@@ -1,0 +1,4 @@
+interface:
+  display_name: "Change Implementation"
+  short_description: "Implement repo changes with evidence and scope control"
+  default_prompt: "Use $change-implementation to inspect this repo, narrow the scope, implement the right change, and verify it."

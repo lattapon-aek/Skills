@@ -1,0 +1,4 @@
+interface:
+  display_name: "Task Intake"
+  short_description: "Clarify objectives, scope, evidence, and proof of done"
+  default_prompt: "Use $task-intake to clarify the real objective, identify the required evidence, narrow the scope, and define proof of done before execution."

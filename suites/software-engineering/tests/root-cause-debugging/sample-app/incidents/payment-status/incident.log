@@ -1,0 +1,3 @@
+2026-05-26T09:14:22Z request_id=req_1027 handler=payment-status level=error message="payment marked failed after capture"
+2026-05-26T09:14:22Z request_id=req_1027 payment_id=pay_991 provider_status=CAPTURED internal_status=FAILED
+2026-05-26T09:14:22Z request_id=req_1027 note="dashboard shows failed payment even though provider capture succeeded"

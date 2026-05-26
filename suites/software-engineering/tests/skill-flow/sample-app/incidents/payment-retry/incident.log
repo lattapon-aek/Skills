@@ -1,0 +1,3 @@
+2026-05-26T10:07:41Z request_id=req_2041 handler=retry-status level=error message="captured payment still shown as failed after retry recovery"
+2026-05-26T10:07:41Z request_id=req_2041 payment_id=pay_2041 provider_status=CAPTURED internal_status=FAILED retry_count=2
+2026-05-26T10:07:41Z request_id=req_2041 note="support confirmed provider dashboard shows capture success"

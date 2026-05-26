@@ -1,0 +1,4 @@
+interface:
+  display_name: "Change Review"
+  short_description: "Review changes for correctness, impact, and proof"
+  default_prompt: "Use $change-review to inspect these changes for correctness risks, hidden impact, and weak verification."

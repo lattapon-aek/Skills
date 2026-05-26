@@ -1,0 +1,22 @@
+diff --git a/src/payments/retry-status-mapper.ts b/src/payments/retry-status-mapper.ts
+index 5555555..6666666 100644
+--- a/src/payments/retry-status-mapper.ts
++++ b/src/payments/retry-status-mapper.ts
+@@ -5,11 +5,15 @@ export type RetryPaymentPayload = {
+   lastErrorCode?: string;
+ };
+ 
++function isCaptured(payload: RetryPaymentPayload): boolean {
++  return payload.providerStatus === "CAPTURED";
++}
++
+ export function mapRetryPaymentStatus(
+   payload: RetryPaymentPayload,
+ ): InternalStatus {
+-  if (payload.providerStatus === "CAPTURED") {
++  if (isCaptured(payload)) {
+     return "SUCCEEDED";
+   }
+ 
+   if (payload.lastErrorCode) {
+     return "FAILED";

@@ -1,0 +1,7 @@
+Ran:
+
+node --test suites/software-engineering/tests/change-review/scenario-1/base/src/payments/retry-status-mapper.test.ts
+
+Result:
+
+1 tests passed, 0 failed

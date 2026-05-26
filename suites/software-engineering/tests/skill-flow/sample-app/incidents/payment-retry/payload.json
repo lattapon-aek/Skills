@@ -1,0 +1,6 @@
+{
+  "paymentId": "pay_2041",
+  "providerStatus": "CAPTURED",
+  "retryCount": 2,
+  "lastErrorCode": "RETRY_TIMEOUT"
+}

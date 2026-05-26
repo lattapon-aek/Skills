@@ -1,0 +1,6 @@
+{
+  "paymentId": "pay_991",
+  "providerStatus": "CAPTURED",
+  "captureCount": 1,
+  "lastErrorCode": "TEMP_NETWORK_RETRY"
+}
