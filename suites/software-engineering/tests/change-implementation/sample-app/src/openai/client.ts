@@ -3,18 +3,17 @@ export type ChatMessage = {
   content: string;
 };
 
-export type ChatCompletionResponse = {
-  content: string;
+export type ResponsesCreateInput = {
+  model: string;
+  input: ChatMessage[];
+  store: false;
 };
 
 export type OpenAIClient = {
-  chat: {
-    completions: {
-      create(input: {
-        model: string;
-        messages: ChatMessage[];
-      }): Promise<ChatCompletionResponse>;
-    };
+  responses: {
+    create(input: ResponsesCreateInput): Promise<{
+      output_text: string;
+    }>;
   };
 };
 
@@ -23,10 +22,11 @@ export async function createSummary(
   model: string,
   messages: ChatMessage[],
 ): Promise<string> {
-  const response = await client.chat.completions.create({
+  const response = await client.responses.create({
     model,
-    messages,
+    input: messages,
+    store: false,
   });
 
-  return response.content.trim();
+  return response.output_text.trim();
 }

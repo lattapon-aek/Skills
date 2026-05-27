@@ -1,0 +1,13 @@
+> node --test src/openai/support-assistant.test.ts
+
+(node:31200) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///workspace/src/openai/support-assistant.test.ts is not specified and it doesn't parse as CommonJS.
+✔ summarizeTicket preserves the caller contract while trimming the final text (2.417ms)
+
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 96.233

@@ -1,9 +1,9 @@
 ---
-name: root-cause-debugging
-description: Investigate software defects with an evidence-first, root-cause-driven workflow. Use when an agent must debug failing tests, incorrect behavior, crashes, regressions, data issues, or environment-specific problems and prove the root issue is understood before fixing it.
+name: root-cause-analysis
+description: Investigate software defects with an evidence-first, root-cause-driven workflow. Use when an agent must analyze failing tests, incorrect behavior, crashes, regressions, data issues, or environment-specific problems and prove the root issue is understood before fixing it.
 ---
 
-# Root Cause Debugging
+# Root Cause Analysis
 
 ## Intent
 
@@ -43,10 +43,25 @@ Apply these principles during investigation:
 ## Clarify Until Clear
 
 - Define the failure precisely: expected behavior, actual behavior, environment, and trigger.
+- Treat tooling, sandbox, dependency-install, process-management, and system-resource failures as valid debugging targets when they block delivery, even if the application code itself is correct.
 - Ask for missing reproduction context when the issue cannot be investigated reliably without it.
 - Narrow the objective to one confirmed failure mode at a time.
 - Ask for or locate the closest incident evidence available from the failure point before expanding into broader theories.
 - If no reproduction or simulation path exists yet, prioritize building one before debating causes.
+
+## Failure Domain Framing
+
+Before chasing a root cause, classify the likely failure domains and reduce them with evidence:
+
+- application logic or data handling
+- dependency, package, or tooling behavior
+- runtime environment or host state
+- sandbox, permissions, or network restrictions
+- orchestration, process lifecycle, retry behavior, or worker coordination
+- system resource pressure such as CPU, memory, disk, or file handles
+- external vendor or platform behavior
+
+Do not assume the issue is in the application source tree if the failure may occur before the application even runs.
 
 ## When Not To Use
 
@@ -61,6 +76,8 @@ Use the best available evidence for the investigation:
 - Start from failing tests, logs, stack traces, commands, user steps, data samples, runtime behavior, and the relevant code.
 - Prefer evidence captured at or near the failure point before relying on downstream symptoms or retrospective explanations.
 - Trace from the observed failure back through the real implementation until you know where the defect is introduced, not just where it becomes visible.
+- Remember that the fault location may be a runtime step, sandbox boundary, orchestration policy, dependency boundary, environment constraint, or process-management mistake rather than application source code.
+- Gather environment and orchestration evidence when relevant: command stderr/stdout, exit codes, process lists, parent-child process relationships, retry counts, worker states, approval/escalation attempts, resource metrics, and cleanup state.
 - Search external sources when the failure may depend on vendor behavior, framework bugs, documented limits, protocol details, or version-specific changes not provable from the repo alone.
 - Prefer official docs, changelogs, issue trackers from maintainers, and primary references before community speculation.
 - Separate observed facts from hypotheses.
@@ -116,9 +133,11 @@ If real incident evidence exists, inspect it before relying on simulation alone.
 Before patching, be able to answer:
 
 - What exact failure is happening now
+- What failure domain the evidence points to most strongly
 - What direct incident evidence exists from the failure point
 - Where the failure first becomes observable
 - Where the defect is actually introduced
+- Whether the failure is introduced before application code, inside application code, or in the surrounding runtime/tooling layer
 - Why that location is the root cause instead of just a symptom site
 - What nearby code paths or data paths could produce similar symptoms but have been ruled out
 - What competing hypotheses were considered and what evidence ruled them out
@@ -128,6 +147,7 @@ Before patching, be able to answer:
 ## Impact And Tradeoffs
 
 - State what systems, data paths, or user flows are affected.
+- If the issue is operational rather than code-local, call out the affected runtime layer: tooling, sandbox, scheduler, worker lifecycle, resource management, or external dependency boundary.
 - Call out the risk of regressions or hidden sibling defects.
 - Recommend broader remediation when the evidence shows the local bug is a symptom of a larger design issue.
 - Identify the likely blast radius around the fix: callers, downstream consumers, contracts, data shape, tests, and runtime behavior.
@@ -166,8 +186,11 @@ Before patching, be able to answer:
 Report:
 
 - `Failure`
+- `Failure Domain`
 - `Evidence`
 - `Incident Evidence`
+- `Process / Orchestration Evidence`
+- `Runtime Constraints`
 - `External Evidence`
 - `Reproduction Path`
 - `Fault Location`

@@ -23,3 +23,9 @@ Verify that review catches:
 - a wider-looking diff that is still behavior-safe
 - validation output is strong
 - review should avoid inventing findings and instead surface ruled-out concerns and residual risk
+
+## Scenario 3
+
+- a safe wrapper-first OpenAI migration from Chat Completions to Responses API
+- review should verify that the patch stays inside the wrapper seam
+- validation should prove the caller contract still holds after the field-shape change

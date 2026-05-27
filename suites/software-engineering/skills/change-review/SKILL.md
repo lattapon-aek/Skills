@@ -9,6 +9,7 @@ description: Review repository changes with an evidence-first, impact-aware work
 
 Review from evidence, not from taste. Prioritize correctness, proof, and impact over style commentary.
 Stay in review mode: inspect the change, trace its behavior, assess impact, and report findings. Do not silently drift into implementation, broad redesign, or speculative debugging unless the review must explicitly explain why the change is unsafe.
+Golden rule: every accepted end state needs an explicit review artifact. That includes self-review after implementation and review of a justified `no patch` conclusion.
 
 ## Four Principles
 
@@ -43,7 +44,7 @@ Apply these principles while reviewing:
 ## When Not To Use
 
 - Do not use this skill as a substitute for `task-intake` when the request itself is still unclear.
-- Do not use this skill as a substitute for `root-cause-debugging` when the main problem is still proving why a failure happens.
+- Do not use this skill as a substitute for `root-cause-analysis` when the main problem is still proving why a failure happens.
 - Do not use this skill as a substitute for `change-implementation` when the task is to make the change rather than assess it.
 
 ## Source Of Truth
@@ -105,6 +106,7 @@ If these are not true, reduce confidence, narrow the finding, or move the gap in
 - Distinguish `Observed Evidence` from `Inference` inside findings when the risk is not directly executed or proven.
 - Include concerns you considered but ruled out when that context materially helps the user trust the review.
 - If no findings are present, say so explicitly and mention residual risk or test gaps.
+- Use the full review structure even when reviewing your own work or a `no patch` outcome. Do not collapse the final phase into a prose-only status update.
 
 ## Proof Gap Rule
 
@@ -119,10 +121,16 @@ Use:
 - `Ruled-out Concerns`
 - `Residual Risk`
 
+When reviewing a `no patch` outcome:
+
+- `Findings` should say whether any justified code change is still required
+- `Ruled-out Concerns` should record candidate fixes or explanations that were checked and rejected
+- `Residual Risk` should capture what the current evidence still does not prove
+
 ## Phase Handoff
 
 - Hand back to `task-intake` if the intended objective of the change is still too unclear to review correctly.
-- Hand back to `root-cause-debugging` if the review identifies an unresolved failure mechanism that still needs diagnosis.
+- Hand back to `root-cause-analysis` if the review identifies an unresolved failure mechanism that still needs diagnosis.
 - Hand back to `change-implementation` if the review identifies concrete changes that must be made before acceptance.
 
 ## Reference

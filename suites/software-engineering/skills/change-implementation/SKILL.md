@@ -50,7 +50,7 @@ Apply these principles throughout the job:
 ## When Not To Use
 
 - Do not use this skill when the main problem is still understanding an unclear request; route that through `task-intake`.
-- Do not use this skill when the main problem is still proving the root cause of a failure; route that through `root-cause-debugging`.
+- Do not use this skill when the main problem is still proving the root cause of a failure; route that through `root-cause-analysis`.
 - Do not use this skill as a substitute for reviewing an already completed diff; use `change-review`.
 
 ## Source Of Truth
@@ -175,7 +175,7 @@ If no proof has been run yet, `Observed Result` must say that no real result has
 ## Phase Handoff
 
 - Hand back to `task-intake` if the task is still too unclear to execute safely.
-- Hand back to `root-cause-debugging` if a failure still lacks a proven root cause.
+- Hand back to `root-cause-analysis` if a failure still lacks a proven root cause.
 - Hand off to `change-review` after a change or justified no-change outcome is ready for acceptance review.
 
 ## Reference

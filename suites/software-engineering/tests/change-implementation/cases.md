@@ -41,3 +41,4 @@ Expected execution behavior:
 - Trace local wrapper first
 - Identify `client.ts` as the likely patch point before `support-assistant.ts`
 - Separate local evidence from external OpenAI docs that must be consulted
+- Use `support-assistant.test.ts` as focused proof that the caller contract still holds after the wrapper migration

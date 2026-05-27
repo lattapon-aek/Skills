@@ -1,0 +1,140 @@
+diff --git a/src/openai/client.ts b/src/openai/client.ts
+index 7777777..8888888 100644
+--- a/src/openai/client.ts
++++ b/src/openai/client.ts
+@@ -1,26 +1,44 @@
+ export type ChatMessage = {
+   role: "system" | "user" | "assistant";
+   content: string;
+ };
+ 
+-export type ChatCompletionResponse = {
+-  content: string;
++export type ResponsesApiResponse = {
++  output_text: string;
+ };
+ 
+ export type OpenAIClient = {
+-  chat: {
+-    completions: {
++  responses: {
++    create(input: {
++      model: string;
++      instructions?: string;
++      input: Array<{
++        role: "user" | "assistant";
++        content: string;
++      }>;
++    }): Promise<ResponsesApiResponse>;
++  };
++};
++
++export async function createSummary(
++  client: OpenAIClient,
++  model: string,
++  messages: ChatMessage[],
++): Promise<string> {
++  const [firstMessage, ...remainingMessages] = messages;
++
++  const instructions =
++    firstMessage?.role === "system" ? firstMessage.content : undefined;
++  const inputMessages =
++    firstMessage?.role === "system" ? remainingMessages : messages;
++
++  const response = await client.responses.create({
++    model,
++    instructions,
++    input: inputMessages.map((message) => ({
++      role: message.role === "assistant" ? "assistant" : "user",
++      content: message.content,
++    })),
++  });
++
++  return response.output_text.trim();
++}
+-      create(input: {
+-        model: string;
+-        messages: ChatMessage[];
+-      }): Promise<ChatCompletionResponse>;
+-    };
+-  };
+-};
+-
+-export async function createSummary(
+-  client: OpenAIClient,
+-  model: string,
+-  messages: ChatMessage[],
+-): Promise<string> {
+-  const response = await client.chat.completions.create({
+-    model,
+-    messages,
+-  });
+-
+-  return response.content.trim();
+-}
+diff --git a/src/openai/support-assistant.ts b/src/openai/support-assistant.ts
+index bbbbbbb..ccccccc 100644
+--- a/src/openai/support-assistant.ts
++++ b/src/openai/support-assistant.ts
+@@ -1,4 +1,4 @@
+-import { createSummary, type OpenAIClient } from "./client";
++import { createSummary, type OpenAIClient } from "./client.ts";
+ 
+ export async function summarizeTicket(
+   client: OpenAIClient,
+diff --git a/src/openai/support-assistant.test.ts b/src/openai/support-assistant.test.ts
+index 9999999..aaaaaaa 100644
+--- a/src/openai/support-assistant.test.ts
++++ b/src/openai/support-assistant.test.ts
+@@ -3,28 +3,35 @@ import assert from "node:assert/strict";
+ 
+ import { summarizeTicket } from "./support-assistant.ts";
+ 
+ test("summarizeTicket preserves the caller contract while trimming the final text", async () => {
+-  const calls: Array<{
++  const calls: Array<{
+     model: string;
+-    messages: Array<{ role: string; content: string }>;
++    instructions?: string;
++    input: Array<{ role: string; content: string }>;
+   }> = [];
+ 
+   const client = {
+-    chat: {
+-      completions: {
+-        create: async (input: {
+-          model: string;
+-          messages: Array<{ role: string; content: string }>;
+-        }) => {
+-          calls.push(input);
+-          return {
+-            content: "- customer could not retry payment\\n- provider later captured successfully\\n- dashboard still showed failed\\n",
+-          };
+-        },
+-      },
++    responses: {
++      create: async (input: {
++        model: string;
++        instructions?: string;
++        input: Array<{ role: string; content: string }>;
++      }) => {
++        calls.push(input);
++        return {
++          output_text:
++            "- customer could not retry payment\\n- provider later captured successfully\\n- dashboard still showed failed\\n",
++        };
++      },
+     },
+   };
+ 
+   const summary = await summarizeTicket(
+@@ -37,7 +44,8 @@ test("summarizeTicket preserves the caller contract while trimming the final text", async () => {
+     "- customer could not retry payment\\n- provider later captured successfully\\n- dashboard still showed failed",
+   );
+   assert.equal(calls[0]?.model, "gpt-4o-mini");
+-  assert.equal(calls[0]?.messages[0]?.role, "system");
+-  assert.equal(calls[0]?.messages[1]?.role, "user");
++  assert.equal(calls[0]?.instructions, "Summarize the support ticket in exactly three bullet points.");
++  assert.equal(calls[0]?.input[0]?.role, "user");
++  assert.match(calls[0]?.input[0]?.content ?? "", /payment eventually captured/i);
+ });

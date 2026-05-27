@@ -7,15 +7,17 @@ Reusable software-engineering skills for AI agents that must work from evidence,
 ```text
 skills/
   task-intake/
+  solution-planning/
   change-implementation/
-  root-cause-debugging/
+  root-cause-analysis/
   change-review/
 references/
   four-principles.md
 tests/
   change-implementation/
   change-review/
-  root-cause-debugging/
+  solution-planning/
+  root-cause-analysis/
   skill-flow/
 ```
 
@@ -70,7 +72,31 @@ Expected output shape:
 - `Observed Result`
 - `Open Risks`
 
-### `root-cause-debugging`
+### `solution-planning`
+
+Use when the objective is clear enough but the implementation approach still needs a design or architecture decision.
+
+Primary job:
+- frame the actual decision
+- compare realistic options
+- recommend one path
+- define execution boundaries and proof strategy before implementation
+
+Expected output shape:
+- `Decision`
+- `Objective`
+- `Current State`
+- `Constraints`
+- `Options Considered`
+- `Ruled-out Options`
+- `Recommended Approach`
+- `Why This Approach`
+- `Impact and Tradeoffs`
+- `Execution Boundaries`
+- `Proof Strategy`
+- `Open Questions`
+
+### `root-cause-analysis`
 
 Use when the issue is a bug, regression, crash, bad data path, or unexplained runtime behavior.
 
@@ -82,8 +108,11 @@ Primary job:
 
 Expected output shape:
 - `Failure`
+- `Failure Domain`
 - `Evidence`
 - `Incident Evidence`
+- `Process / Orchestration Evidence`
+- `Runtime Constraints`
 - `External Evidence`
 - `Reproduction Path`
 - `Fault Location`
@@ -112,6 +141,7 @@ Expected output shape:
 - `Residual Risk`
 
 Inside findings, distinguish `Observed Evidence` from `Inference` when the risk is not directly executed or proven.
+Use the same structure for self-review and justified `no patch` outcomes.
 
 ## Shared Doctrine
 
@@ -140,18 +170,23 @@ Evidence hierarchy:
 
 ## Compose The Skills
 
+Suite-level orchestration policy lives in [references/orchestration-policy.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/references/orchestration-policy.md).
+
 Typical flow:
 
 1. `task-intake`
-2. `root-cause-debugging` or `change-implementation`
-3. `change-review`
+2. `solution-planning` when design choice is still open
+3. `root-cause-analysis` or `change-implementation`
+4. `change-review`
 
 Recommended routing:
 
 - unclear request -> `task-intake`
+- clear objective but unsettled solution or migration path -> `solution-planning`
 - clear change request -> `change-implementation`
-- bug or unexplained runtime issue -> `root-cause-debugging`
+- bug or unexplained runtime issue -> `root-cause-analysis`
 - diff acceptance or self-review -> `change-review`
+- any accepted final state -> emit a `change-review`-shaped report
 
 ## Reporting Conventions
 
@@ -175,8 +210,9 @@ These conventions are meant to reduce confident-but-undersupported conclusions a
 The repo includes fixture suites for forward-testing skill behavior:
 
 - [tests/change-implementation/README.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/change-implementation/README.md)
-- [tests/root-cause-debugging/README.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/root-cause-debugging/README.md)
+- [tests/root-cause-analysis/README.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/root-cause-analysis/README.md)
 - [tests/change-review/README.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/change-review/README.md)
+- [tests/solution-planning/README.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/solution-planning/README.md)
 - [tests/skill-flow/README.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/skill-flow/README.md)
 
 Current coverage themes:
@@ -184,7 +220,9 @@ Current coverage themes:
 - small surgical change vs over-fix
 - local evidence vs external evidence
 - incident evidence before simulation
+- failure-domain thinking across code, tooling, runtime, sandbox, orchestration, and resource pressure
 - misleading signals and ruled-out hypotheses
+- design-choice recommendation before implementation
 - review findings vs ruled-out concerns
 - end-to-end skill composition across multiple phases
 
@@ -206,7 +244,8 @@ Then edit the generated `SKILL.md`, add any needed references, scripts, or asset
 
 ```powershell
 python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\task-intake
+python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\solution-planning
 python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\change-implementation
-python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\root-cause-debugging
+python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\root-cause-analysis
 python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\change-review
 ```

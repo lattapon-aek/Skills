@@ -1,5 +1,7 @@
 # Review Template
 
+Use this template for final review after a patch and after a justified `no patch` conclusion.
+
 ## Findings
 
 - `[severity] [file]: issue and impact`

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Planning Architecture"
+  short_description: "Choose an evidence-backed design approach before implementation"
+  default_prompt: "Use $solution-planning to compare realistic options, recommend one approach, define execution boundaries, and justify the tradeoffs before implementation."

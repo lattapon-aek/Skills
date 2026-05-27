@@ -10,6 +10,7 @@ description: Convert vague, underspecified, or messy requests into a clear execu
 Clarify until the objective, evidence, and proof of done are sufficient for safe execution. Do not rush into implementation on top of an unclear request.
 Stay in intake mode: identify what must be known, what evidence must be gathered, and what success must look like. Do not drift into execution, debugging, code inspection, or external research unless the user explicitly asks for that as part of the current phase.
 Golden rule: shape the task and name the evidence needed for execution, but do not turn intake into execution, debugging, or proof work.
+Allowed exception: when phase routing depends on knowing where the likely seam lives, you may do a light source scan to name candidate files, modules, or interfaces. Stop before proving behavior, choosing a solution, or doing implementation work.
 
 ## When To Use
 
@@ -53,6 +54,14 @@ Stop clarifying and hand off to execution only when all of these are true:
 - Extract the real objective, desired outcome, stakeholders, constraints, and success criteria.
 - Do not accept the proposed solution as the goal until the underlying problem, decision need, or pain point is clear.
 - When the user proposes a solution, ask what failure, bottleneck, decision, or missed outcome that solution is supposed to address.
+- When the task is failure-oriented, identify the likely failure domains before assuming the problem lives in application code. Typical domains include:
+  - application logic or data handling
+  - dependency, package, or tooling behavior
+  - runtime environment or machine state
+  - sandbox, permissions, or network restrictions
+  - orchestration, process lifecycle, or retry behavior
+  - system resource pressure such as CPU, memory, or disk
+  - external vendor or platform behavior
 - Keep asking when the missing detail affects correctness, scope, architecture, budget, or access.
 - Stop asking only when the task is scoped tightly enough to execute responsibly.
 
@@ -68,6 +77,7 @@ Use the best available evidence for the intake:
 - Distinguish explicit facts from assumptions and unknowns.
 - Do not treat guesswork as requirement.
 - During intake, name the evidence and authority that must be consulted; do not turn the intake itself into a research or verification pass unless the user explicitly asks for that phase now.
+- Limited seam identification is allowed when needed to decide whether the next phase should be planning, debugging, or implementation. Keep that scan shallow and descriptive.
 
 ## Question Triage
 
@@ -88,6 +98,7 @@ For each unknown, decide one path:
 ## Intake Boundaries
 
 - Do not inspect repository paths, open files, check links, or browse docs just to prove they exist during intake.
+- You may inspect just enough local structure to identify likely seams or ownership boundaries when that is necessary to choose the next phase correctly.
 - If the user names artifacts, treat them as claimed source material unless access verification is itself part of the request.
 - If access to local or external artifacts is still needed before execution, record that as a resolution path instead of prematurely blocking the intake.
 - Do not recommend concrete technical solutions, migrations, or architecture choices during intake unless the user explicitly asks for options at this stage.
@@ -112,6 +123,7 @@ Produce a short brief with:
 
 - `Objective`
 - `Desired Outcome`
+- `Failure Domain Candidates` when the task is about an incident, stuck command, degraded environment, or unexplained runtime/system behavior
 - `Source Material`
 - `External Evidence Needed`
 - `Scoped Work`
@@ -127,6 +139,7 @@ Produce a short brief with:
 
 - Convert subjective requests into observable proof of done.
 - Make clear whether proof depends only on local execution or also on external evidence or current vendor/platform behavior.
+- For failure-oriented work, state what evidence would distinguish between competing failure domains instead of assuming the fault is in code.
 - If the intake rejected a proposed solution, broad scope, or interpretation, say what evidence or reasoning ruled it out.
 - If proof cannot be defined yet, keep clarifying.
 
@@ -138,7 +151,8 @@ Produce a short brief with:
 
 ## Phase Handoff
 
-- Hand off to `root-cause-debugging` when the core problem is still an unexplained failure or regression.
+- Hand off to `solution-planning` when the objective is clear but the solution, migration path, or system boundary decision is not settled yet.
+- Hand off to `root-cause-analysis` when the core problem is still an unexplained failure or regression.
 - Hand off to `change-implementation` when the change objective is clear enough to execute safely.
 - Hand off to `change-review` only after changes or explicit no-change conclusions are ready to be assessed.
 
