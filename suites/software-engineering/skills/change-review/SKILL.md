@@ -43,9 +43,7 @@ Apply these principles while reviewing:
 
 ## When Not To Use
 
-- Do not use this skill as a substitute for `task-intake` when the request itself is still unclear.
-- Do not use this skill as a substitute for `root-cause-analysis` when the main problem is still proving why a failure happens.
-- Do not use this skill as a substitute for `change-implementation` when the task is to make the change rather than assess it.
+- Do not use this skill as a substitute for `software-engineering-core` when the request still needs clarification, planning, diagnosis, or implementation.
 
 ## Source Of Truth
 
@@ -85,6 +83,16 @@ If these are not true, reduce confidence, narrow the finding, or move the gap in
 5. Check whether the verification is sufficient.
 6. Assess whether the change is appropriately sized and scoped.
 
+## Review Rubric
+
+Judge the change primarily on:
+
+- `Functionality`: does the change actually do what it claims
+- `Code Health`: is the result maintainable and free of unnecessary complexity
+- `Complexity`: could a smaller change have solved the same problem
+- `Blast Radius`: what callers, contracts, or runtime paths could break
+- `Proof Sufficiency`: did the tests, logs, or validation actually prove the claim
+
 ## Blast Radius Review
 
 - Trace the likely impact path for each meaningful change: callers, downstream consumers, contracts, data shape, config, tests, runtime behavior, and operational expectations.
@@ -96,6 +104,7 @@ If these are not true, reduce confidence, narrow the finding, or move the gap in
 - Explain who or what is affected by each finding.
 - Flag when a small local change hides a larger unresolved design or root-cause issue.
 - Mention when a broader change would have been safer or more honest than the current patch.
+- Prefer findings grounded in facts and observed behavior over opinion about style or taste.
 
 ## Output
 
@@ -129,9 +138,7 @@ When reviewing a `no patch` outcome:
 
 ## Phase Handoff
 
-- Hand back to `task-intake` if the intended objective of the change is still too unclear to review correctly.
-- Hand back to `root-cause-analysis` if the review identifies an unresolved failure mechanism that still needs diagnosis.
-- Hand back to `change-implementation` if the review identifies concrete changes that must be made before acceptance.
+- Hand back to `software-engineering-core` if the objective is still too unclear, the failure mechanism is still unproven, or the change still needs execution before acceptance.
 
 ## Reference
 
