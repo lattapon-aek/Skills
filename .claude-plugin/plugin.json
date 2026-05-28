@@ -1,0 +1,7 @@
+{
+  "name": "agents-skills",
+  "skills": [
+    "./suites/software-engineering/skills/software-engineering-core",
+    "./suites/software-engineering/skills/change-review"
+  ]
+}

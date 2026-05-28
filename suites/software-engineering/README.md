@@ -2,6 +2,20 @@
 
 Reusable software-engineering skills for AI agents that must work from evidence, narrow scope, and prove results instead of guessing.
 
+## Portable Install
+
+This suite is packaged for the `skills` CLI. From the repository root, install the shipped skills with:
+
+```powershell
+npx skills add https://github.com/lattapon-aek/Agents-Skills --skill software-engineering-core --skill change-review
+```
+
+## Adapters
+
+- Claude Code: `.\scripts\link-software-engineering-skills.ps1`
+- Codex: `.\scripts\link-codex-skills.ps1`
+- skills CLI: `npx skills add https://github.com/lattapon-aek/Agents-Skills`
+
 ## Catalog
 
 ```text
@@ -135,6 +149,7 @@ Current coverage themes:
 - failure-domain thinking across code, tooling, runtime, sandbox, orchestration, and resource pressure
 - misleading signals and ruled-out hypotheses
 - design-choice recommendation before implementation
+- decision logging and reversibility before implementation
 - review findings vs ruled-out concerns
 - end-to-end skill composition across multiple phases
 
