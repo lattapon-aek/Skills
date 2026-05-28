@@ -74,6 +74,7 @@ Pause and confirm with facts before crossing these gates:
 - from objective to plan
 - from suspicion to root cause
 - from root cause or plan to patch point
+- from plan to implementation
 - from code change to done
 
 Confirmation must come from at least one of:
@@ -91,6 +92,13 @@ Do not use memory alone when inspectable evidence exists. If the gate cannot be 
 - The objective cannot be stated in one concrete sentence with a verifiable success condition
 
 When this gate is closed, present the Clarify output and stop. Do not move to Plan, Analyze, or Implement in the same response.
+
+**Gate: from plan to implementation** — this gate is CLOSED until all of the following are true:
+- The patch boundary is confirmed by inspectable source read directly from the workspace, or by explicit user statement
+- All questions marked `Ask Now` in the Plan output have been answered
+- The `Proof Gap` in the Plan output has been reviewed and the remaining unknowns are acceptable to proceed
+
+When this gate is closed, present the Plan output and stop. Do not begin Implement in the same response as Plan.
 
 ## Clarify The Objective
 
@@ -236,12 +244,22 @@ Use `Implement` mode when the objective and patch boundary are clear enough to e
 - Do not drift into redesign, cleanup passes, or indefinite research.
 - Do not call the work complete until the target behavior is observed to work or the original failure is observed to disappear.
 
+#### Assumption Re-validation
+
+Before editing, re-validate every assumption listed in any prior Clarify or Plan output:
+
+- Read the relevant source files again; do not rely on what was read in an earlier phase.
+- State which assumptions held against current evidence.
+- State which assumptions required revision and how that changes the patch boundary.
+- If a revised assumption invalidates the current plan, return to `Plan` before proceeding.
+
 #### Reversibility Gate
 
 Before editing, confirm whether the change can be rolled back cleanly:
 
 - can the patch be reverted without extra migration work
-- does the change preserve the caller contract or require a staged rollout
+- does the change affect callers outside this file or repository, including other services or repos that depend on the changed signature, return type, behavior, or data shape
+- does the change require a staged rollout or deprecation notice for external callers
 - will the tests catch the intended rollback risk
 - is a narrower patch available if reversibility is weak
 
@@ -253,12 +271,14 @@ Before editing, confirm whether the change can be rolled back cleanly:
 - `Assumptions`
 - `Change Location`
 - `Why This Patch Point`
-- `Reversibility Assessment` — whether the patch can be reverted cleanly, whether caller contracts are preserved, whether tests catch rollback risk, and whether a narrower patch is available if reversibility is weak
+- `Reversibility Assessment` — whether the patch can be reverted cleanly; whether caller contracts are preserved; whether tests catch rollback risk; whether a narrower patch is available if reversibility is weak
+- `Caller Contract Impact` — whether callers outside this file or repository depend on the changed signature, return type, behavior, or data shape; whether a staged rollout or deprecation notice is required; none if the change is purely internal with no external consumers
 - `Rejected Approaches`
 - `Scoped Plan`
 - `Out of Scope`
 - `Impact and Tradeoffs`
 - `Verification`
+- `Test Coverage` — list of test cases that exercise this patch; must be runnable and observed green before `Observed Result` is valid; if no tests exist for this path, state that explicitly as a proof gap
 - `Observed Result`
 - `Proof Gap` — what is already proven by verification, what is still unverified or assumed, what next check would close the gap
 - `Open Risks`
@@ -276,6 +296,7 @@ Before editing, confirm whether the change can be rolled back cleanly:
 - Do not answer from memory when the workspace, logs, docs, or runtime can be checked directly.
 - If a claim can be inspected or tested, inspect or test it before elevating it to a conclusion.
 - If local and external evidence conflict, state the conflict explicitly and resolve it using the most authoritative source available. Do not silently discard either side.
+- **Verified means:** a command was run and its output was observed, or a test was executed and its result was included. Model self-assertion without execution does not count as verification. "It should work" is not an observed result.
 
 ## Output Formatting
 
@@ -294,6 +315,13 @@ Before editing, confirm whether the change can be rolled back cleanly:
 - If the approach and patch boundary are clear, move to `Implement`.
 - If implementation reveals an unproven failure mechanism, go back to `Analyze`.
 - If current evidence does not justify any change, `no patch` is valid.
+
+**Mandatory stop conditions** — stop immediately, surface the situation to the user, and do not proceed when:
+
+1. The fix requires deleting, disabling, or weakening an existing test to pass.
+2. The change boundary has grown beyond the patch point stated in the current Implement output.
+3. The Proof Gap cannot be closed after two directed searches for the required evidence.
+4. Implementation reveals a failure mechanism that was not diagnosed in Analyze — return to `Analyze` before editing further.
 
 ## Proof Gap Rule
 
