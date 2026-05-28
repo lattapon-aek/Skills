@@ -8,6 +8,11 @@ One sentence describing what must be achieved.
 
 Describe the real result the user wants, not just the artifact.
 
+## Failure or Decision Domain
+
+- Classification: one of — `application logic` | `dependency` | `runtime environment` | `sandbox/permissions` | `orchestration` | `resource pressure` | `external vendor` | `design/migration/integration`
+- Rationale for this classification
+
 ## Source Material
 
 - Required evidence to proceed
@@ -68,3 +73,15 @@ For incident-driven work, note separately:
 
 - Only include questions that materially affect execution
 - Mark each as `Ask Now`, `Investigate from Source`, `Investigate Externally`, or `Assume Explicitly`
+
+## Clarify Exit Checklist
+
+Complete this before transitioning to the next mode. All items must be checked.
+
+- [ ] Failure or Decision Domain confirmed by at least one user statement, runtime signal, or source scan — not inferred from pattern matching alone
+- [ ] Source Material names specific artifacts (files, logs, systems, commands) — no placeholders
+- [ ] All `Ask Now` questions answered by the user or re-classified as `Assume Explicitly`
+- [ ] Ruled-out Interpretations lists at least one alternative reading that was considered and rejected
+- [ ] Objective can be stated in one concrete sentence with a verifiable success condition
+
+If any item is unchecked: present this output and stop. Do not transition in the same response.

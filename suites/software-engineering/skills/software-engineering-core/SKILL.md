@@ -76,7 +76,21 @@ Pause and confirm with facts before crossing these gates:
 - from root cause or plan to patch point
 - from code change to done
 
-Confirmation can come from local source, runtime output, tests, logs, external docs, or direct user approval. Do not use memory alone when inspectable evidence exists.
+Confirmation must come from at least one of:
+- inspectable source: code, config, tests, or docs read directly from the workspace
+- runtime evidence: output, logs, traces, metrics, or a command that was run and observed
+- official external documentation with a cited source
+- direct user statement when no inspectable source is available
+
+Do not use memory alone when inspectable evidence exists. If the gate cannot be confirmed, state the missing evidence explicitly instead of proceeding.
+
+**Gate: from user wording to objective** — this gate is CLOSED when any of the following is true:
+- The failure domain has two or more equally-probable candidates with no distinguishing signal from the user's report
+- Source Material is empty or contains only placeholders such as "not yet collected"
+- Any question classified `Ask Now` has not been answered by the user
+- The objective cannot be stated in one concrete sentence with a verifiable success condition
+
+When this gate is closed, present the Clarify output and stop. Do not move to Plan, Analyze, or Implement in the same response.
 
 ## Clarify The Objective
 
@@ -86,23 +100,38 @@ Use `Clarify` mode when the request is vague, broad, or solution-biased.
 - Extract the real objective, desired outcome, stakeholders, constraints, and proof of done.
 - Do not accept a proposed solution as the goal until the underlying problem, decision need, or missed outcome is clear.
 - If phase routing depends on likely ownership or seam location, do only a shallow source scan.
-- Stop clarifying when the task is narrow enough to choose the next mode responsibly.
+- For incident reports where the failure domain is not immediately clear from the user's words alone, `Open Questions and Resolution Path` and `Ruled-out Interpretations` are required, not optional.
+
+**Clarify Exit Conditions** — all of the following must be true before leaving this mode:
+
+1. The Failure or Decision Domain is supported by at least one direct user statement, runtime signal, or shallow source scan — not inferred from pattern matching alone.
+2. Source Material names specific artifacts (files, logs, systems, commands to run) — not a placeholder like "not yet collected".
+3. Every question marked `Ask Now` has been answered by the user, or re-classified as `Assume Explicitly` with the assumption stated.
+4. Ruled-out Interpretations lists at least one alternative reading of the request that was considered and rejected.
+5. The objective can be stated in one concrete sentence with a verifiable success condition.
+
+If any exit condition is not yet met, present the Clarify output and stop. Do not transition to another mode in the same response.
 
 ### Clarify Output
+
+Required fields (always include):
 
 - `Objective`
 - `Desired Outcome`
 - `Failure or Decision Domain`
 - `Source Material`
-- `External Evidence Needed`
-- `Scoped Work`
-- `Out of Scope`
-- `Constraints`
-- `Assumptions`
-- `Ruled-out Interpretations`
-- `Impact and Tradeoffs`
 - `Proof of Done`
-- `Open Questions and Resolution Path`
+
+Conditional fields (include when applicable):
+
+- `External Evidence Needed` — when external sources must be checked before proceeding
+- `Scoped Work` — when scope boundaries need to be made explicit
+- `Out of Scope` — when explicit exclusions affect routing
+- `Constraints` — when constraints exist that limit the solution space
+- `Assumptions` — when assumptions are material to correctness
+- `Ruled-out Interpretations` — when alternative readings of the request were considered
+- `Impact and Tradeoffs` — when multiple valid paths exist with different consequences
+- `Open Questions and Resolution Path` — when unresolved questions materially affect execution; mark each as `Ask Now`, `Investigate from Source`, `Investigate Externally`, or `Assume Explicitly`
 
 ## Classify The Domain
 
@@ -147,6 +176,7 @@ When comparing options, record the decision in a way that can be audited later:
 - `Objective`
 - `Current State`
 - `Constraints`
+- `Assumptions`
 - `Options Considered`
 - `Ruled-out Options`
 - `Recommended Approach`
@@ -154,7 +184,8 @@ When comparing options, record the decision in a way that can be audited later:
 - `Impact and Tradeoffs`
 - `Execution Boundaries`
 - `Proof Strategy`
-- `Open Questions`
+- `Proof Gap` — what this plan already has evidence for, what is still unverified or assumed, and what next check would close the gap
+- `Open Questions` — mark each as `Ask Now`, `Investigate from Source`, `Investigate Externally`, or `Assume Explicitly`
 
 ### Analyze
 
@@ -181,11 +212,8 @@ Before a root cause is finalized, collect the smallest useful pack of evidence f
 
 - `Failure`
 - `Failure Domain`
-- `Evidence`
-- `Incident Evidence`
-- `Process / Orchestration Evidence`
-- `Runtime Constraints`
-- `External Evidence`
+- `Incident Evidence Pack` — logs, traces, error output, process/orchestration state, runtime constraints, sandbox or permission signals, metrics, repro or simulation input used; group by evidence type when multiple are present
+- `External Evidence` — official docs, vendor sources, or community references that materially affect the diagnosis
 - `Reproduction Path`
 - `Fault Location`
 - `Root Cause`
@@ -195,6 +223,7 @@ Before a root cause is finalized, collect the smallest useful pack of evidence f
 - `Impact and Tradeoffs`
 - `Verification`
 - `Observed Result`
+- `Proof Gap` — what is already demonstrated by evidence, what is still unproven or assumed, what direct evidence would close the gap
 - `Open Risks`
 
 ### Implement
@@ -224,12 +253,14 @@ Before editing, confirm whether the change can be rolled back cleanly:
 - `Assumptions`
 - `Change Location`
 - `Why This Patch Point`
+- `Reversibility Assessment` — whether the patch can be reverted cleanly, whether caller contracts are preserved, whether tests catch rollback risk, and whether a narrower patch is available if reversibility is weak
 - `Rejected Approaches`
 - `Scoped Plan`
 - `Out of Scope`
 - `Impact and Tradeoffs`
 - `Verification`
 - `Observed Result`
+- `Proof Gap` — what is already proven by verification, what is still unverified or assumed, what next check would close the gap
 - `Open Risks`
 
 ## Evidence Rules
@@ -244,6 +275,16 @@ Before editing, confirm whether the change can be rolled back cleanly:
 - State what is proven, what is still uncertain, and what next evidence would close the gap.
 - Do not answer from memory when the workspace, logs, docs, or runtime can be checked directly.
 - If a claim can be inspected or tested, inspect or test it before elevating it to a conclusion.
+- If local and external evidence conflict, state the conflict explicitly and resolve it using the most authoritative source available. Do not silently discard either side.
+
+## Output Formatting
+
+- Use the field names defined in each mode's output section as markdown headers or bold labels.
+- List each field, even when its value is short. Do not collapse multiple fields into prose.
+- For `Findings` and similar lists: one item per line, ordered by severity.
+- For `Observed Evidence` vs `Inference`: always place these as sub-items directly under the finding they support.
+- For `Open Questions`: always include the resolution path classification (`Ask Now`, `Investigate from Source`, `Investigate Externally`, `Assume Explicitly`).
+- Do not omit required fields. If a required field has no content, write "none" rather than skipping it.
 
 ## Escalation And Boundaries
 

@@ -18,6 +18,10 @@
 - Product or policy limits
 - Rollout, migration, or compatibility constraints
 
+## Assumptions
+
+- Every assumption this plan depends on, stated explicitly
+
 ## Options Considered
 
 - Option A
@@ -55,6 +59,13 @@
 - What later implementation must prove
 - What validation will show this approach is working
 
+## Proof Gap
+
+- What this plan already has evidence for
+- What is still unverified, assumed, or blocked
+- What next check or implementation step would close the gap
+
 ## Open Questions
 
 - Remaining unknowns that could still change the recommendation
+- Mark each as `Ask Now`, `Investigate from Source`, `Investigate Externally`, or `Assume Explicitly`

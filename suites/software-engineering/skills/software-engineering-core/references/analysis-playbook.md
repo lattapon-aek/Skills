@@ -37,3 +37,19 @@
 - Note what was not verified
 - Do not call the bug fixed until the original failure is observed to disappear
 - If you never observed the failure directly, state that confidence is lower and explain the substitute evidence used
+
+## When Reproduction Is Not Possible
+
+Use this section when the failure only occurs in production, under conditions that cannot be safely replicated, or intermittently.
+
+- Gather the best available substitute evidence: logs, traces, metrics, error reports, user-submitted artifacts
+- State explicitly what could not be reproduced and why
+- Use simulation narrowly to explain or bound the failure mode — not to replace incident evidence
+- Confidence is lower when reproduction is not possible; state this in `Ruled-out Hypotheses` and `Open Risks`
+
+For intermittent failures (race conditions, time-dependent issues, resource pressure):
+- Document the conditions observed so far
+- Increase logging or tracing before concluding if feasible
+- State remaining uncertainty explicitly
+
+Never upgrade a non-reproduced incident to a confirmed root cause. Label it as the most likely explanation given available evidence, and note what direct evidence would confirm it.

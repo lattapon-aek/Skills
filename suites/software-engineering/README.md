@@ -7,14 +7,14 @@ Reusable software-engineering skills for AI agents that must work from evidence,
 This suite is packaged for the `skills` CLI. From the repository root, install the shipped skills with:
 
 ```powershell
-npx skills add https://github.com/lattapon-aek/Agents-Skills --skill software-engineering-core --skill change-review
+npx skills add https://github.com/lattapon-aek/Skills --skill software-engineering-core --skill change-review
 ```
 
 ## Adapters
 
 - Claude Code: `.\scripts\link-software-engineering-skills.ps1`
 - Codex: `.\scripts\link-codex-skills.ps1`
-- skills CLI: `npx skills add https://github.com/lattapon-aek/Agents-Skills`
+- skills CLI: `npx skills add https://github.com/lattapon-aek/Skills`
 
 ## Catalog
 
@@ -84,7 +84,7 @@ All skills follow the same operating model:
 - state impact and tradeoffs
 - prove claims and results with evidence
 
-Shared principles live in [references/four-principles.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/references/four-principles.md):
+Shared principles live in [references/four-principles.md](references/four-principles.md):
 
 - `Think Before Coding`
 - `Simplicity First`
@@ -100,7 +100,7 @@ Evidence hierarchy:
 
 ## Compose The Skills
 
-Suite-level orchestration policy lives in [references/orchestration-policy.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/references/orchestration-policy.md).
+Suite-level orchestration policy lives in [references/orchestration-policy.md](references/orchestration-policy.md).
 
 Typical flow:
 
@@ -138,8 +138,8 @@ These conventions are meant to reduce confident-but-undersupported conclusions a
 
 The repo includes fixture suites for forward-testing skill behavior:
 
-- [tests/software-engineering-core/README.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/software-engineering-core/README.md)
-- [tests/change-review/README.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/change-review/README.md)
+- [tests/software-engineering-core/README.md](tests/software-engineering-core/README.md)
+- [tests/change-review/README.md](tests/change-review/README.md)
 
 Current coverage themes:
 

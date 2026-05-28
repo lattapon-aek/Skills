@@ -7,13 +7,13 @@ This repository now organizes the software-engineering skills as a single suite.
 Install the portable skill bundle with the open skills CLI:
 
 ```powershell
-npx skills add https://github.com/lattapon-aek/Agents-Skills
+npx skills add https://github.com/lattapon-aek/Skills
 ```
 
 To install only the shipped software-engineering skills:
 
 ```powershell
-npx skills add https://github.com/lattapon-aek/Agents-Skills --skill software-engineering-core --skill change-review
+npx skills add https://github.com/lattapon-aek/Skills --skill software-engineering-core --skill change-review
 ```
 
 For local Claude Code use, link the shipped skills into the local skill directory:

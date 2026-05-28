@@ -13,27 +13,12 @@ Golden rule: every accepted end state needs an explicit review artifact. That in
 
 ## Four Principles
 
-Apply these principles while reviewing:
+Apply the shared doctrine from [../../references/four-principles.md](../../references/four-principles.md). In review context:
 
-### 1. Think Before Coding
-
-- Confirm the intended requirement before judging the diff.
-- Surface ambiguity and alternative interpretations instead of overclaiming.
-
-### 2. Simplicity First
-
-- Flag unnecessary complexity when a smaller change would have solved the same problem.
-- Treat speculative abstraction as review risk, not design sophistication.
-
-### 3. Surgical Changes
-
-- Check whether every changed area traces back to the stated objective.
-- Flag orthogonal edits and unrelated cleanup that increase risk.
-
-### 4. Goal-Driven Execution
-
-- Check whether success was defined concretely.
-- Prefer reviews grounded in tests, repro steps, and validation output over aesthetic opinion.
+- `Think Before Coding` — confirm the intended requirement before judging the diff; surface ambiguity instead of overclaiming
+- `Simplicity First` — flag unnecessary complexity when a smaller change would have solved the same problem
+- `Surgical Changes` — check that every changed area traces back to the stated objective; flag orthogonal edits
+- `Goal-Driven Execution` — check whether success was defined concretely; prefer reviews grounded in tests and validation output over aesthetic opinion
 
 ## Clarify Until Clear
 
@@ -109,13 +94,19 @@ Judge the change primarily on:
 ## Output
 
 - Report findings before summaries.
-- Order findings by severity.
-- Reference files and explain impact.
+- Order findings by severity using these levels:
+  - `critical` — change is incorrect or will cause failures in likely code paths
+  - `high` — significant risk to correctness, safety, or reliability
+  - `medium` — notable concern that warrants attention but does not block acceptance
+  - `low` — minor observation with a real behavior implication
+  - `note` — context or tradeoff that does not require action
+- Reference files and line numbers for each finding.
 - Cite external sources when a finding depends on them.
-- Distinguish `Observed Evidence` from `Inference` inside findings when the risk is not directly executed or proven.
+- Distinguish `Observed Evidence` from `Inference` inside findings when the risk is not directly executed or proven. Place these as sub-items directly under the finding they support.
 - Include concerns you considered but ruled out when that context materially helps the user trust the review.
 - If no findings are present, say so explicitly and mention residual risk or test gaps.
 - Use the full review structure even when reviewing your own work or a `no patch` outcome. Do not collapse the final phase into a prose-only status update.
+- If local and external evidence conflict, surface the conflict explicitly under the finding rather than silently resolving it.
 
 ## Proof Gap Rule
 
@@ -138,7 +129,13 @@ When reviewing a `no patch` outcome:
 
 ## Phase Handoff
 
-- Hand back to `software-engineering-core` if the objective is still too unclear, the failure mechanism is still unproven, or the change still needs execution before acceptance.
+Hand back to `software-engineering-core` when any of the following is true:
+
+- The intended objective cannot be inferred from the diff, ticket, or surrounding context — route to core `Clarify`
+- The failure mechanism the change claims to fix is asserted but not demonstrated by evidence — route to core `Analyze`
+- The diff contains no executable result and it is not possible to determine whether the approach works — route to core `Implement`
+
+When handing back, state which mode to resume and what specific information that mode needs to close the gap. Do not hand back without a concrete reason and a clear next action.
 
 ## Reference
 

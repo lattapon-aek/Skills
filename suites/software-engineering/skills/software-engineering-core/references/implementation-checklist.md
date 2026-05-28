@@ -23,6 +23,9 @@
 - State what should remain untouched
 - State what nearby behavior could be affected
 - State the likely blast radius if the patch is wrong
+- Confirm whether the patch can be reverted cleanly without extra migration work
+- Note if the change alters caller contracts or requires a staged rollout
+- If reversibility is weak, look for a narrower patch before proceeding
 - Do this even for very small fixes
 
 ## During Editing
