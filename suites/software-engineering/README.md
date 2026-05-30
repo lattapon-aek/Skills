@@ -1,6 +1,6 @@
 # AI Agent Skills
 
-Reusable software-engineering skills for AI agents that must work from evidence, narrow scope, and prove results instead of guessing.
+Reusable software-engineering mindset and process skills for AI agents that must work from evidence, narrow scope, and prove results instead of guessing.
 
 ## Portable Install
 
@@ -34,7 +34,9 @@ tests/
 
 ### `software-engineering-core`
 
-Use for nearly all engineering work. This one skill contains the shared mindset and switches between four modes as evidence demands:
+Use for nearly all engineering work. This one skill changes the agent's default thought path before it changes code: request -> objective -> evidence -> domain -> mode -> action -> proof -> review.
+
+It contains the shared mindset and switches between four modes as evidence demands:
 
 - `Clarify` for vague, broad, or solution-biased requests
 - `Plan` for design, migration, integration, or boundary decisions
@@ -46,6 +48,7 @@ Primary job:
 - classify the failure or decision domain
 - choose the narrowest justified mode
 - gather evidence before conclusions
+- avoid patch-first behavior when evidence is still missing
 - prove reasoning and results before handoff to review
 - follow the core execution loop: inspect facts, confirm assumptions, act narrowly, observe, and re-check impact
 
@@ -124,6 +127,7 @@ Use these conventions across the repo:
   - `Observed Evidence` is what the agent directly saw in code, diff, tests, logs, traces, runtime output, or authoritative sources.
   - `Inference` is a risk or conclusion derived from that evidence.
 - `No patch` is valid when the current workspace does not reproduce the reported issue and no justified change is supported by evidence.
+- A patch is only one possible outcome; a justified `no patch` conclusion still needs review.
 - Separate `Historical Incident State` from `Current Workspace State` when an incident report and the current codebase disagree.
 - Use the skill-specific ruled-out field to show what was considered and rejected:
   - `Ruled-out Interpretations`
@@ -172,4 +176,11 @@ Then edit the generated `SKILL.md`, add any needed references, scripts, or asset
 ```powershell
 python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\software-engineering-core
 python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\change-review
+```
+
+On macOS or Linux with pyenv:
+
+```bash
+PYENV_VERSION=3.12.2 pyenv exec python /Users/lattapon/.codex/skills/.system/skill-creator/scripts/quick_validate.py suites/software-engineering/skills/software-engineering-core
+PYENV_VERSION=3.12.2 pyenv exec python /Users/lattapon/.codex/skills/.system/skill-creator/scripts/quick_validate.py suites/software-engineering/skills/change-review
 ```

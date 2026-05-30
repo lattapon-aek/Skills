@@ -11,6 +11,25 @@ Use one disciplined workflow for software-engineering work instead of switching 
 Stay in core mode: move between clarification, planning, diagnosis, and implementation only when the current evidence justifies that transition. Do not silently jump from a vague request to a patch, from a report to a root cause, or from a design idea to a rewrite.
 Golden rule: one skill, multiple modes. Pick the narrowest mode that fits the current evidence, and keep the work scoped to that mode until the proof gap changes.
 
+## Mindset Contract
+
+Optimize for a proven engineering outcome, not for producing code first.
+
+- A patch is only one possible outcome.
+- `No patch` is valid when evidence does not justify a change.
+- A user report is a lead, not proof.
+- Memory and conventions are hints, not evidence.
+- "Verified" means observed output from source, tests, logs, runtime behavior, or authoritative docs.
+- Review is not optional for an accepted patch or accepted `no patch` conclusion.
+
+## Default Thought Path
+
+Use this mental path before acting:
+
+`request -> objective -> evidence -> domain -> mode -> action -> proof -> review`
+
+If any link is missing, do the smallest step that closes that gap. Do not skip from `request` to `action`.
+
 ## When To Use
 
 Use this skill for most software-engineering work, including:
@@ -65,6 +84,18 @@ Use this loop for every mode, but keep it light when the task is small:
 7. Check impact, adjacent behavior, and proof gaps before moving on.
 
 If the loop is still missing a fact that changes correctness, stop and confirm instead of guessing.
+
+## Anti-Patterns
+
+Avoid these behaviors even when the requested task sounds urgent:
+
+- patching before the objective or patch boundary is clear
+- treating a user report, issue title, or failing summary as confirmed root cause
+- calling work verified without observed command, test, log, runtime, or authoritative-source output
+- expanding scope because nearby code looks weak but is not part of the proof path
+- using memory, naming, conventions, or pattern matching as proof when source or runtime evidence is inspectable
+- weakening or deleting a test to make a fix look green
+- ending implementation with status prose instead of a review-shaped acceptance report
 
 ## Confirm Gates
 
@@ -307,6 +338,30 @@ Before editing, confirm whether the change can be rolled back cleanly:
 - For `Open Questions`: always include the resolution path classification (`Ask Now`, `Investigate from Source`, `Investigate Externally`, `Assume Explicitly`).
 - Do not omit required fields. If a required field has no content, write "none" rather than skipping it.
 
+### Compact Output For Small Tasks
+
+For small, clear tasks, keep field values terse instead of expanding into a long report. Preserve the proof path with these fields:
+
+- `Objective`
+- `Evidence`
+- `Mode`
+- `Change` or `No Patch`
+- `Verification`
+- `Proof Gap`
+- `Residual Risk`
+
+Compact output is not permission to skip evidence, verification, or review handoff. It is only a shorter format for the same reasoning.
+
+### No-Patch Pattern
+
+Use `no patch` when current evidence does not justify a code change. State it plainly:
+
+- `No Patch`: why no change is justified in the current workspace
+- `Observed Evidence`: source, test, log, runtime, or authoritative docs that support that conclusion
+- `Ruled-out Hypotheses`: likely explanations or fixes that were checked and rejected
+- `Residual Risk`: what historical or external condition may still differ from current evidence
+- `Review`: hand off to `change-review` shape before acceptance
+
 ## Escalation And Boundaries
 
 - If the objective is still unclear, stay in `Clarify`.
@@ -346,4 +401,5 @@ Use these references as needed:
 - [references/planning-template.md](references/planning-template.md)
 - [references/analysis-playbook.md](references/analysis-playbook.md)
 - [references/implementation-checklist.md](references/implementation-checklist.md)
+- [references/output-patterns.md](references/output-patterns.md)
 - [../../references/four-principles.md](../../references/four-principles.md)

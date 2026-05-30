@@ -1,4 +1,4 @@
 interface:
   display_name: "Software Engineering Core"
-  short_description: "One evidence-first workflow for clarify, plan, analyze, and implement"
-  default_prompt: "Use $software-engineering-core to clarify the objective, classify the domain, choose the right mode, prove the reasoning, and only then plan, analyze, or implement the narrowest justified change."
+  short_description: "Evidence-first engineering mindset for clarify, plan, analyze, and implement"
+  default_prompt: "Use $software-engineering-core to follow the evidence-first thought path: clarify the objective, classify the domain, choose the right mode, prove the reasoning, and only then plan, analyze, implement, or justify no patch."
