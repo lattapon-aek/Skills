@@ -115,7 +115,7 @@ Use `Clarify` mode when the request is vague, broad, or solution-biased.
 1. The Failure or Decision Domain is supported by at least one direct user statement, runtime signal, or shallow source scan — not inferred from pattern matching alone.
 2. Source Material names specific artifacts (files, logs, systems, commands to run) — not a placeholder like "not yet collected".
 3. Every question marked `Ask Now` has been answered by the user, or re-classified as `Assume Explicitly` with the assumption stated.
-4. Ruled-out Interpretations lists at least one alternative reading of the request that was considered and rejected.
+4. When the request is ambiguous or has multiple plausible readings, Ruled-out Interpretations lists at least one alternative reading that was considered and rejected.
 5. The objective can be stated in one concrete sentence with a verifiable success condition.
 
 If any exit condition is not yet met, present the Clarify output and stop. Do not transition to another mode in the same response.

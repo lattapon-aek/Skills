@@ -58,7 +58,7 @@ Request:
 
 Expected debugging behavior:
 
-- Surface `Incident Evidence` explicitly
+- Surface `Incident Evidence Pack` explicitly
 - Start from the log and payload before code theories
 - Use simulation to confirm or narrow the failing path
 - Trace to the exact code branch that misclassifies the payment status

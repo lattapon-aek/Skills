@@ -52,7 +52,7 @@ Primary job:
 Mode output shapes:
 - `Clarify`: `Objective`, `Desired Outcome`, `Failure or Decision Domain`, `Source Material`, `Proof of Done`
 - `Plan`: `Decision`, `Current State`, `Options Considered`, `Recommended Approach`, `Proof Strategy`
-- `Analyze`: `Failure`, `Failure Domain`, `Incident Evidence`, `Fault Location`, `Root Cause`, `Ruled-out Hypotheses`
+- `Analyze`: `Failure`, `Failure Domain`, `Incident Evidence Pack`, `Fault Location`, `Root Cause`, `Ruled-out Hypotheses`
 - `Implement`: `Change Location`, `Why This Patch Point`, `Rejected Approaches`, `Verification`, `Observed Result`
 
 ### `change-review`
