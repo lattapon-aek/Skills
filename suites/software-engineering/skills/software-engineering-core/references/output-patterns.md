@@ -5,7 +5,7 @@ Use these compact patterns when the full mode output would be too heavy for the 
 ## Small Clear Implementation
 
 - `Objective`: Implement the specific requested behavior.
-- `Working Document`: User-supplied task document, repo-local work packet, or inline packet when the work is genuinely one-turn.
+- `Working Document`: User-supplied task document or repo-local work packet for any file-changing work; inline packet only for read-only one-turn work.
 - `Evidence`: Files, tests, docs, or runtime behavior inspected before editing.
 - `Mode`: `Implement`.
 - `Change`: The narrow patch point and why it is sufficient.
@@ -18,7 +18,7 @@ Use these compact patterns when the full mode output would be too heavy for the 
 ## Current Code Already Correct
 
 - `Objective`: Validate the reported behavior against the current workspace.
-- `Working Document`: User-supplied task document, repo-local work packet, or inline packet when no file artifact is needed.
+- `Working Document`: User-supplied task document or repo-local work packet for any file-changing work; inline packet only when no file artifact is needed.
 - `Evidence`: The reported input, relevant code path, and observed test or simulation result.
 - `Mode`: `Analyze` leading to `No Patch`.
 - `No Patch`: Current code already produces the expected result, or the reported failure cannot be reproduced with available evidence.

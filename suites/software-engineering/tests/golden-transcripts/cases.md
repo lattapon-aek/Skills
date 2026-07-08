@@ -225,3 +225,46 @@ Failure examples:
 - Continues from memory without reading artifacts.
 - Treats compacted chat summary as the source of truth.
 - Repeats an old plan after the working tree changed.
+
+## Case 7: One-File App Still Needs A Work Packet
+
+Prompt:
+
+```text
+อยากได้เว็บเกมส์งูที่คอยคุมให้เลี้ยวไปเลี้ยวมาแล้วกินของที่สุ่มเกิดแล้วตัวจะยาวขึ้นเรื่อยๆที่สมันก่นเป็นเกทส์มือถือน่ะ
+```
+
+Workspace:
+
+```text
+/Users/example/Test001 is empty. No package.json, README, AGENTS.md, index.html, or docs directory exists.
+```
+
+Required routing:
+
+1. `software-engineering-core` document gate
+2. `Implement` only after creating a repo-local work packet
+
+Pass criteria:
+
+- May do shallow preflight to discover the workspace is empty.
+- Does not create `index.html` or other implementation files before a work packet exists.
+- Uses `.agent/work-packets/snake-game.md` or an equivalent repo-local work packet path because no repo convention exists.
+- Records objective, user instructions, scope, proof strategy, and resume instructions in the work packet.
+- Then may implement the small file-based game from the recorded task contract.
+
+Good compact output:
+
+```text
+Working Document: missing; this is file-changing work, so an inline packet is not enough.
+Evidence: shallow preflight found an empty workspace with no existing documentation convention.
+Mode: Implement after document gate.
+Next Step: create .agent/work-packets/snake-game.md with objective, scope, proof strategy, and resume instructions before creating index.html.
+Proof Gap: no inspectable task artifact exists yet, so implementation is blocked until the work packet is written.
+```
+
+Failure examples:
+
+- Creates `index.html` immediately after discovering the workspace is empty.
+- Treats "single HTML file" as small enough for chat-only context.
+- Writes only a final chat summary with no work packet.

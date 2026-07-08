@@ -10,6 +10,8 @@ The conversation context window is not a source of truth. It is a working surfac
 
 Before substantial action, confirm that the task has a working document.
 
+Any task that creates, edits, deletes, renames, formats, or generates files is substantial for this gate, even when it is a small one-file deliverable in an empty workspace.
+
 Substantial action includes:
 
 - editing code, docs, config, tests, generated assets, or repository metadata
@@ -23,12 +25,15 @@ If the user supplied a task document, packet, issue, PR, design brief, or runboo
 
 If no working document exists:
 
-- for file-changing or multi-step work, create a work packet before implementation begins
+- for any file-changing work, create a repo-local work packet before the first file edit
+- for multi-step work, create a work packet before implementation begins
 - for planning or design work, create or update a decision-bearing work packet before presenting the plan as actionable
-- for very small one-turn work, an inline work packet is acceptable, but state the objective, source material, proof of done, and proof gap
+- for very small one-turn read-only work, an inline work packet is acceptable, but state the objective, source material, proof of done, and proof gap
 - if the user forbids creating artifacts, state the audit and resume risk explicitly before continuing
 
 Do not treat private reasoning, chat memory, or a prior assistant summary as the working document.
+
+Inline work packets are not allowed for work that will touch files. A chat request such as "build a small HTML page", "make a one-file game", "fix this config", or "add a quick script" still needs a file artifact before editing unless the user supplied a working document or explicitly accepted the audit risk.
 
 ## Required Artifacts
 
@@ -116,6 +121,8 @@ Prefer a repo-local path that follows existing conventions, such as:
 - a suite-specific path when the repo already has one
 
 Do not add ad hoc root files when repository instructions define a documentation area.
+
+When the workspace is empty or has no documentation convention, use `.agent/work-packets/<task>.md` for the work packet and create that directory before the first implementation edit.
 
 ## Anti-Patterns
 

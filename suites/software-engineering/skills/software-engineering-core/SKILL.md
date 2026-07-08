@@ -132,7 +132,7 @@ Avoid these behaviors even when the requested task sounds urgent:
 
 Apply [../../references/context-continuity.md](../../references/context-continuity.md) before substantial action.
 
-The conversation context window is not a source of truth. Important task state must live in inspectable artifacts when the work may affect files, span phases, require decisions, or need later resume.
+The conversation context window is not a source of truth. Important task state must live in inspectable artifacts when the work may affect files, span phases, require decisions, or need later resume. Any file-changing task is substantial for this gate, even if it looks like a small one-file deliverable.
 
 ### Document Gate
 
@@ -140,10 +140,10 @@ Before planning, analyzing, implementing, or reviewing substantial work, confirm
 
 - the user supplied a task document, packet, issue, PR, design brief, or runbook and you have identified it as the working document
 - you created or updated a repo-local work packet using [references/work-packet-template.md](references/work-packet-template.md)
-- the task is small enough for an inline work packet and no file artifact is needed
+- the task is read-only, small enough for an inline work packet, and no file artifact is needed
 - the user explicitly declined artifacts and you stated the audit and resume risk
 
-When the gate is closed, do not continue into implementation. Create the work packet or ask the user for the missing working document path when the correct location cannot be inferred safely.
+When the gate is closed, do not continue into implementation. Create the work packet or ask the user for the missing working document path when the correct location cannot be inferred safely. In an empty workspace with no convention, create `.agent/work-packets/<task>.md` before the first file edit.
 
 ### Continuity Updates
 
