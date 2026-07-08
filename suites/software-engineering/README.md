@@ -7,7 +7,7 @@ Reusable software-engineering mindset and process skills for AI agents that must
 This suite is packaged for the `skills` CLI. From the repository root, install the shipped skills with:
 
 ```powershell
-npx skills add https://github.com/lattapon-aek/Skills --skill software-engineering-core --skill change-review
+npx skills add https://github.com/lattapon-aek/Skills --skill software-engineering-core --skill change-review --skill verification-hazards
 ```
 
 ## Adapters
@@ -22,12 +22,17 @@ npx skills add https://github.com/lattapon-aek/Skills --skill software-engineeri
 skills/
   software-engineering-core/
   change-review/
+  verification-hazards/
 references/
   four-principles.md
   orchestration-policy.md
 tests/
   software-engineering-core/
   change-review/
+  verification-hazards/
+  golden-transcripts/
+  internet-derived/
+  mini-stress/
 ```
 
 ## Skills
@@ -76,6 +81,26 @@ Expected output shape:
 Inside findings, distinguish `Observed Evidence` from `Inference` when the risk is not directly executed or proven.
 Use the same structure for self-review and justified `no patch` outcomes.
 
+### `verification-hazards`
+
+Use as a lens (not a mode) whenever a green test, CI run, benchmark, or agent report is about to be trusted. It names the five repeatable ways a passing result lies and gives the cheapest counter-check for each:
+
+- `Bypassed-Layer Green` — the test hit a mock/shim/direct-call, not the real trigger, transport, or transition
+- `Subset Green` — the run covered a slice (packet subset, local-only, sandbox-limited) that cannot reach the failing case
+- `Wrong-Theory Green` — the fix rests on an unobserved root cause; the offline test encodes the same wrong assumption
+- `Wrong-Tree Green` — the verified bytes are not the committed/shipping bytes
+- `Not-Your-Red` — a pre-existing flake or environment contention misattributed to the change
+
+Before elevating green to `Observed Result`, it requires five gates to pass — `Layer`, `Surface`, `Cause`, `Artifact`, `Baseline` — and otherwise returns a `still a lead` verdict with the cheapest next check. It sharpens core's `Verification`/`Proof Gap` and review's `Proof Sufficiency`; it does not replace them.
+
+Expected output shape:
+- `Claim Under Test`
+- `Hazard Scan` (per-hazard `clear` / `at risk` / `not applicable` with the deciding tell)
+- `Counter-Checks Run`
+- `Verification Verdict` (`confirmed` / `still a lead`)
+- `Proof Gap`
+- `Residual Risk`
+
 ## Shared Doctrine
 
 All skills follow the same operating model:
@@ -105,10 +130,19 @@ Evidence hierarchy:
 
 Suite-level orchestration policy lives in [references/orchestration-policy.md](references/orchestration-policy.md).
 
+Operating contract:
+
+- `software-engineering-core` owns the work: clarify, plan, analyze, implement, or justify no patch.
+- `verification-hazards` challenges proof: use it only when a green/red run, CI result, benchmark, or agent report is being treated as evidence.
+- `change-review` accepts or rejects the result: use it only when there is a concrete diff, working tree, implemented result, PR, or justified no-patch outcome.
+
+If a gate applies, run it or state why it does not apply. Do not jump to review while objective, diagnosis, patch boundary, or proof is still missing.
+
 Typical flow:
 
 1. `software-engineering-core`
-2. `change-review`
+2. `verification-hazards` when a green/red result or agent report is about to be trusted
+3. `change-review`
 
 Recommended routing:
 
@@ -116,8 +150,17 @@ Recommended routing:
 - clear objective but unsettled solution or migration path -> core `Plan`
 - bug or unexplained runtime issue -> core `Analyze`
 - clear patch boundary and execution target -> core `Implement`
+- a green result or agent report about to be trusted -> `verification-hazards`
 - diff acceptance or self-review -> `change-review`
 - any accepted final state -> emit a `change-review`-shaped report
+
+Handoff packets:
+
+- Core to hazards: claim under test, exact command/report/result, expected proof, artifact checked, known gaps
+- Hazards to core: failed hazard, observed tell, cheapest next check, mode to resume
+- Hazards to review: verdict, confirmed gates, open hazards, residual risk
+- Core to review: objective, diff or no-patch conclusion, evidence, verification, hazard verdict if applicable, proof gaps
+- Review to core: blocking finding, mode to resume, exact evidence or patch needed next
 
 ## Reporting Conventions
 
@@ -144,6 +187,10 @@ The repo includes fixture suites for forward-testing skill behavior:
 
 - [tests/software-engineering-core/README.md](tests/software-engineering-core/README.md)
 - [tests/change-review/README.md](tests/change-review/README.md)
+- [tests/verification-hazards/cases.md](tests/verification-hazards/cases.md)
+- [tests/golden-transcripts/cases.md](tests/golden-transcripts/cases.md)
+- [tests/internet-derived/cases.md](tests/internet-derived/cases.md)
+- [tests/mini-stress/cases.md](tests/mini-stress/cases.md)
 
 Current coverage themes:
 
@@ -155,6 +202,10 @@ Current coverage themes:
 - design-choice recommendation before implementation
 - decision logging and reversibility before implementation
 - review findings vs ruled-out concerns
+- green-result hazards: bypassed layer, subset, wrong theory, wrong tree, and not-your-red
+- golden transcript checks for routing and output-shape regressions
+- internet-derived public incident cases for rollout safety, data recovery, distributed systems, destructive scripts, partial deployments, and interface contracts
+- mini-model stress cases for premature patching, false-green acceptance, and unsourced external claims
 - end-to-end skill composition across multiple phases
 
 ## Usage Notes
@@ -173,9 +224,18 @@ Then edit the generated `SKILL.md`, add any needed references, scripts, or asset
 
 ## Validation
 
+Run the full suite validation:
+
+```bash
+./scripts/validate-suite.sh
+```
+
+Or run the individual skill validators:
+
 ```powershell
 python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\software-engineering-core
 python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\change-review
+python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\verification-hazards
 ```
 
 On macOS or Linux with pyenv:
@@ -183,4 +243,5 @@ On macOS or Linux with pyenv:
 ```bash
 PYENV_VERSION=3.12.2 pyenv exec python /Users/lattapon/.codex/skills/.system/skill-creator/scripts/quick_validate.py suites/software-engineering/skills/software-engineering-core
 PYENV_VERSION=3.12.2 pyenv exec python /Users/lattapon/.codex/skills/.system/skill-creator/scripts/quick_validate.py suites/software-engineering/skills/change-review
+PYENV_VERSION=3.12.2 pyenv exec python /Users/lattapon/.codex/skills/.system/skill-creator/scripts/quick_validate.py suites/software-engineering/skills/verification-hazards
 ```

@@ -1,6 +1,6 @@
 ---
 name: software-engineering-core
-description: Drive software-engineering work with one evidence-first workflow that can clarify objectives, choose an approach, investigate failures, implement the smallest justified change, and prove the result before handoff to review.
+description: Primary working skill for software-engineering tasks. Use when an agent must clarify an objective, choose an approach, diagnose a failure, implement a scoped change, or justify no patch from evidence. Owns the work until a concrete result or no-patch conclusion is ready; then hand proof through verification-hazards when green/red evidence is being trusted and change-review for acceptance.
 ---
 
 # Software Engineering Core
@@ -10,6 +10,25 @@ description: Drive software-engineering work with one evidence-first workflow th
 Use one disciplined workflow for software-engineering work instead of switching mental models per task. Start by clarifying the objective, classify the failure or decision domain, gather the best available evidence, choose the next justified mode, and prove each conclusion before moving on.
 Stay in core mode: move between clarification, planning, diagnosis, and implementation only when the current evidence justifies that transition. Do not silently jump from a vague request to a patch, from a report to a root cause, or from a design idea to a rewrite.
 Golden rule: one skill, multiple modes. Pick the narrowest mode that fits the current evidence, and keep the work scoped to that mode until the proof gap changes.
+
+## Suite Role
+
+This is the default owner for engineering work. Use it to decide what the task really is, what evidence is available, which mode is justified, and what action is safe.
+
+Do not use this skill as a loose checklist. It must either:
+
+- produce a justified next mode and action,
+- produce a concrete implementation or no-patch result, or
+- stop with the specific proof gap that blocks safe progress.
+
+When the result depends on a green/red run or an agent report, hand the claim to `verification-hazards` before acceptance. When an end state is ready, hand it to `change-review`.
+
+## Must Obey
+
+- Do not skip the current gate because the next step seems obvious.
+- Do not patch before objective, domain, and patch boundary are supported by evidence.
+- Do not call work done without observed verification and a stated proof gap.
+- Do not use `change-review` or `verification-hazards` as a substitute for core diagnosis or implementation.
 
 ## Mindset Contract
 
@@ -21,12 +40,13 @@ Optimize for a proven engineering outcome, not for producing code first.
 - Memory and conventions are hints, not evidence.
 - "Verified" means observed output from source, tests, logs, runtime behavior, or authoritative docs.
 - Review is not optional for an accepted patch or accepted `no patch` conclusion.
+- The agent must not proceed to the next phase only because the current phase feels likely; it needs a stated gate, evidence, and proof gap.
 
 ## Default Thought Path
 
 Use this mental path before acting:
 
-`request -> objective -> evidence -> domain -> mode -> action -> proof -> review`
+`request -> objective -> evidence -> domain -> mode -> action -> proof -> verification-hazards when proof depends on a green/red result -> review`
 
 If any link is missing, do the smallest step that closes that gap. Do not skip from `request` to `action`.
 
@@ -42,6 +62,7 @@ Use this skill for most software-engineering work, including:
 
 ## When Not To Use
 
+- Do not use this skill as a substitute for a false-green scan; use `verification-hazards` when proof depends on a green/red result or agent report.
 - Do not use this skill as a substitute for final acceptance review; use `change-review`.
 - Do not use this skill for non-engineering work that does not depend on code, systems, runtime behavior, or technical evidence.
 
@@ -63,6 +84,7 @@ Always walk these questions in order:
 3. What evidence do I already have?
 4. What is the narrowest justified next mode?
 5. What is already proven, and what is still a proof gap?
+6. Could the current green or red result be lying because it used the wrong layer, surface, cause, artifact, or baseline?
 
 The main modes inside this skill are:
 
@@ -70,6 +92,8 @@ The main modes inside this skill are:
 - `Plan` for solution, migration, or boundary decisions
 - `Analyze` for bugs, regressions, runtime issues, and unexplained behavior
 - `Implement` for narrow, evidence-backed changes
+
+Use `verification-hazards` as a verification lens inside any mode before trusting a green test, CI result, benchmark, agent report, or suspicious red result. When that lens applies, use `change-review` only after the hazard scan either confirms the result or names the remaining proof gap.
 
 ## Execution Loop
 
@@ -81,7 +105,8 @@ Use this loop for every mode, but keep it light when the task is small:
 4. Confirm the current assumption set against source material or runtime evidence.
 5. Narrow the next action to the smallest justified step.
 6. Run that step and observe the result.
-7. Check impact, adjacent behavior, and proof gaps before moving on.
+7. Scan the observed result for verification hazards before treating it as proof.
+8. Check impact, adjacent behavior, and proof gaps before moving on.
 
 If the loop is still missing a fact that changes correctness, stop and confirm instead of guessing.
 
@@ -95,6 +120,7 @@ Avoid these behaviors even when the requested task sounds urgent:
 - expanding scope because nearby code looks weak but is not part of the proof path
 - using memory, naming, conventions, or pattern matching as proof when source or runtime evidence is inspectable
 - weakening or deleting a test to make a fix look green
+- accepting a green result without checking whether it exercised the shipping layer, full surface, proven cause, committed artifact, and stable baseline
 - ending implementation with status prose instead of a review-shaped acceptance report
 
 ## Confirm Gates
@@ -391,7 +417,8 @@ For any mode, always state:
 - Stay inside `software-engineering-core` until the work reaches either:
   - a concrete implementation result, or
   - a justified `no patch` conclusion
-- Hand off to `change-review` for every accepted end state, including self-review and `no patch`.
+- Before handoff, use `verification-hazards` when the acceptance evidence includes a green test, CI result, benchmark, agent report, or red result attributed to the change.
+- Hand off to `change-review` for every accepted end state, including self-review and `no patch`. Include any `verification-hazards` verdict or proof gap in the review evidence.
 
 ## Reference
 

@@ -13,6 +13,10 @@ $skills = @(
     @{
         Name = 'change-review'
         Path = Join-Path $repoRoot 'suites/software-engineering/skills/change-review'
+    },
+    @{
+        Name = 'verification-hazards'
+        Path = Join-Path $repoRoot 'suites/software-engineering/skills/verification-hazards'
     }
 )
 

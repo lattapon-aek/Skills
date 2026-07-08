@@ -1,4 +1,4 @@
 interface:
   display_name: "Change Review"
-  short_description: "Review changes for correctness, impact, and proof"
-  default_prompt: "Use $change-review to inspect these changes for correctness risks, hidden impact, and weak verification."
+  short_description: "Final acceptance gate for diffs, implemented results, and justified no-patch outcomes"
+  default_prompt: "Use $change-review to accept or reject a concrete diff, working tree, implemented result, or justified no-patch outcome by inspecting correctness, impact, proof sufficiency, false-green hazards, and residual risk."

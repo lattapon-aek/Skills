@@ -13,6 +13,7 @@ Expected flow:
 - core `Clarify`
 - core `Analyze`
 - core `Implement`
+- `verification-hazards` before trusting the green fix verification
 - `change-review`
 
 ## Case 2: Design-Then-Implement
@@ -39,6 +40,7 @@ Expected flow:
 - core `Clarify`
 - core `Plan`
 - core `Implement`
+- `verification-hazards` if implementation proof depends on a green test, CI result, benchmark, or agent report
 - `change-review`
 
 Suggested final review shape:

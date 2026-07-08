@@ -13,7 +13,7 @@ npx skills add https://github.com/lattapon-aek/Skills
 To install only the shipped software-engineering skills:
 
 ```powershell
-npx skills add https://github.com/lattapon-aek/Skills --skill software-engineering-core --skill change-review
+npx skills add https://github.com/lattapon-aek/Skills --skill software-engineering-core --skill change-review --skill verification-hazards
 ```
 
 For local Claude Code use, link the shipped skills into the local skill directory:
@@ -30,7 +30,7 @@ For local Codex use, link the shipped skills into the local skill directory:
 
 Primary entry point:
 
-- [suites/software-engineering/README.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/README.md)
+- [suites/software-engineering/README.md](suites/software-engineering/README.md)
 
 Repo-level structure:
 
@@ -39,6 +39,7 @@ suites/
   software-engineering/
 scripts/
   new-skill.ps1
+  validate-suite.sh
 ```
 
 Use the suite README for:

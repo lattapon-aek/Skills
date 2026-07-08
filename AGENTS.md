@@ -4,10 +4,9 @@
 
 This repository is organized as a single suite under `suites/software-engineering/`.
 
-- `skills/`: phase-based skills such as `task-intake`, `solution-planning`, `root-cause-analysis`, `change-implementation`, and `change-review`
-- `skills/`: one core workflow skill plus `change-review`
+- `skills/`: `software-engineering-core`, `change-review`, and `verification-hazards` (a verification lens for catching false-green results)
 - `references/`: shared doctrine and orchestration guidance
-- `tests/`: fixture-driven stress tests, with `software-engineering-core/` for core modes and `change-review/` for acceptance review
+- `tests/`: fixture-driven stress tests, with `software-engineering-core/` for core modes, `change-review/` for acceptance review, and `verification-hazards/` for false-green scenarios
 - `scripts/new-skill.ps1`: scaffold for new skills
 
 Keep new suite content inside `suites/software-engineering/`; avoid adding ad hoc files at the repo root.
@@ -20,6 +19,8 @@ Keep new suite content inside `suites/software-engineering/`; avoid adding ad ho
   Runs a representative end-to-end fixture test.
 - `node --test suites/software-engineering/tests/change-review/scenario-3/base/src/openai/support-assistant.test.ts`
   Runs a focused migration/review proof fixture.
+- `./scripts/validate-suite.sh`
+  Runs skill validation, representative fixtures, registration checks, and stale routing scans.
 - `.\scripts\new-skill.ps1 -Name my-skill -DisplayName "My Skill" -ShortDescription "..." -DefaultPrompt "Use $my-skill ..."`
   Scaffolds a new skill.
 
@@ -31,7 +32,7 @@ Write short, directive prose. Prefer evidence-first wording and phase-based nami
 
 ## Testing Guidelines
 
-Tests are fixture-based, not framework-heavy. Add new cases under the matching suite in `suites/software-engineering/tests/`. Prefer small, realistic artifacts over synthetic placeholders.
+Tests are fixture-based, not framework-heavy. Add new cases under the matching suite in `suites/software-engineering/tests/`. Prefer small, realistic artifacts over synthetic placeholders. Use `golden-transcripts/` for expected routing/output-shape examples and `mini-stress/` for small-model failure modes.
 
 Name scenario folders and fixtures descriptively, for example `scenario-3/` or `artifacts/npm-sandbox-repro/`. Validate changed skills and run at least one relevant `node --test` fixture before submitting changes.
 

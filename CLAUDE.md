@@ -12,6 +12,7 @@ This repository packages software-engineering skills for reuse across AI agents.
 
 - `software-engineering-core`
 - `change-review`
+- `verification-hazards`
 
 ## Local Claude Setup
 
