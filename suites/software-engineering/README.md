@@ -16,6 +16,57 @@ npx skills add https://github.com/lattapon-aek/Skills --skill software-engineeri
 - Codex: `.\scripts\link-codex-skills.ps1`
 - skills CLI: `npx skills add https://github.com/lattapon-aek/Skills`
 
+## Enforce Skill Use With `AGENTS.md`
+
+Installing a skill makes it available, but it does not guarantee every agent will select it. Some agents may skip the skill when they consider a task "small", such as a single-file UI edit or a quick script. Use a repository `AGENTS.md` or global agent instruction to make skill selection mandatory.
+
+Copy this into projects where you want the software-engineering suite enforced:
+
+```md
+# Agent Instructions
+
+## Required Software-Engineering Workflow
+
+For any software-engineering task, use `agents-skills:software-engineering-core` before planning, editing, debugging, reviewing, or running verification.
+
+This requirement applies to:
+
+- creating, editing, deleting, renaming, formatting, or generating files
+- single-file UI/app/script edits
+- empty workspaces and greenfield prototypes
+- bug fixes, refactors, migrations, config changes, tests, docs, and tooling
+- design or implementation plans that may later become code
+
+Do not skip the skill because the task looks small.
+
+Before the first file edit, satisfy the Document Gate:
+
+- use the user-supplied task document, issue, PR, packet, design brief, or runbook if one exists
+- otherwise create a repo-local work packet before editing
+- if this repo has no convention, use `.agent/work-packets/<task>.md`
+- inline work packets are allowed only for read-only one-turn work that does not touch files
+- if the user explicitly refuses artifacts, state the audit and resume risk before continuing
+
+During work:
+
+- update the work packet or progress log when objective, scope, decisions, evidence, patch boundary, verification, proof gaps, or next action change
+- after context compaction, interruption, or handoff, read the work packet/progress log/final report before continuing
+- verify with real commands or runtime checks before claiming completion
+
+Before accepting completion:
+
+- use `agents-skills:verification-hazards` when trusting a green/red test, CI result, benchmark, rollout result, or agent report
+- use `agents-skills:change-review` for every accepted patch or justified no-patch conclusion
+```
+
+For stricter global use, place the same policy in the agent's global instructions. Keep repo-local `AGENTS.md` files for project-specific paths, package managers, test commands, and artifact locations.
+
+Recommended prompt when starting a task:
+
+```text
+Use agents-skills:software-engineering-core and follow this repo's AGENTS.md. If no working document exists, create the required work packet before editing files.
+```
+
 ## Catalog
 
 ```text

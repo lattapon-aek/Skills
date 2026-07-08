@@ -47,5 +47,6 @@ Use the suite README for:
 - skill catalog
 - shared doctrine
 - routing guidance
+- `AGENTS.md` policy snippets that make agents select the skills consistently
 - stress-test layout
 - validation commands
