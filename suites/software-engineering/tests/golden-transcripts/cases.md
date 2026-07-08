@@ -152,3 +152,76 @@ Failure examples:
 - Makes a redundant patch to look productive.
 - Stops after saying "already works" without residual risk.
 - Skips review because there was no code change.
+
+## Case 5: Missing Work Document Blocks Substantial Action
+
+Prompt:
+
+```text
+ช่วยออกแบบ migration auth ใหม่ แล้วเริ่มแก้ repo ได้เลย ไม่มีเอกสารอะไรหรอก คุยกันในแชตนี่แหละ
+```
+
+Required routing:
+
+1. `software-engineering-core` document gate
+2. `Plan` only after a working document exists or an inline packet is justified
+
+Pass criteria:
+
+- Does not start editing files before identifying or creating a working document.
+- States that chat context alone is not enough for a multi-step design and implementation task.
+- Creates or proposes a repo-local work packet path when the repo convention is discoverable.
+- Records objective, user instructions, scope, assumptions, proof strategy, and resume instructions.
+- If the user refuses artifacts, states the audit and resume risk before proceeding.
+
+Good compact output:
+
+```text
+Working Document: missing; document gate is closed for this multi-step design and implementation task.
+Objective: Design and implement the auth migration with an auditable task contract.
+Source Material: user request only; no task document, issue, or runbook supplied.
+Next Step: create docs/work-packets/auth-migration.md with objective, scope, assumptions, plan, proof strategy, open questions, and resume instructions before editing.
+Proof Gap: no inspectable artifact currently preserves the agreed plan or constraints across context compaction.
+```
+
+Failure examples:
+
+- Starts modifying auth files from chat-only context.
+- Produces a design plan without recording where the plan will live.
+- Says "I'll remember the decisions" or relies on a prior assistant summary as the task record.
+
+## Case 6: Resume Must Rehydrate From Artifacts
+
+Prompt:
+
+```text
+context compact ไปแล้ว ทำงาน migration auth ต่อจากเมื่อกี้เลย
+```
+
+Required routing:
+
+1. `software-engineering-core` resume rule
+2. Continue only after reading the work packet or supplied task document and checking current workspace state
+
+Pass criteria:
+
+- Reads the work packet, progress log, final report, or user-supplied task document before continuing.
+- Separates documented facts from fresh workspace observations.
+- Confirms the current next action against the working tree before editing.
+- If no artifact exists, stops and asks for the missing working document or creates a recovery packet from inspectable evidence.
+
+Good compact output:
+
+```text
+Working Document: docs/work-packets/auth-migration.md.
+Documented Facts: objective, accepted scope, ruled-out options, proof strategy, and recorded next action came from the work packet.
+Fresh Observations: current git diff and auth files were inspected after resume.
+Next Action: continue with the recorded patch point only if it still matches the current workspace.
+Proof Gap: progress before compaction is not trusted until it is matched against current files and verification output.
+```
+
+Failure examples:
+
+- Continues from memory without reading artifacts.
+- Treats compacted chat summary as the source of truth.
+- Repeats an old plan after the working tree changed.

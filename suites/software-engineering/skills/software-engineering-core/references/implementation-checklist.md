@@ -3,6 +3,7 @@
 ## Clarify
 
 - State the objective and expected result
+- Identify the working document or create a work packet before substantial action
 - Identify the decisions that still need clarification
 - Define how success will be proven
 - If the task is still underspecified, push it back to intake instead of guessing

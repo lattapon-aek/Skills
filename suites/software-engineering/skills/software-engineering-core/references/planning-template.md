@@ -1,5 +1,9 @@
 # Design Template
 
+## Working Document
+
+- User-supplied task document, repo-local work packet, or inline packet used for this plan
+
 ## Decision
 
 - One sentence describing the design or architecture decision to be made

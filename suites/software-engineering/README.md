@@ -24,6 +24,7 @@ skills/
   change-review/
   verification-hazards/
 references/
+  context-continuity.md
   four-principles.md
   orchestration-policy.md
 tests/
@@ -119,6 +120,8 @@ Shared principles live in [references/four-principles.md](references/four-princi
 - `Surgical Changes`
 - `Goal-Driven Execution`
 
+Context continuity lives in [references/context-continuity.md](references/context-continuity.md). For substantial work, agents must identify a user-supplied working document, create a repo-local work packet, or state an inline work packet before acting. The conversation context window is not enough for multi-step, file-changing, design, review, or resume-prone work.
+
 Evidence hierarchy:
 
 1. Real behavior: runtime output, logs, traces, metrics, failing commands, observed results
@@ -135,6 +138,7 @@ Operating contract:
 - `software-engineering-core` owns the work: clarify, plan, analyze, implement, or justify no patch.
 - `verification-hazards` challenges proof: use it only when a green/red run, CI result, benchmark, or agent report is being treated as evidence.
 - `change-review` accepts or rejects the result: use it only when there is a concrete diff, working tree, implemented result, PR, or justified no-patch outcome.
+- every substantial phase carries a working document so decisions, evidence, proof gaps, and next actions survive context compaction.
 
 If a gate applies, run it or state why it does not apply. Do not jump to review while objective, diagnosis, patch boundary, or proof is still missing.
 
@@ -156,11 +160,11 @@ Recommended routing:
 
 Handoff packets:
 
-- Core to hazards: claim under test, exact command/report/result, expected proof, artifact checked, known gaps
-- Hazards to core: failed hazard, observed tell, cheapest next check, mode to resume
-- Hazards to review: verdict, confirmed gates, open hazards, residual risk
-- Core to review: objective, diff or no-patch conclusion, evidence, verification, hazard verdict if applicable, proof gaps
-- Review to core: blocking finding, mode to resume, exact evidence or patch needed next
+- Core to hazards: working document, claim under test, exact command/report/result, expected proof, artifact checked, known gaps
+- Hazards to core: working document, failed hazard, observed tell, cheapest next check, mode to resume
+- Hazards to review: working document, verdict, confirmed gates, open hazards, residual risk
+- Core to review: working document, objective, diff or no-patch conclusion, evidence, verification, hazard verdict if applicable, proof gaps
+- Review to core: working document, blocking finding, mode to resume, exact evidence or patch needed next
 
 ## Reporting Conventions
 
@@ -169,6 +173,7 @@ Use these conventions across the repo:
 - `Observed Evidence` vs `Inference`
   - `Observed Evidence` is what the agent directly saw in code, diff, tests, logs, traces, runtime output, or authoritative sources.
   - `Inference` is a risk or conclusion derived from that evidence.
+- `Working Document` is the user-supplied task source or repo-local work packet that preserves context beyond the current chat. Use an inline work packet only for small one-turn work that does not need file artifacts.
 - `No patch` is valid when the current workspace does not reproduce the reported issue and no justified change is supported by evidence.
 - A patch is only one possible outcome; a justified `no patch` conclusion still needs review.
 - Separate `Historical Incident State` from `Current Workspace State` when an incident report and the current codebase disagree.
@@ -207,12 +212,14 @@ Current coverage themes:
 - internet-derived public incident cases for rollout safety, data recovery, distributed systems, destructive scripts, partial deployments, and interface contracts
 - mini-model stress cases for premature patching, false-green acceptance, and unsourced external claims
 - end-to-end skill composition across multiple phases
+- context continuity through work packets, progress logs, final reports, and resume after compaction
 
 ## Usage Notes
 
 - These skills are opinionated toward consultative, evidence-first software engineering work.
 - They are designed to prefer `no patch` over speculative patching when the current workspace does not reproduce the reported issue.
 - They are also designed to make proof gaps explicit instead of hiding them behind confident language.
+- They require substantial work to preserve task context in inspectable artifacts instead of relying on chat history alone.
 
 ## Add A New Skill
 

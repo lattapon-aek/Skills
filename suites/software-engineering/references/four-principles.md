@@ -15,6 +15,8 @@ Preferred order:
 
 Treat memory, conventions, and generic patterns as hints, not evidence.
 
+For multi-step work, the working document or work packet is part of the local artifact layer. It records the task contract, but it does not replace fresh inspection of the current workspace.
+
 ## 1. Think Before Coding
 
 - Do not assume silently.
@@ -48,6 +50,7 @@ This principle addresses orthogonal edits and touching code you should not touch
 ## 4. Goal-Driven Execution
 
 - Define what success looks like before editing.
+- Record substantial objectives, decisions, proof gaps, and next actions in an inspectable working document.
 - Turn tasks into verifiable checks.
 - Prefer tests, reproductions, direct runtime checks, or explicit commands over subjective judgments.
 - For multi-step work, pair each step with a verification target.

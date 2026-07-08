@@ -14,6 +14,8 @@ Use exactly one primary owner at a time:
 
 Do not treat these skills as optional style guidance. If a gate applies, run it or state why it does not apply.
 
+Context continuity is part of the suite contract. Before substantial action, the current owner must identify a user-supplied working document, create a repo-local work packet, or state an inline work packet for a small one-turn task. Use [context-continuity.md](context-continuity.md) for the document gate and resume rules.
+
 ## Default Flow
 
 1. `software-engineering-core`
@@ -47,13 +49,15 @@ Small-model routing shortcut: if the prompt contains `approve`, `ship`, `merge`,
 
 When moving between skills, carry only the evidence needed by the next gate:
 
-- Core to hazards: `Claim Under Test`, exact command/report/result, what it is supposed to prove, artifact or branch checked, known gaps.
-- Hazards to core: failed hazard, observed tell, cheapest next check, and whether to resume `Analyze` or `Implement`.
-- Hazards to review: verdict, confirmed gates, open hazards, residual risk.
-- Core to review: objective, diff or no-patch conclusion, evidence inspected, verification run, hazard verdict if applicable, proof gaps.
-- Review to core: blocking finding, required mode to resume, exact evidence or patch needed next.
+- Core to hazards: working document, `Claim Under Test`, exact command/report/result, what it is supposed to prove, artifact or branch checked, known gaps.
+- Hazards to core: working document, failed hazard, observed tell, cheapest next check, and whether to resume `Analyze` or `Implement`.
+- Hazards to review: working document, verdict, confirmed gates, open hazards, residual risk.
+- Core to review: working document, objective, diff or no-patch conclusion, evidence inspected, verification run, hazard verdict if applicable, proof gaps.
+- Review to core: working document, blocking finding, required mode to resume, exact evidence or patch needed next.
 
 Do not hand off a prose summary without enough source, command, diff, or runtime evidence for the next skill to inspect.
+
+If context was compacted, interrupted, or transferred between agents, rebuild state from the working document and current workspace before acting on the handoff.
 
 ## Escalation Rules
 
@@ -90,13 +94,15 @@ Observable thresholds for these rules:
 
 For multi-step work, enforce this loop:
 
-1. inspect the facts that can actually be checked
-2. confirm the current assumption set against source material or runtime evidence
-3. choose the narrowest justified core mode
-4. act on one small step
-5. observe the result
-6. run `verification-hazards` if the observation is being treated as proof
-7. re-check impact and proof gaps before moving on
+1. identify or create the working document
+2. inspect the facts that can actually be checked
+3. confirm the current assumption set against source material or runtime evidence
+4. choose the narrowest justified core mode
+5. act on one small step
+6. observe the result
+7. update the working artifact when decisions, evidence, verification, proof gaps, or next action change
+8. run `verification-hazards` if the observation is being treated as proof
+9. re-check impact and proof gaps before moving on
 
 If a fact is inspectable, inspect it instead of guessing. If the current evidence does not justify the next step, route back to the earlier core mode that can close the gap.
 

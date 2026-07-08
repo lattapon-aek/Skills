@@ -29,6 +29,7 @@ When the result depends on a green/red run or an agent report, hand the claim to
 - Do not patch before objective, domain, and patch boundary are supported by evidence.
 - Do not call work done without observed verification and a stated proof gap.
 - Do not use `change-review` or `verification-hazards` as a substitute for core diagnosis or implementation.
+- Do not start substantial work without a working document, user-supplied task document, or explicit inline work packet for small one-turn tasks.
 
 ## Mindset Contract
 
@@ -46,7 +47,7 @@ Optimize for a proven engineering outcome, not for producing code first.
 
 Use this mental path before acting:
 
-`request -> objective -> evidence -> domain -> mode -> action -> proof -> verification-hazards when proof depends on a green/red result -> review`
+`request -> document gate -> objective -> evidence -> domain -> mode -> action -> proof -> verification-hazards when proof depends on a green/red result -> review`
 
 If any link is missing, do the smallest step that closes that gap. Do not skip from `request` to `action`.
 
@@ -79,12 +80,13 @@ Apply the repo's shared doctrine throughout all modes:
 
 Always walk these questions in order:
 
-1. What is the real objective?
-2. What failure domain or decision domain am I actually in?
-3. What evidence do I already have?
-4. What is the narrowest justified next mode?
-5. What is already proven, and what is still a proof gap?
-6. Could the current green or red result be lying because it used the wrong layer, surface, cause, artifact, or baseline?
+1. What working document records the task contract, or do I need to create one before substantial action?
+2. What is the real objective?
+3. What failure domain or decision domain am I actually in?
+4. What evidence do I already have?
+5. What is the narrowest justified next mode?
+6. What is already proven, and what is still a proof gap?
+7. Could the current green or red result be lying because it used the wrong layer, surface, cause, artifact, or baseline?
 
 The main modes inside this skill are:
 
@@ -100,13 +102,14 @@ Use `verification-hazards` as a verification lens inside any mode before trustin
 Use this loop for every mode, but keep it light when the task is small:
 
 1. Read the request and restate the real objective.
-2. Collect the facts that can actually be inspected.
-3. Decide whether you need `Clarify`, `Plan`, `Analyze`, or `Implement`.
-4. Confirm the current assumption set against source material or runtime evidence.
-5. Narrow the next action to the smallest justified step.
-6. Run that step and observe the result.
-7. Scan the observed result for verification hazards before treating it as proof.
-8. Check impact, adjacent behavior, and proof gaps before moving on.
+2. Run the document gate: identify the user-supplied task document, create a work packet, or state the inline packet for a small one-turn task.
+3. Collect the facts that can actually be inspected.
+4. Decide whether you need `Clarify`, `Plan`, `Analyze`, or `Implement`.
+5. Confirm the current assumption set against source material or runtime evidence.
+6. Narrow the next action to the smallest justified step.
+7. Run that step and observe the result.
+8. Scan the observed result for verification hazards before treating it as proof.
+9. Check impact, adjacent behavior, and proof gaps before moving on.
 
 If the loop is still missing a fact that changes correctness, stop and confirm instead of guessing.
 
@@ -122,6 +125,31 @@ Avoid these behaviors even when the requested task sounds urgent:
 - weakening or deleting a test to make a fix look green
 - accepting a green result without checking whether it exercised the shipping layer, full surface, proven cause, committed artifact, and stable baseline
 - ending implementation with status prose instead of a review-shaped acceptance report
+- relying on chat context as the only task record for multi-step work, design decisions, or user-agreed constraints
+- resuming after compaction or handoff without reading the work packet, progress log, or user-supplied task document first
+
+## Context Continuity
+
+Apply [../../references/context-continuity.md](../../references/context-continuity.md) before substantial action.
+
+The conversation context window is not a source of truth. Important task state must live in inspectable artifacts when the work may affect files, span phases, require decisions, or need later resume.
+
+### Document Gate
+
+Before planning, analyzing, implementing, or reviewing substantial work, confirm one of these is true:
+
+- the user supplied a task document, packet, issue, PR, design brief, or runbook and you have identified it as the working document
+- you created or updated a repo-local work packet using [references/work-packet-template.md](references/work-packet-template.md)
+- the task is small enough for an inline work packet and no file artifact is needed
+- the user explicitly declined artifacts and you stated the audit and resume risk
+
+When the gate is closed, do not continue into implementation. Create the work packet or ask the user for the missing working document path when the correct location cannot be inferred safely.
+
+### Continuity Updates
+
+Update the working artifact when objective, scope, decision, source material, patch boundary, verification, proof gap, or next action changes. Use [references/progress-log-template.md](references/progress-log-template.md) for multi-step work and [references/final-report-template.md](references/final-report-template.md) before accepted completion.
+
+After context compaction, interruption, or handoff, read the work packet or user-supplied task document before continuing. Then inspect current workspace state and distinguish documented facts from fresh observations.
 
 ## Confirm Gates
 
@@ -181,6 +209,7 @@ If any exit condition is not yet met, present the Clarify output and stop. Do no
 
 Required fields (always include):
 
+- `Working Document`
 - `Objective`
 - `Desired Outcome`
 - `Failure or Decision Domain`
@@ -237,6 +266,7 @@ When comparing options, record the decision in a way that can be audited later:
 
 #### Plan Output
 
+- `Working Document`
 - `Decision`
 - `Objective`
 - `Current State`
@@ -275,6 +305,7 @@ Before a root cause is finalized, collect the smallest useful pack of evidence f
 
 #### Analyze Output
 
+- `Working Document`
 - `Failure`
 - `Failure Domain`
 - `Incident Evidence Pack` — logs, traces, error output, process/orchestration state, runtime constraints, sandbox or permission signals, metrics, repro or simulation input used; group by evidence type when multiple are present
@@ -322,6 +353,7 @@ Before editing, confirm whether the change can be rolled back cleanly:
 
 #### Implement Output
 
+- `Working Document`
 - `Objective`
 - `Evidence`
 - `External Evidence`
@@ -369,6 +401,7 @@ Before editing, confirm whether the change can be rolled back cleanly:
 For small, clear tasks, keep field values terse instead of expanding into a long report. Preserve the proof path with these fields:
 
 - `Objective`
+- `Working Document`
 - `Evidence`
 - `Mode`
 - `Change` or `No Patch`
@@ -429,4 +462,8 @@ Use these references as needed:
 - [references/analysis-playbook.md](references/analysis-playbook.md)
 - [references/implementation-checklist.md](references/implementation-checklist.md)
 - [references/output-patterns.md](references/output-patterns.md)
+- [references/work-packet-template.md](references/work-packet-template.md)
+- [references/progress-log-template.md](references/progress-log-template.md)
+- [references/final-report-template.md](references/final-report-template.md)
 - [../../references/four-principles.md](../../references/four-principles.md)
+- [../../references/context-continuity.md](../../references/context-continuity.md)
