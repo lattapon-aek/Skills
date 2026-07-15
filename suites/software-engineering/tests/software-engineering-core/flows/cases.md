@@ -10,6 +10,7 @@ Request:
 
 Expected flow:
 
+- record `execute-within-scope` authority and acceptance coverage
 - core `Clarify`
 - core `Analyze`
 - core `Implement`
@@ -37,15 +38,19 @@ Suggested review proof:
 
 Expected flow:
 
+- record whether the request grants `execute-within-scope` authority
 - core `Clarify`
 - core `Plan`
-- core `Implement`
+- core `Implement` in the same turn only when the plan gate is satisfied and authority permits it
 - `verification-hazards` if implementation proof depends on a green test, CI result, benchmark, or agent report
 - `change-review`
 
 Suggested final review shape:
 
 - `Findings`
+- `Instruction Compliance`
+- `Acceptance Coverage`
+- `Deviations`
 - `Open Questions`
 - `Ruled-out Concerns`
 - `Residual Risk`

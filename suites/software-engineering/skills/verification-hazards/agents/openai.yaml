@@ -1,4 +1,4 @@
 interface:
   display_name: "Verification Hazards"
-  short_description: "Proof-challenge lens for green/red runs, staging, partial rollouts, approval gates, and agent reports"
-  default_prompt: "Use $verification-hazards when a result or report is being treated as proof, especially approve/ship/merge/accept/close/go-no-go/production-run questions based on tests, staging, partial rollout, dashboards, or agent reports. Start with Claim Under Test, scan bypassed-layer green, subset green, wrong-theory green, wrong-tree green, and not-your-red, then return confirmed or still a lead with the next gate."
+  short_description: "Challenge functional and intent-conformance proof before trust"
+  default_prompt: "Use $verification-hazards when a result or report is treated as proof; scan all six hazards plus layer, surface, cause, artifact, baseline, outcome, and conformance before returning confirmed or still a lead."

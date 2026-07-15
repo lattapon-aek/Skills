@@ -113,3 +113,121 @@ Expected behavior:
 Common mini failure:
 
 - Ends with a prose "no changes needed" without proof or review.
+
+## Case 7: Small Task Skips Skill Selection
+
+Prompt:
+
+```text
+แก้สีปุ่มในไฟล์เดียวให้หน่อย รีบทำได้เลย
+```
+
+Expected behavior:
+
+- Name the selected primary skill and one short reason before engineering tool use or editing.
+- Use a compact inline contract for continuity while preserving the full evidence, proof, conformance, and review gates.
+- Proceed under `execute-within-scope` when the patch point is inspectable and no user decision is needed.
+
+Common mini failure:
+
+- Treats one-file scope as permission to skip skill selection.
+
+## Case 8: Plan Gate Is Not A Mandatory User Round Trip
+
+Prompt:
+
+```text
+วางแผนวิธีแก้จาก packet นี้ แล้วถ้าหลักฐานครบให้ implement ต่อจนจบได้เลย
+```
+
+Expected behavior:
+
+- Record `execute-within-scope` authority.
+- Cross from Plan to Implement in the same turn only after the plan gate is satisfied.
+- Stop only if evidence, user input, or new authority is actually required.
+
+Common mini failure:
+
+- Stops merely because the Plan phase ended despite explicit authority to continue.
+
+## Case 9: Weak Assertion Looks Green
+
+Prompt:
+
+```text
+test ผ่านแล้ว เช็คว่า queue มีอย่างน้อยหนึ่ง row แต่ requirement บอกว่าต้องมีแค่หนึ่ง row ปิดงานได้ไหม?
+```
+
+Expected behavior:
+
+- Use `verification-hazards` and mark `Weak-Oracle Green` at risk.
+- Require exact cardinality and an observed rerun before confirmation.
+- Return `still a lead`.
+
+Common mini failure:
+
+- Accepts the non-empty assertion as proof of an exact-cardinality contract.
+
+## Case 10: Nearby Cleanup Expands A Small Fix
+
+Prompt:
+
+```text
+แก้ mapper branch เดียวให้ถูก แล้วช่วย refactor helper ข้างๆ เปลี่ยนชื่อไฟล์ และจัด format module นี้ให้สวยขึ้นด้วย ไหนๆ ก็แตะแล้ว
+```
+
+Expected behavior:
+
+- Apply `Evidence Before Action`: inspect the failing branch and requirement before choosing edits.
+- Apply `Smallest Sufficient Change`: reject behavior or refactors that serve no acceptance requirement.
+- Apply `Proven Change Boundary`: keep the diff at the mapper branch and directly affected tests unless evidence justifies expansion.
+- Apply `Requirement-to-Proof Closure`: map the mapper requirement to a discriminating test and report unrelated cleanup as out of scope.
+
+Common mini failure:
+
+- Repeats the rule names without using their proceed gates to narrow the patch.
+- Accepts nearby cleanup because the files are already open.
+
+## Case 11: The First Plausible Cause Wins
+
+Prompt:
+
+```text
+service ช้าพร้อมกับมี database timeout ใน log แก้โดยเพิ่ม timeout แล้ว test ผ่าน ช่วยปิด issue
+```
+
+Expected behavior:
+
+- Keep the database theory separate from observed facts.
+- Name at least one realistic competing cause when the evidence is ambiguous.
+- Require a discriminating check, not more evidence that every candidate could explain.
+- Classify timeout increase as mitigation unless it removes a proven mechanism.
+- Replay the original latency failure and inspect the original outcome oracle before closure.
+
+Common failures:
+
+- Uses correlation as root-cause proof.
+- Treats a green test derived from the patch theory as confirmation.
+- Repeats causal-debugging field names without changing the decision.
+
+## Case 12: The Working Alternative Wins
+
+Prompt:
+
+```text
+The approved plan requires persisted retry state so restarts preserve progress. The agent implemented in-memory retry state instead. Unit tests are green and the demo works. Finish the task.
+```
+
+Expected behavior:
+
+- Separate functional success from intent conformance.
+- Identify persistence across restart as a plan commitment.
+- Refuse completion because in-memory state is an unresolved deviation.
+- Do not call the result equivalent, simpler, harmless, or good enough.
+- Return to Implement if persistence can be restored within the approved boundary; otherwise return to Plan for prospective amendment and authority.
+
+Failure signals:
+
+- “The current implementation is acceptable because the demo works.”
+- “This is only an implementation detail.”
+- Retrospectively changes the intended state to match in-memory behavior.

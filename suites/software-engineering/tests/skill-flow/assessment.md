@@ -36,14 +36,14 @@ Observed results:
 Action taken:
 - `verification-hazards` now names approve/ship/merge/accept/close/go-no-go/production-run prompts as primary hazards outputs when they depend on green results or reports.
 - `orchestration-policy` now includes a small-model routing shortcut for approval gates and requires `Claim Under Test` before `Findings`.
-- `output-patterns` now includes an `Approval Or Ship Gate` template.
+- `verification-hazards` now keeps the approval-gate output contract in its runtime entrypoint, with golden transcripts covering the compact shape.
 - `change-review` now defers proof-gated approval questions to `verification-hazards` until a hazard verdict or concrete artifact exists.
 
 Assessment:
 - The suite successfully taught the small model the intended skeptical reasoning across unrelated public incidents.
 - The main weakness was output-shape selection under approval wording. The patch addresses routing and format, not core doctrine.
 - A post-patch Knight Capital rerun passed the approval-gate shape: the answer started with `Claim Under Test`, included a hazard scan, returned `still a lead`, and only then added a review-shaped summary.
-- A future automated transcript harness should assert that approval-gate answers begin with `Claim Under Test` and include a five-hazard scan.
+- A future automated transcript harness should assert that approval-gate answers begin with `Claim Under Test` and include the six exact hazard labels.
 
 ### `software-engineering-core` Clarify
 
@@ -80,7 +80,7 @@ Observed boundary:
 
 ### `verification-hazards`
 
-- The current suite includes manual cases for bypassed-layer green, subset green, wrong-theory green, wrong-tree green, not-your-red, and a compound all-five scan.
+- The current suite includes manual cases for bypassed-layer green, subset green, wrong-theory green, wrong-tree green, not-your-red, weak-oracle green, and a compound all-six scan.
 - These cases should be used before accepting a flow result that depends on green/red verification output or a second-hand agent report.
 
 ## Commands Used

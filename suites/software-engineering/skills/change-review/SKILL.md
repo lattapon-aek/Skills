@@ -1,177 +1,122 @@
 ---
 name: change-review
-description: Final acceptance gate for software-engineering work. Use when an agent must inspect a diff, pull request, patch set, working tree, implemented result, or justified no-patch conclusion and report correctness risks, regressions, root-cause gaps, missing proof, false-green hazards, and residual risk before acceptance.
+description: Final acceptance gate for a concrete software change, diff, pull request, working tree, implemented result, or justified no-patch conclusion. Use to find correctness risks, regressions, intent or plan divergence, instruction violations, false-green proof, hidden blast radius, and residual risk before accepting the result.
 ---
 
 # Change Review
 
-## Intent
+## Role
 
-Review from evidence, not from taste. Prioritize correctness, proof, and impact over style commentary.
-Stay in review mode: inspect the change, trace its behavior, assess impact, and report findings. Do not silently drift into implementation, broad redesign, or speculative debugging unless the review must explicitly explain why the change is unsafe.
-Golden rule: every accepted end state needs an explicit review artifact. That includes self-review after implementation and review of a justified `no patch` conclusion.
+Own acceptance, not primary clarification, diagnosis, planning, or implementation. Review a concrete artifact from evidence and decide whether it is ready, must return to an earlier owner, or remains blocked by proof.
 
-## Suite Role
+Acceptable review targets are:
 
-This skill owns acceptance. Use it only when there is something concrete to accept or reject: a diff, PR, working tree, implemented result, or justified `no patch`.
+- a diff, patch set, pull request, working tree, commit, build, or deployed artifact
+- an implemented result tied to inspectable source and proof
+- a justified `no patch` conclusion with inspected evidence
 
-Do not use review to do the primary work. If review discovers the objective is unclear, diagnosis is unproven, implementation is missing, or proof is not trustworthy, hand back to the exact owner:
-
-- `software-engineering-core` `Clarify` for unclear objective or success criteria
-- `software-engineering-core` `Analyze` for unproven failure mechanism
-- `software-engineering-core` `Implement` for missing or incorrect patch execution
-- `verification-hazards` when a green/red result or agent report must be challenged before acceptance
-
-If the user asks whether to approve, ship, merge, accept, close, open market, or run in production and the evidence is mainly passing tests, staging success, partial rollout, green dashboards, or a second-hand report, do not start with `Findings`. Route to `verification-hazards` first and use its `Claim Under Test` output shape. Review starts only after the hazard verdict or concrete artifact exists.
+If the request is an approve, merge, ship, close, or production decision based mainly on a green/red result or report, use `verification-hazards` first. If no concrete target or justified no-patch artifact exists, return to `software-engineering-core`.
 
 ## Must Obey
 
-- Do not review from summary alone when the diff or artifact can be inspected.
-- Do not promote external behavior to observed evidence unless the source was inspected in this review.
-- Do not accept weak verification; surface false-green hazards as findings or residual risk.
-- Do not implement fixes in review mode; hand back to the exact owner and next gate.
+- Inspect the actual target and surrounding behavior; do not review from summary alone.
+- Confirm objective, intended state, user contract, and plan commitments before judging the result.
+- Separate observed evidence from inference and source external behavior in the current review.
+- Prioritize correctness, intent conformance, regressions, blast radius, and proof over taste or style.
+- Do not implement fixes in review mode; hand back to the exact owner and gate.
+- Do not accept a working result that materially diverges from the approved plan without explicit authority.
+- Do not erase a temporary or corrected material deviation from the audit trail.
 
-## Four Principles
+## Review Procedure
 
-Apply the shared doctrine from [../../references/four-principles.md](../../references/four-principles.md). In review context:
-
-- `Think Before Coding` — confirm the intended requirement before judging the diff; surface ambiguity instead of overclaiming
-- `Simplicity First` — flag unnecessary complexity when a smaller change would have solved the same problem
-- `Surgical Changes` — check that every changed area traces back to the stated objective; flag orthogonal edits
-- `Goal-Driven Execution` — check whether success was defined concretely; prefer reviews grounded in tests and validation output over aesthetic opinion
-
-## Clarify Until Clear
-
-- Confirm the intended requirement or change objective before judging the diff.
-- If the expected behavior is unclear, state that uncertainty and limit conclusions accordingly.
-- If critical review context is missing, say what is missing and how it limits confidence instead of overclaiming.
-
-## When Not To Use
-
-- Do not use this skill as a substitute for `software-engineering-core` when the request still needs clarification, planning, diagnosis, or implementation.
-- Do not use this skill as a substitute for `verification-hazards` when the only question is whether a green/red result or report can be trusted.
-- Do not use this skill as the primary output for a go/no-go approval that has no concrete diff, patch set, working tree, or accepted `no patch` artifact.
-
-## Source Of Truth
-
-Use the best available evidence during review:
-
-- Read the actual diff and the surrounding code paths that determine behavior.
-- Check tests, configs, logs, and validation output when they affect the conclusion.
-- Search external sources when the change depends on framework semantics, API contracts, standards, version changes, or vendor behavior not established by the repo alone.
-- Prefer official docs, primary references, and maintainer-owned sources first.
-- Do not cite external API, framework, or vendor behavior from memory. If an external source was not inspected in this review, mark the claim as `Open Questions` or `Residual Risk` instead of presenting it as observed evidence.
-- Do not infer safety from naming or code style alone.
-- Separate observed evidence from inference. Make it clear when a finding is directly proven by the diff or surrounding code, and when it is a higher-confidence risk inference.
-
-## Review Sufficiency
-
-Before issuing a strong finding, try to establish all of these:
-
-- the intended objective of the change is understood well enough to judge correctness
-- the relevant diff and nearby code paths have been inspected
-- any tests, logs, or validation output that materially affect the conclusion have been checked or explicitly noted as missing
-- any external behavior that materially affects the conclusion has an authoritative source
-- the impact path is concrete enough to explain who or what can break
-
-If these are not true, reduce confidence, narrow the finding, or move the gap into `Open Questions` or `Residual Risk`.
-
-## Scope Narrowing
-
-- Focus first on correctness, regressions, missing verification, unsafe assumptions, and hidden impact.
-- Ignore style nits unless they hide a real maintenance or behavior risk.
-- Prefer the smallest defensible finding that matches the evidence.
-
-## Review In Parts
-
-1. Confirm what the change is supposed to do.
-2. Inspect the actual diff and the surrounding implementation.
-3. Check whether the code can actually do what the change claims.
-4. Look for broken adjacent behavior, hidden regressions, and missing edge handling.
-5. Check whether the verification is sufficient.
-6. Assess whether the change is appropriately sized and scoped.
+1. Identify the exact artifact and acceptance target.
+2. Read the working document, user contract, intended state, plan commitments, and allowed variations.
+3. Inspect the actual diff and the surrounding code paths that determine behavior.
+4. Trace callers, contracts, data shapes, runtime paths, operational effects, and rollback implications.
+5. Check whether the implementation solves the proven objective or failure mechanism.
+6. Compare observed state with intended state and classify every material delta.
+7. Inspect tests, commands, logs, and hazard verdicts used as proof.
+8. Map each requirement and plan commitment to implementation and observed evidence.
+9. Report blocking findings before summaries and hand back when an earlier gate is open.
 
 ## Review Rubric
 
-Judge the change primarily on:
+- `Functionality` — the result performs the required behavior and fixes the demonstrated failure when applicable.
+- `Intent Conformance` — observed state matches the approved requirements, plan, architecture boundary, output contract, required sequence, and exclusions.
+- `Code Health` — the result is maintainable without unnecessary complexity.
+- `Smallest Sufficient Change` — every meaningful behavior and touched area has a requirement, fault, compatibility, or proof reason.
+- `Blast Radius` — caller, consumer, data, config, runtime, migration, rollout, and rollback effects are understood.
+- `Proof Sufficiency` — observed evidence exercises the right layer, surface, cause, artifact, baseline, outcome, and conformance criteria.
+- `Instruction Compliance` — authority, sequence, deliverables, forbidden actions, commits, reports, and verification obligations were followed.
+- `Oracle Strength` — a plausible incorrect or plan-divergent implementation would fail the available assertion.
 
-- `Functionality`: does the change actually do what it claims
-- `Code Health`: is the result maintainable and free of unnecessary complexity
-- `Complexity`: could a smaller change have solved the same problem
-- `Blast Radius`: what callers, contracts, or runtime paths could break
-- `Proof Sufficiency`: did the tests, logs, or validation actually prove the claim, and did any green/red result survive a `verification-hazards` scan
+Do not infer safety from naming, code shape, or passing tests alone. Reduce confidence or keep a gap open when critical source, runtime, or external contract evidence is unavailable.
 
-## False-Green Review
+## Intent-Conformance Gate
 
-When validation output is part of the acceptance argument, review the observation before trusting it:
+For every recorded commitment compare:
 
-- Check whether the evidence used the shipping layer, full surface, proven cause, committed artifact, and stable baseline.
-- Treat "tests pass", "CI is green", "done", "fixed", and "amended" as leads until the artifact and run can be tied to the accepted change.
-- If the available verification is a subset, a mock-layer pass, a theory-built repro, a dirty working tree result, or a suspicious unrelated red, surface that as a proof-sufficiency finding or residual risk.
-- Prefer citing the `verification-hazards` verdict when one exists. If it does not exist and the acceptance claim depends on green/red output, perform the smallest hazard scan needed for the review.
+`Expected State -> Observed State -> Delta -> Authority -> Disposition`
 
-## Blast Radius Review
+Use these dispositions:
 
-- Trace the likely impact path for each meaningful change: callers, downstream consumers, contracts, data shape, config, tests, runtime behavior, and operational expectations.
-- Do not stop at the changed lines if the risk clearly propagates through nearby code paths.
-- If the likely impact path is unclear, say so instead of pretending the review is complete.
+- `conforms`
+- `authorized deviation` — allowed in advance or explicitly approved by the user or governing document
+- `unresolved deviation`
 
-## Impact And Tradeoffs
+An `unresolved deviation` is blocking when it changes a user requirement, plan decision, architecture boundary, public or internal contract named by the plan, output shape, required sequence, compatibility constraint, or explicit exclusion.
 
-- Explain who or what is affected by each finding.
-- Flag when a small local change hides a larger unresolved design or root-cause issue.
-- Mention when a broader change would have been safer or more honest than the current patch.
-- Prefer findings grounded in facts and observed behavior over opinion about style or taste.
+“It works”, “tests pass”, “the alternative is simpler”, “users are not affected”, and “functionally equivalent” do not authorize the deviation. If evidence shows the plan itself is wrong, route to core `Plan` for a prospective amendment; do not approve a retrospective rewrite.
 
-## Output
+## Proof Review
 
-- Report findings before summaries.
-- Order findings by severity using these levels:
-  - `critical` — change is incorrect or will cause failures in likely code paths
-  - `high` — significant risk to correctness, safety, or reliability
-  - `medium` — notable concern that warrants attention but does not block acceptance
-  - `low` — minor observation with a real behavior implication
-  - `note` — context or tradeoff that does not require action
-- Reference files and line numbers for each finding.
-- Cite external sources when a finding depends on them.
-- When citing external behavior, name the source inspected. If the source was unavailable or not inspected, do not promote that behavior to a strong finding unless the local diff alone proves the issue.
-- Distinguish `Observed Evidence` from `Inference` inside findings when the risk is not directly executed or proven. Place these as sub-items directly under the finding they support.
-- Include concerns you considered but ruled out when that context materially helps the user trust the review.
-- If no findings are present, say so explicitly and mention residual risk or test gaps.
-- Use the full review structure even when reviewing your own work or a `no patch` outcome. Do not collapse the final phase into a prose-only status update.
-- If local and external evidence conflict, surface the conflict explicitly under the finding rather than silently resolving it.
-- If a `verification-hazards` scan is missing but materially needed, include that as `Residual Risk` or a proof-sufficiency finding depending on impact.
+When a green/red observation supports acceptance, require a `verification-hazards` verdict or run the smallest necessary scan. Check that:
 
-## Proof Gap Rule
+- production does not bypass the tested layer
+- the run covers the relevant shipping surface
+- the claimed cause was observed
+- the verified artifact is the accepted artifact
+- red attribution survives baseline comparison
+- the oracle rejects plausible wrong behavior
+- the oracle rejects a working but nonconforming result
 
-- State what the available diff, code, tests, and validation output already prove.
-- State what is still unverified, uninspected, or ambiguous.
-- State what additional evidence would be needed to raise confidence or close the review gap.
+A missing or `still a lead` hazard verdict becomes a proof-sufficiency finding or residual risk according to impact; it cannot be hidden behind “tests pass.”
 
-Use:
+## Findings
+
+Report findings first and order them:
+
+- `critical` — incorrect or unsafe in a likely path
+- `high` — blocks correctness, intent conformance, safety, or reliable acceptance
+- `medium` — notable risk needing resolution or explicit acceptance
+- `low` — minor issue with real behavior impact
+- `note` — context or tradeoff without required action
+
+Each finding should name the file and tight line range when applicable, impact, observed evidence, inference, and required resolution. Ignore style nits unless they hide a behavior or maintenance risk.
+
+## Output Contract
 
 - `Findings`
+- `Instruction Compliance`
+- `Acceptance Coverage`
+- `Intent Conformance`
+- `Deviations`
 - `Open Questions`
 - `Ruled-out Concerns`
+- `Proof Gap`
 - `Residual Risk`
+- `Verdict` — `accept`, `accept with authorized deviation`, or `return to <owner/mode>`
 
-When reviewing a `no patch` outcome:
+Use [references/review-template.md](references/review-template.md) for the compact structure. If there are no findings, say so explicitly and still report proof gaps, conformance, and residual risk.
 
-- `Findings` should say whether any justified code change is still required
-- `Ruled-out Concerns` should record candidate fixes or explanations that were checked and rejected
-- `Residual Risk` should capture what the current evidence still does not prove
+For `no patch`, state whether any justified change remains, which candidate fixes were ruled out, how current state conforms to the intended state, and what historical or external condition remains unproven.
 
-## Phase Handoff
+## Handoff
 
-Hand back to `software-engineering-core` when any of the following is true:
+- Return to core `Clarify` when objective or intended state is unclear.
+- Return to core `Analyze` when the claimed failure mechanism is unproven.
+- Return to core `Plan` when implementation diverges materially or the approved approach needs amendment.
+- Return to core `Implement` when a concrete execution or oracle gap must be corrected.
+- Return to `verification-hazards` when acceptance depends on an unchallenged green/red result or report.
 
-- The intended objective cannot be inferred from the diff, ticket, or surrounding context — route to core `Clarify`
-- The failure mechanism the change claims to fix is asserted but not demonstrated by evidence — route to core `Analyze`
-- The diff contains no executable result and it is not possible to determine whether the approach works — route to core `Implement`
-
-When handing back, state which mode to resume and what specific information that mode needs to close the gap. Do not hand back without a concrete reason and a clear next action.
-
-## Reference
-
-Use [references/review-template.md](references/review-template.md) for a compact review format.
-Use [../../references/four-principles.md](../../references/four-principles.md) for the shared doctrine and rationale.
+State the exact open gate, evidence or change required, and mode to resume. Do not hand back with a generic request to “fix the issues.”

@@ -49,3 +49,5 @@ PRs should describe:
 ## Agent-Specific Instructions
 
 Preserve the suite’s doctrine: identify the real failure domain, separate observed evidence from inference, and prove outcomes before calling work complete. End accepted work with a `change-review`-shaped summary, including justified `no patch` outcomes.
+
+Before the first engineering tool call or file edit, inspect the available skills, name the selected primary skill with one short reason, and only then begin work. Do not skip this preflight for small, single-file, visual, experimental, or greenfield tasks.

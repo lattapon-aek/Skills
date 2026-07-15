@@ -1,54 +1,102 @@
-# Execution Checklist
+# Implement Protocol
 
-## Clarify
+Use this protocol only when objective, approach, assumptions, patch boundary, intended state, and amendment authority are confirmed.
 
-- State the objective and expected result
-- Identify the working document or create a work packet before substantial action
-- Identify the decisions that still need clarification
-- Define how success will be proven
-- If the task is still underspecified, push it back to intake instead of guessing
+## Pre-Edit Gate
 
-## Inspect
+Before editing:
 
-- Read the relevant files and code paths
-- Check config, tests, logs, or command output as needed
-- Separate observed facts from assumptions
-- Pull external docs only when they materially affect the next safe implementation step
-- Trace until you know the concrete change location
+1. Re-read the relevant source; do not rely on an earlier phase summary.
+2. Revalidate every assumption and plan commitment.
+3. Name the exact file, function, block, query, config, or template to change.
+4. Explain why this is the narrowest safe patch point and what remains untouched.
+5. Trace callers, external consumers, data shapes, runtime side effects, and likely blast radius.
+6. Confirm rollback and whether a migration, staged rollout, or deprecation is required.
+7. Freeze the original failure reproduction for issue work.
+8. Confirm the functional oracle and intent-conformance oracle.
 
-## Locate Fix
+Return to `Plan` when an assumption, boundary, or commitment changed. Return to `Analyze` when the failure mechanism is not proven.
 
-- Name the exact file(s) to change
-- Name the exact function, block, query, config, or template to change
-- State why this is the narrowest safe patch point
-- State what should remain untouched
-- State what nearby behavior could be affected
-- State the likely blast radius if the patch is wrong
-- Confirm whether the patch can be reverted cleanly without extra migration work
-- Note if the change alters caller contracts or requires a staged rollout
-- If reversibility is weak, look for a narrower patch before proceeding
-- Do this even for very small fixes
+## Editing Rules
 
-## During Editing
+- Keep steps small and inside the proven boundary.
+- Preserve unrelated code and surrounding style.
+- Do not bundle cleanup or speculative hardening with the required change.
+- Expand the diff only when new evidence justifies the expansion; update the plan before editing the new area.
+- Track every user requirement and plan commitment in acceptance coverage.
+- Record a material deviation immediately, including one later corrected.
+- Never use working behavior as authority to accept an unplanned substitute.
 
-- Keep steps small
-- Stay within the narrowed scope
-- Expand the diff only when evidence shows it is necessary
-- Stop if the work turns into redesign, research drift, or stale-brief execution
-- Prefer the smallest working patch over broad cleanup
+When observed implementation needs to differ from the plan:
 
-## Impact
+1. stop before completing the alternative
+2. record the evidence invalidating the current plan
+3. state the proposed delta and impact
+4. return to `Plan`
+5. amend the working document prospectively
+6. obtain authority when the delta is outside pre-approved variation
 
-- Note affected modules, APIs, data paths, and user-visible behavior
-- Call out compatibility or migration concerns
-- Explain when a larger refactor is justified
-- Identify callers, downstream consumers, contracts, and runtime side effects around the patch
+## Verification
 
-## Verify And Handoff
+After editing:
 
-- Run the lightest meaningful proof
-- Confirm the target behavior and touched adjacent paths
-- State open risks, assumptions, and out-of-scope items
-- Confirm that the likely blast-radius areas still behave correctly
-- Do not call the work done until the failure is gone or the target behavior is observed to work
-- If proof has not been run yet, say explicitly that no observed result exists yet
+1. Run the targeted checks that exercise the changed boundary.
+2. For a fix, replay the frozen original reproduction or closest faithful incident simulation.
+3. Observe the user-visible outcome oracle and former divergence point.
+4. Run at least one negative or adjacent control.
+5. Compare observed state against every intended-state criterion.
+6. Name one plausible working-but-nonconforming implementation and confirm the oracle rejects it.
+7. State the recurrence boundary and anything the environment could not exercise.
+8. Route the result through `verification-hazards` before trusting it.
+
+If the issue persists, changes form, or disappears for an unexplained reason, return to `Analyze`; do not stack another speculative patch.
+
+## Conformance Verdict
+
+Use exactly one:
+
+- `conforms`
+- `authorized deviation`
+- `unresolved deviation`
+
+For every delta record:
+
+- expected state
+- observed state
+- affected commitment
+- functional impact
+- conformance impact
+- authority source
+- required resolution
+
+An `unresolved deviation` blocks completion and acceptance even when functional verification is green.
+
+## Output Contract
+
+- `Working Document`
+- `User Contract`
+- `Objective`
+- `Evidence`
+- `Assumptions Revalidated`
+- `Change Location`
+- `Why This Patch Point`
+- `Reversibility Assessment`
+- `Caller Contract Impact`
+- `Rejected Approaches`
+- `Scoped Plan`
+- `Out of Scope`
+- `Intended State`
+- `Observed State`
+- `Plan Commitments`
+- `Allowed Variations`
+- `Conformance Check`
+- `Conformance Verdict`
+- `Verification`
+- `Test Coverage`
+- `Original-Reproduction Replay`
+- `Recurrence Boundary`
+- `Acceptance Coverage`
+- `Deviations`
+- `Observed Result`
+- `Proof Gap`
+- `Open Risks`

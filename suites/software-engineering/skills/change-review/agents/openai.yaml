@@ -1,4 +1,4 @@
 interface:
   display_name: "Change Review"
-  short_description: "Final acceptance gate for diffs, implemented results, and justified no-patch outcomes"
-  default_prompt: "Use $change-review to accept or reject a concrete diff, working tree, implemented result, or justified no-patch outcome by inspecting correctness, impact, proof sufficiency, false-green hazards, and residual risk."
+  short_description: "Accept or return concrete results based on correctness, proof, and plan fidelity"
+  default_prompt: "Use $change-review on a concrete result to inspect correctness, intent conformance, instruction compliance, blast radius, proof sufficiency, deviations, and residual risk before acceptance."

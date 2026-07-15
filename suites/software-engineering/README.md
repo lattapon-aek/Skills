@@ -1,305 +1,181 @@
-# AI Agent Skills
+# AI Agent Software-Engineering Skills
 
-Reusable software-engineering mindset and process skills for AI agents that must work from evidence, narrow scope, and prove results instead of guessing.
+An evidence-first suite for agents that must understand the objective, diagnose failures causally, implement within an approved boundary, prove the observed result, and reject working-but-unintended outcomes.
 
-## Portable Install
-
-This suite is packaged for the `skills` CLI. From the repository root, install the shipped skills with:
+## Install
 
 ```powershell
-npx skills add https://github.com/lattapon-aek/Skills --skill software-engineering-core --skill change-review --skill verification-hazards
+npx skills add https://github.com/lattapon-aek/Skills --skill software-engineering-core --skill verification-hazards --skill change-review
 ```
 
-## Adapters
+Adapters:
 
-- Claude Code: `.\scripts\link-software-engineering-skills.ps1`
-- Codex: `.\scripts\link-codex-skills.ps1`
-- skills CLI: `npx skills add https://github.com/lattapon-aek/Skills`
+- Claude Code: `scripts/link-software-engineering-skills.ps1`
+- Codex: `scripts/link-codex-skills.ps1`
+- skills CLI: `npx skills add ...`
 
-## Enforce Skill Use With `AGENTS.md`
+## Runtime Architecture
 
-Installing a skill makes it available, but it does not guarantee every agent will select it. Some agents may skip the skill when they consider a task "small", such as a single-file UI edit or a quick script. Use a repository `AGENTS.md` or global agent instruction to make skill selection mandatory.
-
-Copy this into projects where you want the software-engineering suite enforced:
-
-```md
-# Agent Instructions
-
-## Required Software-Engineering Workflow
-
-For any software-engineering task, use `agents-skills:software-engineering-core` before planning, editing, debugging, reviewing, or running verification.
-
-This requirement applies to:
-
-- creating, editing, deleting, renaming, formatting, or generating files
-- single-file UI/app/script edits
-- empty workspaces and greenfield prototypes
-- bug fixes, refactors, migrations, config changes, tests, docs, and tooling
-- design or implementation plans that may later become code
-
-Do not skip the skill because the task looks small.
-
-Before the first file edit, satisfy the Document Gate:
-
-- use the user-supplied task document, issue, PR, packet, design brief, or runbook if one exists
-- otherwise create a repo-local work packet before editing
-- if this repo has no convention, use `.agent/work-packets/<task>.md`
-- inline work packets are allowed only for read-only one-turn work that does not touch files
-- if the user explicitly refuses artifacts, state the audit and resume risk before continuing
-
-During work:
-
-- update the work packet or progress log when objective, scope, decisions, evidence, patch boundary, verification, proof gaps, or next action change
-- after context compaction, interruption, or handoff, read the work packet/progress log/final report before continuing
-- verify with real commands or runtime checks before claiming completion
-
-Before accepting completion:
-
-- use `agents-skills:verification-hazards` when trusting a green/red test, CI result, benchmark, rollout result, or agent report
-- use `agents-skills:change-review` for every accepted patch or justified no-patch conclusion
-```
-
-For stricter global use, place the same policy in the agent's global instructions. Keep repo-local `AGENTS.md` files for project-specific paths, package managers, test commands, and artifact locations.
-
-Recommended prompt when starting a task:
+The suite keeps three public skills with separate ownership:
 
 ```text
-Use agents-skills:software-engineering-core and follow this repo's AGENTS.md. If no working document exists, create the required work packet before editing files.
+software-engineering-core
+        ↓ concrete proof claim
+verification-hazards
+        ↓ confirmed or still-gapped verdict
+change-review
 ```
 
-## Catalog
+- `software-engineering-core` owns Clarify, Plan, Analyze, Implement, and justified no patch.
+- `verification-hazards` challenges whether a green/red result or report proves shipping behavior and approved intent.
+- `change-review` owns final acceptance of a concrete result.
 
-```text
-skills/
-  software-engineering-core/
-  change-review/
-  verification-hazards/
-references/
-  context-continuity.md
-  four-principles.md
-  orchestration-policy.md
-tests/
-  software-engineering-core/
-  change-review/
-  verification-hazards/
-  golden-transcripts/
-  internet-derived/
-  mini-stress/
-```
+Each `SKILL.md` is a compact runtime entrypoint. Core loads the direct protocol for the selected mode; expanded hazard patterns and output templates load only when their trigger applies. This progressive disclosure reduces activated context without reducing the gates an applicable task must pass.
+
+## Full Applicable Workflow
+
+Task size does not change execution rigor. Every task must pass every gate that applies:
+
+1. Record user contract and authority.
+2. Establish objective, intended state, source material, and proof of done.
+3. Select the evidence-justified core mode.
+4. Read that mode's direct reference.
+5. Diagnose or implement within a proven boundary.
+6. Observe functional behavior.
+7. Compare observed state with intended state.
+8. Challenge proof through `verification-hazards` when a result or report is being trusted.
+9. Use `change-review` before accepting a concrete patch, result, or no-patch conclusion.
+
+Continuity artifact choice affects only audit and resume durability. An inline contract never authorizes weaker analysis, verification, conformance, or review.
+
+## Intent-To-Outcome Conformance
+
+Functional success and plan fidelity are independent requirements.
+
+Before implementation, freeze:
+
+- `Intended State`
+- `Plan Commitments`
+- `Observable Conformance Criteria`
+- `Allowed Variations` — default `none`
+- `Forbidden Substitutions`
+- `Plan Amendment Authority`
+
+After implementation, compare intended and observed state. Use:
+
+- `conforms`
+- `authorized deviation`
+- `unresolved deviation`
+
+An unresolved material deviation blocks completion even when tests pass and the system remains usable. The agent may restore the approved state within scope, or return to Plan and amend the working document prospectively. It may not authorize its own material deviation or rewrite the plan after the fact.
 
 ## Skills
 
 ### `software-engineering-core`
 
-Use for nearly all engineering work. This one skill changes the agent's default thought path before it changes code: request -> objective -> evidence -> domain -> mode -> action -> proof -> review.
+Use for most engineering work:
 
-It contains the shared mindset and switches between four modes as evidence demands:
+- `Clarify` — objective, contract, domain, intended state, and proof of done
+- `Plan` — options, boundary, commitments, allowed variations, and proof strategy
+- `Analyze` — incident evidence, causal chain, competing hypotheses, discriminating checks, and root-cause gate
+- `Implement` — assumption revalidation, narrow patch, original-reproduction replay, conformance check, and proof
 
-- `Clarify` for vague, broad, or solution-biased requests
-- `Plan` for design, migration, integration, or boundary decisions
-- `Analyze` for failures, regressions, runtime issues, and system-level incidents
-- `Implement` for narrow, justified code, config, docs, or tooling changes
-
-Primary job:
-- clarify the real objective
-- classify the failure or decision domain
-- choose the narrowest justified mode
-- gather evidence before conclusions
-- avoid patch-first behavior when evidence is still missing
-- prove reasoning and results before handoff to review
-- follow the core execution loop: inspect facts, confirm assumptions, act narrowly, observe, and re-check impact
-
-Mode output shapes:
-- `Clarify`: `Objective`, `Desired Outcome`, `Failure or Decision Domain`, `Source Material`, `Proof of Done`
-- `Plan`: `Decision`, `Current State`, `Options Considered`, `Recommended Approach`, `Proof Strategy`
-- `Analyze`: `Failure`, `Failure Domain`, `Incident Evidence Pack`, `Fault Location`, `Root Cause`, `Ruled-out Hypotheses`
-- `Implement`: `Change Location`, `Why This Patch Point`, `Rejected Approaches`, `Verification`, `Observed Result`
-
-### `change-review`
-
-Use when the agent must review a diff, PR, patch set, or working tree before acceptance.
-
-Primary job:
-- inspect the real diff and surrounding code
-- separate observed evidence from inference
-- report correctness, regression, proof, and blast-radius risks
-
-Expected output shape:
-- `Findings`
-- `Open Questions`
-- `Ruled-out Concerns`
-- `Residual Risk`
-
-Inside findings, distinguish `Observed Evidence` from `Inference` when the risk is not directly executed or proven.
-Use the same structure for self-review and justified `no patch` outcomes.
+Mode detail lives in direct references under `skills/software-engineering-core/references/`.
 
 ### `verification-hazards`
 
-Use as a lens (not a mode) whenever a green test, CI run, benchmark, or agent report is about to be trusted. It names the five repeatable ways a passing result lies and gives the cheapest counter-check for each:
+Use before trusting a test, CI run, benchmark, staging result, rollout signal, suspicious red, or agent report. Scan:
 
-- `Bypassed-Layer Green` — the test hit a mock/shim/direct-call, not the real trigger, transport, or transition
-- `Subset Green` — the run covered a slice (packet subset, local-only, sandbox-limited) that cannot reach the failing case
-- `Wrong-Theory Green` — the fix rests on an unobserved root cause; the offline test encodes the same wrong assumption
-- `Wrong-Tree Green` — the verified bytes are not the committed/shipping bytes
-- `Not-Your-Red` — a pre-existing flake or environment contention misattributed to the change
+1. `Bypassed-Layer Green`
+2. `Subset Green`
+3. `Wrong-Theory Green`
+4. `Wrong-Tree Green`
+5. `Not-Your-Red`
+6. `Weak-Oracle Green`
 
-Before elevating green to `Observed Result`, it requires five gates to pass — `Layer`, `Surface`, `Cause`, `Artifact`, `Baseline` — and otherwise returns a `still a lead` verdict with the cheapest next check. It sharpens core's `Verification`/`Proof Gap` and review's `Proof Sufficiency`; it does not replace them.
+Then establish Layer, Surface, Cause, Artifact, Baseline, Outcome, and Conformance. Return `confirmed` only when every applicable gate passes; otherwise return `still a lead` and the cheapest next check.
 
-Expected output shape:
-- `Claim Under Test`
-- `Hazard Scan` (per-hazard `clear` / `at risk` / `not applicable` with the deciding tell)
-- `Counter-Checks Run`
-- `Verification Verdict` (`confirmed` / `still a lead`)
-- `Proof Gap`
-- `Residual Risk`
+### `change-review`
 
-## Shared Doctrine
+Use for a concrete diff, PR, working tree, commit, implemented result, or justified no patch. Review:
 
-All skills follow the same operating model:
+- functionality and root-cause closure
+- intent conformance and plan fidelity
+- code health and smallest sufficient change
+- blast radius and rollback
+- proof sufficiency and oracle strength
+- instruction compliance and acceptance coverage
+- deviations and residual risk
 
-- clarify until the real objective is clear
-- use the best available evidence
-- narrow scope before acting
-- break work into parts
-- state impact and tradeoffs
-- prove claims and results with evidence
+Return `accept`, `accept with authorized deviation`, or the exact owner and mode that must resume.
 
-Shared principles live in [references/four-principles.md](references/four-principles.md):
+## Shared References
 
-- `Think Before Coding`
-- `Simplicity First`
-- `Surgical Changes`
-- `Goal-Driven Execution`
+- [references/four-principles.md](references/four-principles.md) — evidence, scope, proof, and intent-conformance gates
+- [references/context-continuity.md](references/context-continuity.md) — working documents, resume safety, and prospective plan amendments
+- [references/orchestration-policy.md](references/orchestration-policy.md) — ownership, routing, and handoff packets
 
-Context continuity lives in [references/context-continuity.md](references/context-continuity.md). For substantial work, agents must identify a user-supplied working document, create a repo-local work packet, or state an inline work packet before acting. The conversation context window is not enough for multi-step, file-changing, design, review, or resume-prone work.
+## Enforce Selection With `AGENTS.md`
 
-Evidence hierarchy:
+Installing skills makes them available but does not guarantee implicit selection. Projects that require this suite should include a compact policy like:
 
-1. Real behavior: runtime output, logs, traces, metrics, failing commands, observed results
-2. Local artifacts: source code, config, tests, docs, tickets, diagrams, workspace data
-3. Official external sources: vendor docs, standards, API refs, release notes, source repos
-4. Supporting external sources: issue trackers, maintainer comments, reputable community writeups
+```md
+## Required Software-Engineering Workflow
 
-## Compose The Skills
+For software-engineering work, use `agents-skills:software-engineering-core` before planning, debugging, editing, or verification. Name the selected skill and reason before the first engineering tool call.
 
-Suite-level orchestration policy lives in [references/orchestration-policy.md](references/orchestration-policy.md).
+Record the user contract, intended state, plan commitments, allowed variations, and proof obligations in a user-supplied document, repo-local work packet, or compact inline contract appropriate only to continuity risk. Task size does not reduce execution rigor.
 
-Operating contract:
+Do not accept a result merely because it works. Compare observed state with intended state; an unapproved material deviation blocks completion and must be corrected or returned to Plan for prospective amendment.
 
-- `software-engineering-core` owns the work: clarify, plan, analyze, implement, or justify no patch.
-- `verification-hazards` challenges proof: use it only when a green/red run, CI result, benchmark, or agent report is being treated as evidence.
-- `change-review` accepts or rejects the result: use it only when there is a concrete diff, working tree, implemented result, PR, or justified no-patch outcome.
-- every substantial phase carries a working document so decisions, evidence, proof gaps, and next actions survive context compaction.
-
-If a gate applies, run it or state why it does not apply. Do not jump to review while objective, diagnosis, patch boundary, or proof is still missing.
-
-Typical flow:
-
-1. `software-engineering-core`
-2. `verification-hazards` when a green/red result or agent report is about to be trusted
-3. `change-review`
-
-Recommended routing:
-
-- vague or broad request -> core `Clarify`
-- clear objective but unsettled solution or migration path -> core `Plan`
-- bug or unexplained runtime issue -> core `Analyze`
-- clear patch boundary and execution target -> core `Implement`
-- a green result or agent report about to be trusted -> `verification-hazards`
-- diff acceptance or self-review -> `change-review`
-- any accepted final state -> emit a `change-review`-shaped report
-
-Handoff packets:
-
-- Core to hazards: working document, claim under test, exact command/report/result, expected proof, artifact checked, known gaps
-- Hazards to core: working document, failed hazard, observed tell, cheapest next check, mode to resume
-- Hazards to review: working document, verdict, confirmed gates, open hazards, residual risk
-- Core to review: working document, objective, diff or no-patch conclusion, evidence, verification, hazard verdict if applicable, proof gaps
-- Review to core: working document, blocking finding, mode to resume, exact evidence or patch needed next
+Use `agents-skills:verification-hazards` before trusting green/red output or an agent report, and `agents-skills:change-review` before accepting every concrete patch or justified no-patch conclusion.
+```
 
 ## Reporting Conventions
 
-Use these conventions across the repo:
+- Separate `Observed Evidence` from `Inference`.
+- Keep historical incident state separate from current workspace state.
+- Map each user requirement and plan commitment to expected state, observed state, status, and evidence.
+- Record material deviations when they occur, including corrected deviations.
+- Treat missing proof and unresolved conformance as blockers, not omitted rows.
+- Preserve ruled-out interpretations, options, hypotheses, approaches, and concerns in their owning mode.
 
-- `Observed Evidence` vs `Inference`
-  - `Observed Evidence` is what the agent directly saw in code, diff, tests, logs, traces, runtime output, or authoritative sources.
-  - `Inference` is a risk or conclusion derived from that evidence.
-- `Working Document` is the user-supplied task source or repo-local work packet that preserves context beyond the current chat. Use an inline work packet only for small one-turn work that does not need file artifacts.
-- `No patch` is valid when the current workspace does not reproduce the reported issue and no justified change is supported by evidence.
-- A patch is only one possible outcome; a justified `no patch` conclusion still needs review.
-- Separate `Historical Incident State` from `Current Workspace State` when an incident report and the current codebase disagree.
-- Use the skill-specific ruled-out field to show what was considered and rejected:
-  - `Ruled-out Interpretations`
-  - `Ruled-out Options`
-  - `Ruled-out Hypotheses`
-  - `Rejected Approaches`
-  - `Ruled-out Concerns`
+## Tests
 
-These conventions are meant to reduce confident-but-undersupported conclusions and make the agent's reasoning easier to audit.
+Fixture suites live under `tests/`:
 
-## Stress Tests
+- `software-engineering-core/` — mode behavior and end-to-end flows
+- `verification-hazards/` — false-green and proof-sufficiency cases
+- `change-review/` — concrete acceptance reviews
+- `golden-transcripts/` — routing and output contracts
+- `internet-derived/` — public incident patterns
+- `mini-stress/` — small-model failure modes
+- `skill-flow/` — observed suite-level assessments
 
-The repo includes fixture suites for forward-testing skill behavior:
-
-- [tests/software-engineering-core/README.md](tests/software-engineering-core/README.md)
-- [tests/change-review/README.md](tests/change-review/README.md)
-- [tests/verification-hazards/cases.md](tests/verification-hazards/cases.md)
-- [tests/golden-transcripts/cases.md](tests/golden-transcripts/cases.md)
-- [tests/internet-derived/cases.md](tests/internet-derived/cases.md)
-- [tests/mini-stress/cases.md](tests/mini-stress/cases.md)
-
-Current coverage themes:
-
-- small surgical change vs over-fix
-- local evidence vs external evidence
-- incident evidence before simulation
-- failure-domain thinking across code, tooling, runtime, sandbox, orchestration, and resource pressure
-- misleading signals and ruled-out hypotheses
-- design-choice recommendation before implementation
-- decision logging and reversibility before implementation
-- review findings vs ruled-out concerns
-- green-result hazards: bypassed layer, subset, wrong theory, wrong tree, and not-your-red
-- golden transcript checks for routing and output-shape regressions
-- internet-derived public incident cases for rollout safety, data recovery, distributed systems, destructive scripts, partial deployments, and interface contracts
-- mini-model stress cases for premature patching, false-green acceptance, and unsourced external claims
-- end-to-end skill composition across multiple phases
-- context continuity through work packets, progress logs, final reports, and resume after compaction
-
-## Usage Notes
-
-- These skills are opinionated toward consultative, evidence-first software engineering work.
-- They are designed to prefer `no patch` over speculative patching when the current workspace does not reproduce the reported issue.
-- They are also designed to make proof gaps explicit instead of hiding them behind confident language.
-- They require substantial work to preserve task context in inspectable artifacts instead of relying on chat history alone.
-
-## Add A New Skill
-
-```powershell
-.\scripts\new-skill.ps1 -Name my-skill -DisplayName "My Skill" -ShortDescription "What it does" -DefaultPrompt "Use $my-skill to help with this task."
-```
-
-Then edit the generated `SKILL.md`, add any needed references, scripts, or assets, and validate it.
+Coverage includes premature patching, symptom fixes, competing hypotheses, environment failures, wrong-layer and wrong-tree greens, weak oracles, unsourced external claims, context resume, instruction tracking, and working-but-plan-divergent results.
 
 ## Validation
 
-Run the full suite validation:
+Run:
 
 ```bash
 ./scripts/validate-suite.sh
 ```
 
-Or run the individual skill validators:
+The suite validator checks skill frontmatter, TypeScript fixtures, registration, direct-reference integrity, entrypoint budgets, required routing contracts, and stale doctrine.
+
+Individual Windows validation:
 
 ```powershell
 python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\software-engineering-core
-python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\change-review
 python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\verification-hazards
+python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\change-review
 ```
 
-On macOS or Linux with pyenv:
+## Add A Skill
 
-```bash
-PYENV_VERSION=3.12.2 pyenv exec python /Users/lattapon/.codex/skills/.system/skill-creator/scripts/quick_validate.py suites/software-engineering/skills/software-engineering-core
-PYENV_VERSION=3.12.2 pyenv exec python /Users/lattapon/.codex/skills/.system/skill-creator/scripts/quick_validate.py suites/software-engineering/skills/change-review
-PYENV_VERSION=3.12.2 pyenv exec python /Users/lattapon/.codex/skills/.system/skill-creator/scripts/quick_validate.py suites/software-engineering/skills/verification-hazards
+```powershell
+.\scripts\new-skill.ps1 -Name my-skill -DisplayName "My Skill" -ShortDescription "What it does" -DefaultPrompt "Use $my-skill to help with this task."
 ```
+
+Keep new suite content under `suites/software-engineering/` and validate it before review.

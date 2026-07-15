@@ -1,87 +1,53 @@
-# Brief Template
+# Clarify Protocol
 
-## Objective
+Use this protocol when the request is vague, solution-biased, missing source material, or lacks a verifiable outcome.
 
-One sentence describing what must be achieved.
+## Procedure
 
-## Desired Outcome
+1. Restate the underlying objective without assuming the proposed solution is correct.
+2. Record the user contract and working document.
+3. Identify the desired outcome, affected boundary, constraints, and proof of done.
+4. Perform only the shallow inspection needed to locate likely ownership or source material.
+5. Separate direct statements and observations from assumptions.
+6. Classify realistic interpretations and failure or decision domains.
+7. Ask only questions whose answers can change correctness; route source-checkable questions to inspection instead.
 
-Describe the real result the user wants, not just the artifact.
+## Exit Gate
 
-## Failure or Decision Domain
+Remain in `Clarify` unless all are true:
 
-- Classification: one of — `application logic` | `dependency` | `runtime environment` | `sandbox/permissions` | `orchestration` | `resource pressure` | `external vendor` | `design/migration/integration`
-- Rationale for this classification
+- The objective is one concrete sentence with a verifiable success condition.
+- The failure or decision domain has direct support from the user, source, or runtime.
+- `Source Material` names inspectable artifacts rather than placeholders.
+- Every material question is answered, assigned to a source investigation, or recorded as an explicit assumption.
+- Plausible alternative interpretations are ruled out with a reason.
+- The intended state and proof of done are explicit enough to evaluate conformance later.
 
-## Source Material
+If two or more domains remain equally plausible without a distinguishing signal, present the open questions and stop. Do not route to Plan, Analyze, or Implement.
 
-- Required evidence to proceed
-- Files
-- Code or repositories
-- Docs or tickets
-- Logs or command output
-- Systems
-- Stakeholders
-- Deadlines
+## Output Contract
 
-Helpful context:
+Always include:
 
-- Additional examples
-- Background notes
-- Nice-to-have references
+- `Working Document`
+- `User Contract`
+- `Objective`
+- `Desired Outcome`
+- `Intended State`
+- `Failure or Decision Domain`
+- `Source Material`
+- `Proof of Done`
+- `Proof Gap`
 
-For incident-driven work, note separately:
+Include when applicable:
 
-- Current workspace state
-- Historical incident state
-- Whether they agree or conflict
+- `Scoped Work`
+- `Out of Scope`
+- `Constraints`
+- `Assumptions`
+- `Ruled-out Interpretations`
+- `Impact and Tradeoffs`
+- `External Evidence Needed`
+- `Open Questions and Resolution Path`
 
-## External Evidence Needed
-
-- Official docs, vendor docs, standards, release notes, or web research required before execution
-- What question each external source must answer
-
-## Scoped Work
-
-- The smallest useful deliverable
-- Work split into parts if needed
-
-## Out of Scope
-
-- Explicitly excluded work for this phase
-
-## Constraints
-
-- Technical limits
-- Policy or approval limits
-- Time or budget limits
-
-## Assumptions
-
-- State every assumption explicitly
-
-## Impact and Tradeoffs
-
-- Affected users, systems, and timelines
-- Tradeoffs that may change the approach
-
-## Proof of Done
-
-- Observable conditions for success
-
-## Open Questions and Resolution Path
-
-- Only include questions that materially affect execution
-- Mark each as `Ask Now`, `Investigate from Source`, `Investigate Externally`, or `Assume Explicitly`
-
-## Clarify Exit Checklist
-
-Complete this before transitioning to the next mode. All items must be checked.
-
-- [ ] Failure or Decision Domain confirmed by at least one user statement, runtime signal, or source scan — not inferred from pattern matching alone
-- [ ] Source Material names specific artifacts (files, logs, systems, commands) — no placeholders
-- [ ] All `Ask Now` questions answered by the user or re-classified as `Assume Explicitly`
-- [ ] Ruled-out Interpretations lists at least one alternative reading that was considered and rejected
-- [ ] Objective can be stated in one concrete sentence with a verifiable success condition
-
-If any item is unchecked: present this output and stop. Do not transition in the same response.
+Classify each open question as `Ask Now`, `Investigate from Source`, `Investigate Externally`, or `Assume Explicitly`.

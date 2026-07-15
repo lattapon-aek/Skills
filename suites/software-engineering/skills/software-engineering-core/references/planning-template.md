@@ -1,75 +1,67 @@
-# Design Template
+# Plan Protocol
 
-## Working Document
+Use this protocol when the objective and decision domain are clear but the approach, migration, integration, or change boundary is not settled.
 
-- User-supplied task document, repo-local work packet, or inline packet used for this plan
+## Procedure
 
-## Decision
+1. State the exact decision and current source-backed state.
+2. Compare only realistic options, normally two to four.
+3. Tie each option to constraints, impact, reversibility, and proof cost.
+4. Recommend one approach and rule out alternatives with evidence or explicit tradeoffs.
+5. Define the change boundary and what must remain untouched.
+6. Freeze the intended state and commitments that implementation must preserve.
+7. Define functional and conformance oracles before implementation.
+8. Record remaining assumptions and the next evidence that would invalidate or confirm them.
 
-- One sentence describing the design or architecture decision to be made
+## Intent Contract
 
-## Objective
+Record:
 
-- What outcome this decision must support
+- `Intended State` — observable behavior, structure, interfaces, outputs, and boundaries expected after implementation.
+- `Plan Commitments` — decisions implementation must follow.
+- `Observable Conformance Criteria` — checks that distinguish the approved result from a merely functional alternative.
+- `Allowed Variations` — default `none`; list only variations explicitly allowed.
+- `Forbidden Substitutions` — working alternatives that would still violate intent.
+- `Plan Amendment Authority` — who may approve a material change and whether another user turn is required.
 
-## Current State
+Do not use broad phrases such as “equivalent implementation is acceptable” without naming the exact equivalence boundary.
 
-- Current code, system, interface, or workflow facts that shape the decision
+## Exit Gate
 
-## Constraints
+Do not enter `Implement` until:
 
-- Technical limits
-- Product or policy limits
-- Rollout, migration, or compatibility constraints
+- the real source path and patch boundary were inspected
+- the recommended approach is justified against alternatives
+- every `Ask Now` question is answered
+- assumptions that affect correctness have a source-check or explicit accepted risk
+- intended state and conformance criteria are observable
+- material variations and amendment authority are explicit
+- the remaining proof gap is acceptable under the recorded authority mode
 
-## Assumptions
+If new evidence later invalidates a commitment, return here and amend the working document before implementing the alternative. Never rewrite the plan retrospectively.
 
-- Every assumption this plan depends on, stated explicitly
+## Output Contract
 
-## Options Considered
-
-- Option A
-- Option B
-- Option C if needed
-
-## Ruled-out Options
-
-- Options rejected and the evidence or constraint that ruled them out
-
-## Recommended Approach
-
-- The single path recommended for execution
-
-## Why This Approach
-
-- Why it fits the current system better than the alternatives
-
-## Impact and Tradeoffs
-
-- Blast radius
-- Complexity
-- Migration cost
-- Reversibility
-- Testability
-
-## Execution Boundaries
-
-- What later implementation must change
-- What remains out of scope
-- Whether phased rollout is required
-
-## Proof Strategy
-
-- What later implementation must prove
-- What validation will show this approach is working
-
-## Proof Gap
-
-- What this plan already has evidence for
-- What is still unverified, assumed, or blocked
-- What next check or implementation step would close the gap
-
-## Open Questions
-
-- Remaining unknowns that could still change the recommendation
-- Mark each as `Ask Now`, `Investigate from Source`, `Investigate Externally`, or `Assume Explicitly`
+- `Working Document`
+- `User Contract`
+- `Decision`
+- `Objective`
+- `Current State`
+- `Constraints`
+- `Assumptions`
+- `Options Considered`
+- `Ruled-out Options`
+- `Recommended Approach`
+- `Why This Approach`
+- `Impact and Tradeoffs`
+- `Execution Boundaries`
+- `Intended State`
+- `Plan Commitments`
+- `Observable Conformance Criteria`
+- `Allowed Variations`
+- `Forbidden Substitutions`
+- `Plan Amendment Authority`
+- `Proof Strategy`
+- `Proof Gap`
+- `Open Questions`
+- `Phase Transition`

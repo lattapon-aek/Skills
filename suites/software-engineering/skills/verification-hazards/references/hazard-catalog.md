@@ -2,7 +2,7 @@
 
 Field-tested detail for each verification hazard. Every pattern below cost real rounds before it was understood. Use this when the SKILL.md summary is not enough to recognize the hazard in front of you.
 
-The unifying failure: a result agreed with the setup that produced it instead of with the behavior that ships. Green is a claim; these are the five ways the claim and the shipping behavior come apart.
+The unifying failure: a result agreed with the setup that produced it instead of with the behavior that ships. Green is a claim; these are the six ways the claim and the shipping behavior come apart.
 
 ---
 
@@ -121,8 +121,30 @@ The unifying failure: a result agreed with the setup that produced it instead of
 
 ---
 
+## Hazard 6 — Weak-Oracle Green
+
+**What it is.** The verification reaches the intended layer, surface, and artifact, but the assertion is too permissive to prove the promised outcome.
+
+**Concrete patterns seen.**
+
+- A queue test checks that at least one row exists when the contract promises exactly one, allowing duplicate or over-emitted rows to pass.
+- A state-machine test omits a contract-relevant input and passes only because the language's zero value happens to select the expected branch.
+- An HTTP or command test checks only success status or exit code while ignoring the returned data, persisted state, ordering, or side effect.
+- A snapshot is stable but encodes formatting rather than the semantic contract that users depend on.
+- The system remains operational, but its architecture boundary, output shape, required sequence, or other approved plan commitment differs from the intended state and the test checks only functional success.
+
+**Why green lied.** The wrong implementation satisfies the same weak assertion as the correct one.
+
+**Counter-check.** Name a plausible incorrect implementation that would still pass, then add the smallest assertion that makes it fail. Also name one working but plan-divergent implementation and require the oracle to reject it. Compare intended state, observed state, allowed variations, and deviation authority. Set contract-relevant inputs explicitly. Prefer exact cardinality, ordering, state transition, persisted effect, semantic output, and intent-conformance checks over broad truthiness.
+
+An agent cannot declare its own material deviation equivalent, harmless, or better. Only a pre-approved variation or explicit user or governing-document amendment authorizes it.
+
+**Cheapest proof.** One discriminating assertion that fails for the plausible wrong or working-but-nonconforming implementation.
+
+---
+
 ## Applying The Catalog
 
-- Most real incidents are a compound: a wrong-theory fix (3) that passed offline because the test bypassed the real trigger (1), reported green from a subset the sandbox could run (2). Scan all five even when one is obvious.
+- Most real incidents are a compound: a wrong-theory fix (3) that passed offline because the test bypassed the real trigger (1), reported green from a subset the sandbox could run (2), with an assertion too weak to expose the difference (6). Scan all six even when one is obvious.
 - The counter-checks are ordered by cost within each hazard. Run the cheapest one that would actually change your verdict; do not build a harness when a single `git show` or one extra tick settles it.
 - When a counter-check moves the verdict from `confirmed` to `still a lead`, that is the skill working. Record it in `Proof Gap` and route per the SKILL's Phase Handoff rather than shipping the green.

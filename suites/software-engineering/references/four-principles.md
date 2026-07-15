@@ -1,67 +1,58 @@
-# Four Principles
+# Operating Gates
 
-These four principles govern execution across this repository's skills.
+Use these as observable decision gates, not values to praise in prose. Task size never authorizes skipping an applicable gate.
 
 ## Evidence Hierarchy
 
-Use the best available evidence for the question at hand.
+Prefer:
 
-Preferred order:
+1. Runtime behavior, logs, traces, metrics, failing commands, and observed results.
+2. Current source, config, tests, docs, tickets, diagrams, and workspace artifacts.
+3. Official documentation, standards, release notes, APIs, and source repositories.
+4. Secondary sources only as support.
 
-1. Real system behavior: runtime output, logs, traces, metrics, failing commands, observed results
-2. Local artifacts: source code, config, tests, docs, tickets, diagrams, data in the current workspace
-3. Official external sources: vendor docs, platform docs, standards, API references, release notes, source repositories
-4. Supporting external sources: issue trackers, maintainer comments, reputable community writeups
+Memory, conventions, summaries, issue theories, and prior agent reports are leads. A working document records the contract but does not replace fresh inspection of current source or runtime state.
 
-Treat memory, conventions, and generic patterns as hints, not evidence.
+## 1. Evidence Before Action
 
-For multi-step work, the working document or work packet is part of the local artifact layer. It records the task contract, but it does not replace fresh inspection of the current workspace.
+- `Trigger` — before choosing a mode, root cause, patch point, or acceptance verdict.
+- `Required Action` — state the claim, inspect the strongest evidence, and separate observation from inference.
+- `Proceed Gate` — name the observed fact that justifies the next action.
+- `Violation Signal` — acting from a plausible explanation when inspectable evidence exists.
 
-## 1. Think Before Coding
+## 2. Smallest Sufficient Change
 
-- Do not assume silently.
-- State assumptions explicitly.
-- Present multiple interpretations when ambiguity exists.
-- Push back when a simpler or safer approach exists.
-- Stop and ask when confusion affects correctness.
-- When the answer depends on third-party behavior or current external facts, gather outside evidence before concluding.
+- `Trigger` — when choosing an approach or implementation.
+- `Required Action` — map every added behavior to a requirement, proven fault, compatibility need, approved plan, or proof strategy.
+- `Proceed Gate` — explain why a smaller change cannot satisfy the contract.
+- `Violation Signal` — speculative abstractions, options, fallbacks, cleanup, or hardening without a contract reason.
 
-This principle addresses wrong assumptions, hidden confusion, and missing tradeoffs.
+## 3. Proven Change Boundary
 
-## 2. Simplicity First
+- `Trigger` — before the first edit and whenever the diff expands to another file, module, contract, or runtime path.
+- `Required Action` — map every touched area to the objective, proven fault, caller impact, or required verification; preserve unrelated code.
+- `Proceed Gate` — each touched area has a concrete reason, expected impact, and rollback path recorded before editing it.
+- `Violation Signal` — scope growth justified by proximity, preference, or convenience.
 
-- Write the minimum code that solves the real problem.
-- Do not add features, abstractions, configurability, or speculative flexibility that was not requested.
-- Do not add error handling for impossible scenarios just to look comprehensive.
-- If a smaller implementation is clearly sufficient, prefer it.
+## 4. Requirement-to-Proof Closure
 
-This principle addresses overcomplication and bloated abstractions.
+- `Trigger` — before claiming a patch, no-patch result, migration, review, or task complete.
+- `Required Action` — map each user requirement and approved plan commitment to implementation or justified no-change plus observed proof.
+- `Proceed Gate` — no row is silently missing; satisfied rows have evidence and unsatisfied rows are explicit gaps or blockers.
+- `Violation Signal` — closing from “tests pass,” code shape, summary, or confidence without requirement-level proof.
 
-## 3. Surgical Changes
+## Intent-to-Outcome Conformance Gate
 
-- Touch only what the task requires.
-- Do not "improve" adjacent code, comments, or formatting unless required for correctness.
-- Match the surrounding style.
-- Mention unrelated dead code or issues; do not fix them opportunistically.
-- Clean up only the imports, variables, and helpers your own change made obsolete.
+This hard gate is cross-cutting and does not replace the four gates above.
 
-This principle addresses orthogonal edits and touching code you should not touch.
+- `Trigger` — before implementation, after each material result, whenever actual state differs from expected state, and before acceptance.
+- `Required Action` — freeze intended state, plan commitments, observable conformance criteria, allowed variations, forbidden substitutions, and amendment authority; then compare observed state against them.
+- `Proceed Gate` — every material delta is corrected or explicitly authorized. Allowed variations default to `none`.
+- `Stop Condition` — an unresolved deviation changes a requirement, plan decision, architecture boundary, output contract, required sequence, compatibility constraint, or explicit exclusion.
+- `Violation Signal` — accepting a different result because it works, tests pass, looks equivalent, seems simpler, or appears harmless.
 
-## 4. Goal-Driven Execution
-
-- Define what success looks like before editing.
-- Record substantial objectives, decisions, proof gaps, and next actions in an inspectable working document.
-- Turn tasks into verifiable checks.
-- Prefer tests, reproductions, direct runtime checks, or explicit commands over subjective judgments.
-- For multi-step work, pair each step with a verification target.
-- Keep iterating until the result is proven, or state exactly what could not be proven.
+Functional success does not close this gate. An agent cannot authorize its own material deviation or rewrite the plan retrospectively. When evidence invalidates the plan, return to planning, amend the working document prospectively, and obtain the authority the delta requires.
 
 ## Evidence Gathering Rule
 
-- Start with local evidence when the answer should exist in the current workspace or running system.
-- Search external sources when local evidence is missing, incomplete, contradictory, or when the question depends on vendor, library, platform, policy, or ecosystem behavior.
-- Prefer primary sources first.
-- If local and external evidence conflict, state the conflict and resolve it with the most authoritative source available.
-- Distinguish local evidence, external evidence, and assumptions in your reasoning and output.
-
-This principle addresses weak success criteria and encourages independent, verification-driven execution.
+Start locally when the answer belongs to the workspace or runtime. Search externally when local evidence is missing, contradictory, or depends on vendor, library, platform, policy, or ecosystem behavior. Surface conflicts and resolve them from the most authoritative applicable source.

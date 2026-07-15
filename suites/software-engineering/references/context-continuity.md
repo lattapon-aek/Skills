@@ -1,133 +1,108 @@
 # Context Continuity
 
-Use this reference whenever a software-engineering task may outlive the current response, require multiple steps, alter workspace files, depend on user decisions, or need to survive context compaction.
+Use this reference when work may outlive the current response, change files, depend on decisions, require multiple steps, or survive compaction or handoff.
 
 ## Intent
 
-The conversation context window is not a source of truth. It is a working surface that can be compacted, truncated, or resumed by another agent. Important task state must live in inspectable workspace artifacts so the user and the next agent can audit what was agreed, what was done, what was proven, and what remains open.
+Chat context is a working surface, not durable truth. Preserve objective, authority, decisions, intended state, evidence, changes, proof gaps, deviations, and next action in inspectable artifacts.
+
+Continuity choices affect only artifact durability. They never reduce evidence gathering, causal analysis, intent conformance, verification, or review rigor.
 
 ## Document Gate
 
-Before substantial action, confirm that the task has a working document.
+Before substantial action, identify one of:
 
-Any task that creates, edits, deletes, renames, formats, or generates files is substantial for this gate, even when it is a small one-file deliverable in an empty workspace.
+- a user-supplied issue, PR, packet, design brief, runbook, or task document
+- a repo-local work packet
+- a compact inline contract for genuinely one-turn, reversible work with low resume risk
+- an explicit user refusal of artifacts, with audit and resume risk stated
 
-Substantial action includes:
+Substantial action includes multi-file or multi-step planning, editing, debugging, review, migration, release work, or any task likely to resume after a context transition.
 
-- editing code, docs, config, tests, generated assets, or repository metadata
-- planning or designing a non-trivial change
-- debugging across more than one file, command, log, or system boundary
-- reviewing a diff, PR, branch, or patch set with acceptance consequences
-- running a multi-step workflow, packet, migration, rollout, or release check
-- any task likely to resume after a context transition
+Do not treat task size as execution authority. An inline contract changes where state is recorded, not which gates the work must pass. Escalate to a durable work packet as soon as the task gains multiple decisions, files, systems, handoff risk, or acceptance consequences.
 
-If the user supplied a task document, packet, issue, PR, design brief, or runbook, use it as the working document and cite its path or source in the response.
+## Artifact Selection
 
-If no working document exists:
+### Inline Contract
 
-- for any file-changing work, create a repo-local work packet before the first file edit
-- for multi-step work, create a work packet before implementation begins
-- for planning or design work, create or update a decision-bearing work packet before presenting the plan as actionable
-- for very small one-turn read-only work, an inline work packet is acceptable, but state the objective, source material, proof of done, and proof gap
-- if the user forbids creating artifacts, state the audit and resume risk explicitly before continuing
-
-Do not treat private reasoning, chat memory, or a prior assistant summary as the working document.
-
-Inline work packets are not allowed for work that will touch files. A chat request such as "build a small HTML page", "make a one-file game", "fix this config", or "add a quick script" still needs a file artifact before editing unless the user supplied a working document or explicitly accepted the audit risk.
-
-## Required Artifacts
-
-Use the smallest artifact set that preserves auditability.
+Use only when the task can finish in one response, is reversible, has no migration or external-contract risk, and is unlikely to require handoff. Record at least objective, authority, intended state, source material, proof of done, allowed variations, and proof gap.
 
 ### Work Packet
 
-Create or identify this before substantial action. It records the job contract.
+Use for multi-step work, meaningful decisions, file changes likely to continue, or any task needing an auditable plan.
 
 Required fields:
 
 - `Objective`
 - `User Instructions`
+- `Authority Mode`
+- `Required Sequence`
 - `Source Documents`
 - `Current Assumptions`
 - `Scope`
 - `Out of Scope`
 - `Decisions`
+- `Intended State`
+- `Plan Commitments`
+- `Allowed Variations`
+- `Plan Amendment Authority`
 - `Plan`
 - `Proof Strategy`
+- `Acceptance Matrix`
+- `Deviations`
 - `Open Questions`
 - `Resume Instructions`
 
 ### Progress Log
 
-Create or update this when the work spans multiple steps, changes direction, uncovers new evidence, or needs interruption-safe state.
+Use when work spans turns, changes direction, uncovers material evidence, or needs interruption-safe state.
 
-Required fields:
-
-- `Timeline`
-- `Evidence Inspected`
-- `Decisions Made`
-- `Changes Made`
-- `Verification Runs`
-- `Proof Gaps`
-- `Next Action`
+Record timeline, inspected evidence, decisions, changes, verification runs, conformance results, proof gaps, deviations, and next action.
 
 ### Final Report
 
-Create or update this before accepted completion for substantial work.
-
-Required fields:
-
-- `Objective`
-- `What Changed`
-- `Files Touched`
-- `Decisions`
-- `Verification`
-- `Observed Evidence`
-- `Remaining Risks`
-- `Resume Or Follow-up Notes`
+Use before accepting substantial work. Record objective, intended and observed state, files touched, decisions, verification, acceptance coverage, conformance verdict, deviations, remaining risks, and follow-up state.
 
 ## Update Triggers
 
 Update the working artifact when any of these changes:
 
-- objective or scope
-- user instruction or constraint
-- decision or ruled-out option
-- source material or evidence
-- patch boundary
-- verification result
-- proof gap, residual risk, or next action
+- objective, authority, scope, or user instruction
+- decision, assumption, intended state, or allowed variation
+- source material, causal conclusion, or patch boundary
+- implementation result or observed state
+- verification, conformance, proof gap, residual risk, or next action
 
-For long-running tasks, update before starting a risky edit, after each meaningful verification result, and before handing off or stopping.
+Record a material deviation when it occurs, including one later corrected. Never edit the original plan after implementation to make an unplanned result appear intended.
 
 ## Resume Rule
 
-After context compaction, interruption, handoff, or a new agent joining the work:
+After compaction, interruption, handoff, or a new agent joining:
 
-1. Read the work packet or user-supplied task document.
-2. Read the progress log or latest final report if present.
-3. Inspect current workspace state before trusting the document as current.
-4. Continue from the recorded next action, or explain why current evidence invalidates it.
+1. Read the working document.
+2. Read the progress log or latest final report when present.
+3. Inspect current workspace state before trusting recorded state as current.
+4. Compare documented intended state with fresh observed state.
+5. Resume from the recorded next action or explain which evidence invalidates it.
 
-The resume answer must distinguish documented facts from fresh observations and assumptions.
+Distinguish documented facts, fresh observations, and assumptions.
 
 ## Artifact Location
 
-Prefer a repo-local path that follows existing conventions, such as:
+Follow repository conventions such as:
 
 - `docs/work-packets/<task>.md`
 - `doc/dev/impl/reports/<task>.md`
 - `.agent/work-packets/<task>.md`
-- a suite-specific path when the repo already has one
+- a suite-specific work-packet directory
 
-Do not add ad hoc root files when repository instructions define a documentation area.
-
-When the workspace is empty or has no documentation convention, use `.agent/work-packets/<task>.md` for the work packet and create that directory before the first implementation edit.
+Do not add ad hoc root files when the repository defines a documentation area.
 
 ## Anti-Patterns
 
-- Starting a patch from a plan that exists only in chat.
-- Saying "as discussed" without a document or source reference.
-- Summarizing user decisions from memory after compaction.
-- Treating the final chat response as the only report for multi-step work.
-- Letting a progress log become a narrative dump without decisions, evidence, verification, and next action.
+- Starting a substantial patch from a plan that exists only in chat.
+- Using an inline contract to justify reduced proof or review.
+- Saying “as discussed” without an inspectable source.
+- Resuming from memory without reading artifacts and current workspace state.
+- Rewriting a plan after the result diverges.
+- Letting a progress log become narrative without decisions, evidence, conformance, gaps, and next action.

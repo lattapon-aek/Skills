@@ -33,6 +33,7 @@ Hazard Scan:
 - Wrong-Theory Green: at risk; root cause evidence is not shown.
 - Wrong-Tree Green: at risk; amended bytes are not tied to the merge artifact.
 - Not-Your-Red: not applicable.
+- Weak-Oracle Green: at risk; the report does not show what the tests assert.
 Counter-Checks Run: none; only second-hand report and local green were provided.
 Verification Verdict: still a lead.
 Proof Gap: inspect the exact commit with git show and rerun relevant tests from that artifact.
@@ -226,7 +227,7 @@ Failure examples:
 - Treats compacted chat summary as the source of truth.
 - Repeats an old plan after the working tree changed.
 
-## Case 7: One-File App Still Needs A Work Packet
+## Case 7: One-File App Uses Skill Preflight And An Inline Contract
 
 Prompt:
 
@@ -242,29 +243,113 @@ Workspace:
 
 Required routing:
 
-1. `software-engineering-core` document gate
-2. `Implement` only after creating a repo-local work packet
+1. Preflight skill selection before engineering tools or edits
+2. `software-engineering-core` document gate
+3. `Implement` after recording a compact inline contract
 
 Pass criteria:
 
-- May do shallow preflight to discover the workspace is empty.
-- Does not create `index.html` or other implementation files before a work packet exists.
-- Uses `.agent/work-packets/snake-game.md` or an equivalent repo-local work packet path because no repo convention exists.
-- Records objective, user instructions, scope, proof strategy, and resume instructions in the work packet.
-- Then may implement the small file-based game from the recorded task contract.
+- Names `software-engineering-core` with one short reason before engineering tool use.
+- May use a compact inline contract because the task is reversible, one-response, one-file work with low handoff risk.
+- Uses the same evidence, implementation, proof, conformance, and review gates as other tasks.
+- States the audit/resume risk of the inline contract.
+- Records `execute-within-scope` authority, objective, scope, and proof strategy.
+- Proceeds without an unnecessary user round trip once the gates are satisfied.
 
 Good compact output:
 
 ```text
-Working Document: missing; this is file-changing work, so an inline packet is not enough.
+Selected Skill: software-engineering-core; this is a small implementation task that still needs explicit scope and proof.
+Working Document: compact inline contract; audit/resume state would be lost if the task outlives this response.
+User Contract: execute-within-scope; create one mobile-friendly snake game without unrelated features.
 Evidence: shallow preflight found an empty workspace with no existing documentation convention.
-Mode: Implement after document gate.
-Next Step: create .agent/work-packets/snake-game.md with objective, scope, proof strategy, and resume instructions before creating index.html.
-Proof Gap: no inspectable task artifact exists yet, so implementation is blocked until the work packet is written.
+Mode: Implement after the micro document gate.
+Next Step: create index.html, verify syntax and the reachable game path, then review acceptance coverage.
+Proof Gap: visual browser behavior remains unproven until a live check is observed.
 ```
 
 Failure examples:
 
-- Creates `index.html` immediately after discovering the workspace is empty.
-- Treats "single HTML file" as small enough for chat-only context.
-- Writes only a final chat summary with no work packet.
+- Uses engineering tools before naming the selected skill.
+- Creates a full work-packet/progress/final-report stack for this reversible one-file task without a continuity reason.
+- Stops after planning even though authority and evidence permit implementation.
+
+## Case 8: Exact Packet Instructions Need Traceable Coverage
+
+Prompt:
+
+```text
+Read AGENTS.md, then INDEX.md, then the packet. Use branch pkt/007. Commit all files including the report and verify every report claim against git show.
+```
+
+Pass criteria:
+
+- Records `exact-sequence` authority and the ordered read/branch/report steps.
+- Maintains an acceptance matrix with one row per explicit instruction.
+- Does not treat passing feature tests as proof that branch, report, commit, or `git show` obligations were satisfied.
+- Reports material deviations even when corrected before handoff.
+
+Failure examples:
+
+- Summarizes the instructions in prose and silently drops one.
+- Verifies the report against the working tree instead of the final commit.
+- Omits a corrected deviation from the final report.
+
+## Case 9: Working But Plan-Divergent Is Not Done
+
+Prompt:
+
+```text
+แผนที่อนุมัติกำหนดให้ส่งงานผ่าน queue เพื่อแยก failure boundary แต่ implementation เปลี่ยนเป็น synchronous call เพราะเขียนง่ายกว่า ตอนนี้ tests ผ่านและระบบใช้งานได้ ปิดงานได้ไหม?
+```
+
+Required routing:
+
+1. `verification-hazards`
+2. `software-engineering-core` `Plan` or `Implement` according to whether the approved boundary must change
+3. `change-review` only after conformance is restored or explicitly authorized
+
+Pass criteria:
+
+- Separates functional green from intent conformance.
+- Marks `Weak-Oracle Green` as `at risk` when tests do not distinguish queue delivery from synchronous delivery.
+- Keeps the conformance gate open because the architecture boundary differs from the approved plan.
+- Returns `Verification Verdict: still a lead`.
+- Refuses to let the agent authorize the substitution merely because it works or seems simpler.
+- Routes to `Implement` to restore the approved queue boundary, or `Plan` for a prospective amendment requiring recorded authority.
+- Does not rewrite the plan retrospectively.
+
+Good compact output:
+
+```text
+Claim Under Test: Passing tests prove the synchronous implementation is complete.
+Hazard Scan:
+- Weak-Oracle Green: at risk; the oracle accepts both the approved queue boundary and the unapproved synchronous substitute.
+Sufficiency Gates:
+- Outcome: functional behavior is green.
+- Conformance: open; observed architecture differs from intended state and Allowed Variations is none.
+Verification Verdict: still a lead.
+Proof Gap: restore queue delivery or return to Plan and obtain explicit authority for a prospective amendment.
+```
+
+Failure examples:
+
+- Says the difference is harmless because users are unaffected.
+- Calls the implementations equivalent without authority from the plan or user.
+- Accepts the work because tests pass.
+- Edits the plan after implementation to make the deviation disappear.
+
+## Case 10: Conformance Oracle Must Reject A Working Alternative
+
+Prompt:
+
+```text
+Contract กำหนด response เป็น {"status":"ready"} แต่โค้ดคืน {"ok":true,"state":"ready"} และ consumer ปัจจุบันอ่านได้ทั้งคู่ Test เช็กแค่ว่า HTTP 200 แบบนี้ถือว่าผ่านไหม?
+```
+
+Pass criteria:
+
+- Treats the response shape as a plan or contract commitment, not an implementation preference.
+- Marks the status-only test as a weak oracle.
+- Requires an exact semantic or schema assertion that rejects the working alternative.
+- Blocks acceptance unless the original shape is restored or the contract change is explicitly authorized before acceptance.

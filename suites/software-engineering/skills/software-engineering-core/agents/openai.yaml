@@ -1,4 +1,4 @@
 interface:
   display_name: "Software Engineering Core"
-  short_description: "Primary evidence-first owner for clarify, plan, analyze, implement, and no-patch work"
-  default_prompt: "Use $software-engineering-core as the primary working skill: clarify the objective, classify the domain, choose the justified mode, act narrowly, prove the result, and hand off to verification-hazards or change-review when their gates apply."
+  short_description: "Own evidence-first engineering work from objective through a conforming result"
+  default_prompt: "Use $software-engineering-core to establish the contract and intended state, choose the evidence-justified mode, diagnose or implement within the proven boundary, block unapproved plan drift, and hand proof to the later gates."
