@@ -20,7 +20,9 @@ Keep new suite content inside `suites/software-engineering/`; avoid adding ad ho
 - `node --test suites/software-engineering/tests/change-review/scenario-3/base/src/openai/support-assistant.test.ts`
   Runs a focused migration/review proof fixture.
 - `./scripts/validate-suite.sh`
-  Runs skill validation, representative fixtures, registration checks, and stale routing scans.
+  Runs skill validation, the behavioral-eval self-test, representative fixtures, registration checks, and stale routing scans.
+- `python suites/software-engineering/scripts/run-behavioral-eval.py --self-test`
+  Validates the behavioral cases and grades the bundled good/bad fixture transcripts.
 - `.\scripts\new-skill.ps1 -Name my-skill -DisplayName "My Skill" -ShortDescription "..." -DefaultPrompt "Use $my-skill ..."`
   Scaffolds a new skill.
 

@@ -34,6 +34,9 @@ run_python "$validate_py" suites/software-engineering/skills/verification-hazard
 echo "== skill architecture =="
 run_python suites/software-engineering/scripts/check-skill-architecture.py
 
+echo "== behavioral eval self-test =="
+run_python suites/software-engineering/scripts/run-behavioral-eval.py --self-test
+
 echo "== node fixtures =="
 node --test $(find suites/software-engineering/tests -name '*.test.ts' -print | sort)
 
@@ -42,6 +45,8 @@ test -f suites/software-engineering/tests/golden-transcripts/cases.md
 test -f suites/software-engineering/tests/internet-derived/cases.md
 test -f suites/software-engineering/tests/mini-stress/cases.md
 test -f suites/software-engineering/tests/verification-hazards/cases.md
+test -f suites/software-engineering/tests/behavioral/cases.json
+test -f suites/software-engineering/tests/behavioral/README.md
 test -f suites/software-engineering/skills/software-engineering-core/references/causal-debugging-protocol.md
 test -f suites/software-engineering/scripts/check-skill-architecture.py
 

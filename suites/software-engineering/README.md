@@ -155,8 +155,17 @@ Fixture suites live under `tests/`:
 - `internet-derived/` — public incident patterns
 - `mini-stress/` — small-model failure modes
 - `skill-flow/` — observed suite-level assessments
+- `behavioral/` — machine-gradable cases and the transcript grading harness
 
 Coverage includes premature patching, symptom fixes, competing hypotheses, environment failures, wrong-layer and wrong-tree greens, weak oracles, unsourced external claims, context resume, instruction tracking, and working-but-plan-divergent results.
+
+To measure agent behavior against the suite, grade transcripts with the behavioral harness:
+
+```bash
+python suites/software-engineering/scripts/run-behavioral-eval.py --transcripts <dir>
+```
+
+See [tests/behavioral/README.md](tests/behavioral/README.md) for agent-driving mode, metrics, and check semantics.
 
 ## Validation
 
