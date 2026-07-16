@@ -126,15 +126,30 @@ def find_transcript(directory: Path, case_id: str) -> Path | None:
 
 
 def run_agent(template: str, prompt: str, out_file: Path) -> None:
-    with tempfile.NamedTemporaryFile(
-        "w", encoding="utf-8", suffix=".md", delete=False
-    ) as handle:
-        handle.write(prompt)
-        prompt_file = Path(handle.name)
-    try:
+    """Run one case. With {prompt_file} in the template, the prompt is passed as
+    a UTF-8 file path; otherwise it is piped to the command's stdin. The template
+    runs through the platform shell (cmd.exe on Windows), so prefer the stdin
+    form for portability."""
+    prompt_file: Path | None = None
+    stdin_input: str | None = None
+    if "{prompt_file}" in template:
+        with tempfile.NamedTemporaryFile(
+            "w", encoding="utf-8", suffix=".md", delete=False
+        ) as handle:
+            handle.write(prompt)
+            prompt_file = Path(handle.name)
         command = template.replace("{prompt_file}", str(prompt_file))
+    else:
+        command = template
+        stdin_input = prompt
+    try:
         completed = subprocess.run(
-            command, shell=True, capture_output=True, text=True, encoding="utf-8"
+            command,
+            shell=True,
+            input=stdin_input,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
         )
         out_file.write_text(completed.stdout or "", encoding="utf-8")
         if completed.returncode != 0:
@@ -144,7 +159,8 @@ def run_agent(template: str, prompt: str, out_file: Path) -> None:
                 file=sys.stderr,
             )
     finally:
-        prompt_file.unlink(missing_ok=True)
+        if prompt_file is not None:
+            prompt_file.unlink(missing_ok=True)
 
 
 def grade_directory(cases: list[dict], directory: Path) -> dict[str, dict]:
