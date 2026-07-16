@@ -14,19 +14,19 @@ Missing transcripts are reported but only fail the run with `--require-all`. Exi
 
 ## Drive An Agent Directly
 
-`--agent-cmd` runs a shell command per case; `{prompt_file}` is replaced with a UTF-8 file containing the prompt, and stdout becomes the transcript:
+`--agent-cmd` runs a shell command per case and captures stdout as the transcript. Without `{prompt_file}` in the template, the prompt is piped to the command's stdin — the portable form, since the template runs through the platform shell (cmd.exe on Windows, where `$(cat ...)` does not work):
 
 ```bash
-# Claude Code
+# Claude Code (prompt via stdin; add "cd /d <empty-dir> &&" on Windows to control the agent cwd)
 python suites/software-engineering/scripts/run-behavioral-eval.py \
-  --agent-cmd 'claude -p "$(cat {prompt_file})"' --out transcripts/
+  --agent-cmd 'claude -p --model sonnet' --out transcripts/
 
-# Codex CLI
+# Codex CLI on a POSIX shell (prompt via file)
 python suites/software-engineering/scripts/run-behavioral-eval.py \
   --agent-cmd 'codex exec "$(cat {prompt_file})"' --out transcripts/
 ```
 
-Use `--case-id <id>` (repeatable) to run a subset. On Thai-locale Windows run with `PYTHONUTF8=1`.
+With `{prompt_file}` in the template, it is replaced by the path of a UTF-8 file containing the prompt instead. Use `--case-id <id>` (repeatable) to run a subset. On Thai-locale Windows run with `PYTHONUTF8=1`. Run the agent from an empty working directory so workspace content does not leak into the answers.
 
 The agent under test must have the suite skills installed; the prompts assume the skills are selectable. Grade the same transcript set before and after a doctrine change to compare metrics.
 
