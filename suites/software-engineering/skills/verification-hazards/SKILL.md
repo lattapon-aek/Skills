@@ -27,6 +27,10 @@ Do not use it to shape an unclear task, diagnose an unknown failure from scratch
 - Do not call a result confirmed while functional behavior or intent conformance remains unproven.
 - Do not diagnose or patch here; route the failed gate to the correct core mode.
 
+## Required Input
+
+Expect from the requesting owner: the claim under test, the intended state with plan commitments and allowed variations, the exact acceptance artifact identity, the commands and observed outputs behind the claim, and known gaps. When an input is missing, name it, treat the affected gate as unproven, and either run the cheapest check that recovers it or return the request with the missing field named. Never fill a missing input from assumption.
+
 ## The Six Hazards
 
 1. `Bypassed-Layer Green` — the observation used a mock, shim, direct call, injected state, or shortcut instead of the real production trigger, transport, or transition.
@@ -99,3 +103,4 @@ Do not substitute gate labels for the six hazard names. Keep the scan compact, b
 - Return to core `Plan` when observed state materially diverges from the approved intent or the plan must change.
 - Return to core `Implement` when the shipping artifact is missing the change or the oracle must be strengthened.
 - Hand confirmed and still-gapped verdicts to `change-review`; never hide an open hazard behind a green summary.
+- Do not return the same `still a lead` verdict to the same mode twice without new evidence; surface the blocking fact as a stop condition instead of looping.

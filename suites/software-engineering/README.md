@@ -82,6 +82,8 @@ Use for most engineering work:
 
 Mode detail lives in direct references under `skills/software-engineering-core/references/`.
 
+The entrypoint also carries the preflight rule, suite routing (earliest unmet gate, no gate re-entry without new evidence), and the adaptive reporting rule, so they load at runtime instead of relying on repository policy files alone.
+
 ### `verification-hazards`
 
 Use before trusting a test, CI run, benchmark, staging result, rollout signal, suspicious red, or agent report. Scan:
@@ -94,6 +96,8 @@ Use before trusting a test, CI run, benchmark, staging result, rollout signal, s
 6. `Weak-Oracle Green`
 
 Then establish Layer, Surface, Cause, Artifact, Baseline, Outcome, and Conformance. Return `confirmed` only when every applicable gate passes; otherwise return `still a lead` and the cheapest next check.
+
+The entrypoint names its required input packet (claim, intended state, artifact identity, commands and outputs, known gaps); a missing field is named and recovered or returned, never assumed. The same `still a lead` verdict is never handed back twice without new evidence.
 
 ### `change-review`
 
