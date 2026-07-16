@@ -98,6 +98,28 @@ Follow repository conventions such as:
 
 Do not add ad hoc root files when the repository defines a documentation area.
 
+## Compaction Checkpoint
+
+Before compaction, a planned handoff, or ending a session mid-task, record in the working artifact:
+
+- current owner skill and mode
+- last proven gate and the next unmet gate
+- exact artifact identities: branch, commit, files, build, or deployment under work
+- active and rejected hypotheses with their deciding evidence
+- approved change boundary and allowed variations
+- pending checks and their expected observations
+- next action and the condition that would route back
+
+A resume that cannot find these facts must rebuild them from workspace evidence before continuing.
+
+## Adaptive Reporting
+
+Rigor is constant; verbosity adapts.
+
+Use a compact report — `Current Gate`, `Action`, `Observed Evidence`, `Decision`, `Next Gate` — when evidence is clear, the scope was fully inspected, and no finding, deviation, or proof gap remains.
+
+Expand to the full template when hypotheses compete, scope or plan changes, a deviation or proof gap exists, verification is incomplete, risk is high, or the work will be resumed or handed off. Never omit a deviation or proof gap to keep a report compact.
+
 ## Anti-Patterns
 
 - Starting a substantial patch from a plan that exists only in chat.
@@ -106,3 +128,4 @@ Do not add ad hoc root files when the repository defines a documentation area.
 - Resuming from memory without reading artifacts and current workspace state.
 - Rewriting a plan after the result diverges.
 - Letting a progress log become narrative without decisions, evidence, conformance, gaps, and next action.
+- Compacting context or handing off without recording the checkpoint fields.

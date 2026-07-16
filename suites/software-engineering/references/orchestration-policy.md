@@ -74,6 +74,8 @@ Carry inspectable evidence, not only prose conclusions. After compaction or hand
 
 Treat a phase gate as an evidence boundary, not an automatic user round trip. Continue when authority permits and the gate is proven; stop only for missing evidence, user decision, new authority, or external state.
 
+Do not re-enter a gate that was already answered unless new evidence changed the answer. A handoff that would repeat a prior verdict without new evidence is a stop condition; surface the missing fact instead of looping.
+
 ## No-Patch Rule
 
 `No patch` is valid when current source and runtime evidence do not justify a change. It must state what was inspected, what candidate fixes were ruled out, how current state compares with intended state, remaining historical or external gaps, and the final review verdict.

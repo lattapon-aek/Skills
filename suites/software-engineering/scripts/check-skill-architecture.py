@@ -19,6 +19,7 @@ LIMITS = {
 
 REQUIRED_TEXT = {
     "software-engineering-core": [
+        "## Preflight",
         "Intent-to-Outcome Conformance",
         "Allowed Variations",
         "unresolved deviation",
@@ -28,6 +29,10 @@ REQUIRED_TEXT = {
         "references/planning-template.md",
         "references/causal-debugging-protocol.md",
         "references/implementation-checklist.md",
+        "earliest unmet gate",
+        "without new evidence",
+        "expected observation",
+        "Rigor is constant",
     ],
     "verification-hazards": [
         "Bypassed-Layer Green",
@@ -38,6 +43,8 @@ REQUIRED_TEXT = {
         "Weak-Oracle Green",
         "Conformance",
         "still a lead",
+        "## Required Input",
+        "without new evidence",
     ],
     "change-review": [
         "Intent Conformance",
@@ -124,6 +131,9 @@ def main() -> None:
         "Continuity choices affect only artifact durability",
         "never reduce evidence gathering",
         "Never edit the original plan after implementation",
+        "## Compaction Checkpoint",
+        "## Adaptive Reporting",
+        "Never omit a deviation or proof gap",
     ):
         if required not in continuity:
             fail(f"context continuity is missing full-rigor contract: {required}")

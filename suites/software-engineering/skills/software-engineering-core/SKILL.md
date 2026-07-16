@@ -22,6 +22,10 @@ The mandatory path is:
 
 Do not skip an applicable gate because the task looks small. Task size may change how much evidence exists or which continuity artifact is needed; it never lowers the reasoning, proof, conformance, or review standard.
 
+## Preflight
+
+Before the first engineering tool call or edit: inspect the available skills, name the selected primary skill with one short reason, and identify the working document and authority mode. Do not skip this because a task is small, single-file, visual, experimental, or in an empty workspace.
+
 ## Must Obey
 
 - Name this skill and the reason before engineering tool use when governing instructions require skill-first behavior.
@@ -133,14 +137,25 @@ When an inspectable fact can change correctness, inspect it. When it cannot be e
 2. State the objective and current mode.
 3. Inspect the facts that can decide the next gate.
 4. Revalidate assumptions against current source or runtime evidence.
-5. Take the smallest justified action.
-6. Observe the result rather than predicting it.
-7. Compare observed state with intended state.
-8. Update acceptance coverage, deviations, and the working artifact.
-9. Challenge any green/red result or report before trusting it.
-10. Recheck impact, adjacent behavior, proof gaps, and the next owner.
+5. State the expected observation and which outcome advances, blocks, or routes back.
+6. Take the smallest justified action.
+7. Observe the result rather than predicting it.
+8. Compare observed state with intended state.
+9. Update acceptance coverage, deviations, and the working artifact.
+10. Challenge any green/red result or report before trusting it.
+11. Recheck impact, adjacent behavior, proof gaps, and the next owner.
 
 If implementation reveals an unproven mechanism, return to `Analyze`. If evidence invalidates the approved approach or the observed result diverges materially, return to `Plan`. Do not stack another speculative patch on top.
+
+## Suite Routing
+
+Start at the earliest unmet gate; do not jump to review while objective, diagnosis, plan, implementation, conformance, or proof remains open. For approve, merge, ship, accept, close, or go/no-go questions that rest mainly on a green/red result or report, use `verification-hazards` first. A phase gate is an evidence boundary, not an automatic user round trip: continue when authority permits and the gate is proven.
+
+Do not re-enter a gate that was already answered unless new evidence changed the answer. When a handoff would repeat a prior verdict without new evidence, stop and surface the missing fact instead of looping.
+
+## Reporting
+
+Rigor is constant; report verbosity adapts. Use a compact report — `Current Gate`, `Action`, `Observed Evidence`, `Decision`, `Next Gate` — when evidence is clear, the scope was fully inspected, and no finding, deviation, or proof gap remains. Expand the report when hypotheses compete, scope or plan changes, a deviation or proof gap exists, risk is high, or the work will be resumed or handed off.
 
 ## Verification And Acceptance
 
