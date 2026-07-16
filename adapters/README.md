@@ -1,11 +1,11 @@
 # Adapters
 
-This folder contains platform-specific export helpers for the software-engineering suite.
+Platform-specific install paths for the software-engineering suite. The adapters are scripts and commands, not subfolders here.
 
 ## Available Targets
 
-- `claude/`: local Claude Code setup via `scripts/link-software-engineering-skills.ps1`
-- `codex/`: local Codex setup via `scripts/link-codex-skills.ps1`
-- `skills-cli/`: portable install via `npx skills add`
+- Claude Code: `scripts/link-software-engineering-skills.ps1` links the shipped skills into `~/.claude/skills/`
+- Codex: `scripts/link-codex-skills.ps1` links the shipped skills into `~/.codex/skills/`
+- skills CLI: `npx skills add https://github.com/lattapon-aek/Skills` for a portable install
 
 Keep the core doctrine in `suites/software-engineering/` and treat adapters as packaging only.

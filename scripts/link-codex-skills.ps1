@@ -26,7 +26,8 @@ foreach ($skill in $skills) {
     $target = Join-Path $Destination $skill.Name
 
     if (Test-Path $target) {
-        throw "Target already exists: $target"
+        Write-Host "skipped $($skill.Name): target already exists at $target"
+        continue
     }
 
     New-Item -ItemType Junction -Path $target -Target $skill.Path | Out-Null
