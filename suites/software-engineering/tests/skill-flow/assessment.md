@@ -83,6 +83,31 @@ Observed boundary:
 - The current suite includes manual cases for bypassed-layer green, subset green, wrong-theory green, wrong-tree green, not-your-red, weak-oracle green, and a compound all-six scan.
 - These cases should be used before accepting a flow result that depends on green/red verification output or a second-hand agent report.
 
+### Claude Sonnet Automated Baseline (2026-07-16)
+
+First run of the behavioral harness (`tests/behavioral/`) against `claude -p --model sonnet` with the suite skills linked into `~/.claude/skills/`, executed from an empty working directory outside the user profile (no project AGENTS.md or CLAUDE.md loaded). Two graded runs of all 30 cases: skills at master (baseline) and skills at the `feat/runtime-routing-and-continuity` branch (runtime Preflight/Suite Routing/Reporting in the core entrypoint).
+
+| Metric | Baseline (master) | Runtime-routing branch |
+| --- | --- | --- |
+| cases passed | 7/30 | 9/30 |
+| routing_accuracy | 0.111 | 0.111 |
+| shape_compliance | 0.417 | 0.5 |
+| false_acceptance_rate | 0.667 | 0.556 |
+| conformance_integrity | 0.25 | 0.5 |
+| premature_action_rate | 1.0 | 1.0 |
+| unsupported_claim_rate | 0.75 | 0.75 |
+
+Observed findings:
+
+- Prompts that name a skill behave well: `verification-hazards` cases passed 6/8 (baseline) and 7/8 (branch) with correct `Claim Under Test` shape and `still a lead` verdicts.
+- Prompts that require implicit selection almost always failed to route (1/9 both runs). The runtime Preflight addition did not move routing, which is consistent with its mechanism: SKILL.md content loads only after the skill is invoked, so selection depends on the frontmatter description, harness-level policy (AGENTS.md), or explicit user wording — not on entrypoint text.
+- Where the skill was invoked, the branch content improved acceptance discipline (false acceptance 0.667 -> 0.556; conformance 0.25 -> 0.5). Case-level flips: gt-10, vh-04, vh-06 fail -> pass; vh-07 pass -> fail.
+- Premature action failed all four tagged cases in both runs: without routing, the agent accepted user-proposed fixes (for example "จะได้แก้ retry ให้ตรงจุด" for the timeout case) instead of demanding evidence.
+
+Caveats: single run per condition on one model; 1–2 case flips are within run-to-run variance, so treat the aggregate direction, not individual flips, as the signal. Four baseline transcripts initially captured a session-limit error message instead of an answer and were re-run after the limit reset; a first baseline attempt executed under the user's home directory leaked machine-local CLAUDE.md context into answers and was discarded.
+
+Next action: routing is the binding constraint. Improve the three frontmatter descriptions (trigger phrasing) and re-run before considering any skill split; keep using this harness for before/after comparisons.
+
 ## Commands Used
 
 - `node --test suites/software-engineering/tests/software-engineering-core/flows/sample-app/src/payments/retry-status-mapper.test.ts`
