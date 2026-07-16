@@ -13,10 +13,10 @@ Keep new suite content inside `suites/software-engineering/`; avoid adding ad ho
 
 ## Build, Test, and Development Commands
 
-- `python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\software-engineering-core`
+- `python "$env:USERPROFILE\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\software-engineering-core`
   Validates the core workflow skill. Replace the path with `change-review` when needed.
 - `node --test suites/software-engineering/tests/software-engineering-core/flows/sample-app/src/payments/retry-status-mapper.test.ts`
-  Runs a representative end-to-end fixture test.
+  Runs a representative end-to-end fixture test. Requires Node.js 23.6+ (or 22.6+ with `--experimental-strip-types`) because fixtures import `.ts` files directly.
 - `node --test suites/software-engineering/tests/change-review/scenario-3/base/src/openai/support-assistant.test.ts`
   Runs a focused migration/review proof fixture.
 - `./scripts/validate-suite.sh`

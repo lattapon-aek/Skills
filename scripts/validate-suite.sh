@@ -89,4 +89,9 @@ if grep -R -E "Think Before Coding|Simplicity First|Surgical Changes|Goal-Driven
   exit 1
 fi
 
+if grep -R "Phase Handoff" suites/software-engineering/skills suites/software-engineering/references suites/software-engineering/tests suites/software-engineering/README.md >/dev/null 2>&1; then
+  echo "stale section name found: Phase Handoff (the section is named Handoff)" >&2
+  exit 1
+fi
+
 echo "suite validation passed"

@@ -112,7 +112,7 @@ Return `accept`, `accept with authorized deviation`, or the exact owner and mode
 ## Shared References
 
 - [references/four-principles.md](references/four-principles.md) — evidence, scope, proof, and intent-conformance gates
-- [references/context-continuity.md](references/context-continuity.md) — working documents, resume safety, and prospective plan amendments
+- [skills/software-engineering-core/references/context-continuity.md](skills/software-engineering-core/references/context-continuity.md) — working documents, resume safety, and prospective plan amendments (ships inside the core skill so installed copies stay self-contained)
 - [references/orchestration-policy.md](references/orchestration-policy.md) — ownership, routing, and handoff packets
 
 ## Enforce Selection With `AGENTS.md`
@@ -156,6 +156,11 @@ Coverage includes premature patching, symptom fixes, competing hypotheses, envir
 
 ## Validation
 
+Prerequisites:
+
+- Node.js 23.6+ (native TypeScript type stripping), or 22.6+ with `--experimental-strip-types`. The fixtures import `.ts` files directly and use `import.meta.dirname`.
+- `quick_validate.py` from the skill-creator toolkit. The validator looks in `$CODEX_HOME/skills/.system/skill-creator/scripts/quick_validate.py` (default `~/.codex/...`); point `SKILL_VALIDATE_PY` at your copy if it lives elsewhere.
+
 Run:
 
 ```bash
@@ -167,9 +172,9 @@ The suite validator checks skill frontmatter, TypeScript fixtures, registration,
 Individual Windows validation:
 
 ```powershell
-python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\software-engineering-core
-python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\verification-hazards
-python "C:\Users\lattapon.kea\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\change-review
+python "$env:USERPROFILE\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\software-engineering-core
+python "$env:USERPROFILE\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\verification-hazards
+python "$env:USERPROFILE\.codex\skills\.system\skill-creator\scripts\quick_validate.py" .\suites\software-engineering\skills\change-review
 ```
 
 ## Add A Skill

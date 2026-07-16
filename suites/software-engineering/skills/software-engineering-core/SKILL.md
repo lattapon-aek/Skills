@@ -106,7 +106,7 @@ Read the selected reference completely before performing that mode. Read only re
 | A bug, incident, regression, hang, performance issue, flaky result, or environment failure is not causally proven | `Analyze` | [references/causal-debugging-protocol.md](references/causal-debugging-protocol.md) |
 | Objective, approach, assumptions, and change boundary are confirmed | `Implement` | [references/implementation-checklist.md](references/implementation-checklist.md) |
 
-For work that may span turns, change files, depend on decisions, or survive compaction, apply [../../references/context-continuity.md](../../references/context-continuity.md). Use its artifact rules only for continuity; never use them to reduce execution rigor.
+For work that may span turns, change files, depend on decisions, or survive compaction, apply [references/context-continuity.md](references/context-continuity.md). Use its artifact rules only for continuity; never use them to reduce execution rigor.
 
 Use these templates only when their artifact is required:
 

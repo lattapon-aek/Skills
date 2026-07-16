@@ -86,9 +86,15 @@ def main() -> None:
             if required not in text:
                 fail(f"{entry.relative_to(REPO)} is missing required contract text: {required}")
 
+        skill_dir = entry.parent.resolve()
         for link in local_links(entry, text):
             if not link.is_file():
                 fail(f"broken direct reference from {entry.relative_to(REPO)} to {link}")
+            if not link.is_relative_to(skill_dir):
+                fail(
+                    f"{entry.relative_to(REPO)} links outside its skill directory: {link}; "
+                    "installed skills must be self-contained"
+                )
             direct_references.add(link)
 
     if total_words > 4200:
@@ -107,7 +113,13 @@ def main() -> None:
                 if stale in text:
                     fail(f"stale runtime reference {stale} in {path.relative_to(REPO)}")
 
-    continuity = (SUITE / "references" / "context-continuity.md").read_text(encoding="utf-8")
+    continuity = (
+        SUITE
+        / "skills"
+        / "software-engineering-core"
+        / "references"
+        / "context-continuity.md"
+    ).read_text(encoding="utf-8")
     for required in (
         "Continuity choices affect only artifact durability",
         "never reduce evidence gathering",

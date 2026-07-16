@@ -147,4 +147,4 @@ An agent cannot declare its own material deviation equivalent, harmless, or bett
 
 - Most real incidents are a compound: a wrong-theory fix (3) that passed offline because the test bypassed the real trigger (1), reported green from a subset the sandbox could run (2), with an assertion too weak to expose the difference (6). Scan all six even when one is obvious.
 - The counter-checks are ordered by cost within each hazard. Run the cheapest one that would actually change your verdict; do not build a harness when a single `git show` or one extra tick settles it.
-- When a counter-check moves the verdict from `confirmed` to `still a lead`, that is the skill working. Record it in `Proof Gap` and route per the SKILL's Phase Handoff rather than shipping the green.
+- When a counter-check moves the verdict from `confirmed` to `still a lead`, that is the skill working. Record it in `Proof Gap` and route per the SKILL's Handoff rather than shipping the green.

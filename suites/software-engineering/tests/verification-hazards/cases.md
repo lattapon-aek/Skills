@@ -101,7 +101,7 @@ Expected behavior:
 
 - Produce a `Hazard Scan` marking 1–6 all `at risk` with the tell for each.
 - Order counter-checks by cost; run the cheapest that changes the verdict first.
-- Return verdict `still a lead` with a `Proof Gap` naming the next check per open hazard, and route per Phase Handoff (Analyze for the unproven cause, Implement for the unverified committed artifact).
+- Return verdict `still a lead` with a `Proof Gap` naming the next check per open hazard, and route per Handoff (Analyze for the unproven cause, Implement for the unverified committed artifact).
 
 ## Case 8: Working But Nonconforming Green
 
