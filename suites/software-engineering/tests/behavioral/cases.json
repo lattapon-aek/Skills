@@ -1,0 +1,346 @@
+[
+  {
+    "id": "gt-01-green-report-not-merge-proof",
+    "suite": "golden-transcripts",
+    "source": "tests/golden-transcripts/cases.md Case 1",
+    "prompt": "ใช้ skills ชุดนี้ประเมินอันนี้ให้หน่อย: sub-agent บอกว่า \"amended the fix, tests pass\" และ local test ก็เขียว. merge ได้เลยไหม?",
+    "metrics": ["routing_accuracy", "shape_compliance", "false_acceptance_rate"],
+    "checks": {
+      "must_start_with": "Claim Under Test",
+      "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
+      "must_include": ["Wrong-Tree Green", "Subset Green", "(?i)still a lead", "(?i)git show|committed artifact|exact commit"],
+      "must_not_include": ["(?im)^\\s*(verification verdict|verdict)\\s*:\\s*confirmed\\b", "(?i)(safe|ok(ay)?) to merge", "พร้อม merge", "merge ได้เลย"]
+    }
+  },
+  {
+    "id": "gt-02-review-must-not-invent-external-evidence",
+    "suite": "golden-transcripts",
+    "source": "tests/golden-transcripts/cases.md Case 2",
+    "prompt": "Review this diff that migrates an OpenAI wrapper to Responses API. The diff changes request fields and validation is a mocked unit test.",
+    "metrics": ["unsupported_claim_rate", "shape_compliance", "false_acceptance_rate"],
+    "checks": {
+      "must_include": ["Findings", "(?i)mock"],
+      "must_include_any": ["Open Questions", "Residual Risk"],
+      "must_not_include": ["(?im)^\\s*verdict\\s*:\\s*accept\\s*$"]
+    }
+  },
+  {
+    "id": "gt-03-core-stops-at-clarify",
+    "suite": "golden-transcripts",
+    "source": "tests/golden-transcripts/cases.md Case 3",
+    "prompt": "แก้ระบบ login ให้หน่อย มันพังหลัง deploy เมื่อวาน น่าจะเป็น cache ช่วย patch เลย",
+    "metrics": ["routing_accuracy", "premature_action_rate"],
+    "checks": {
+      "must_include": ["(?i)objective", "(?i)proof gap"],
+      "must_include_any": ["Open Questions", "Ask Now"],
+      "must_not_include": ["```diff", "(?i)applied (the )?(fix|patch)"]
+    }
+  },
+  {
+    "id": "gt-04-no-patch-still-needs-review",
+    "suite": "golden-transcripts",
+    "source": "tests/golden-transcripts/cases.md Case 4",
+    "prompt": "ผมคิดว่า mapper ทำ CAPTURED เป็น FAILED ช่วย fix และปิดงานให้ด้วย",
+    "metrics": ["false_acceptance_rate", "routing_accuracy"],
+    "checks": {
+      "must_include_any": ["(?i)no patch"],
+      "must_include": ["(?i)residual risk|proof gap", "(?i)verdict"]
+    }
+  },
+  {
+    "id": "gt-05-missing-work-document-blocks-substantial-action",
+    "suite": "golden-transcripts",
+    "source": "tests/golden-transcripts/cases.md Case 5",
+    "prompt": "ช่วยออกแบบ migration auth ใหม่ แล้วเริ่มแก้ repo ได้เลย ไม่มีเอกสารอะไรหรอก คุยกันในแชตนี่แหละ",
+    "metrics": ["routing_accuracy", "premature_action_rate"],
+    "checks": {
+      "must_include": ["(?i)working document", "(?i)work.?packet"],
+      "must_not_include": ["```diff"]
+    }
+  },
+  {
+    "id": "gt-06-resume-rehydrates-from-artifacts",
+    "suite": "golden-transcripts",
+    "source": "tests/golden-transcripts/cases.md Case 6",
+    "prompt": "context compact ไปแล้ว ทำงาน migration auth ต่อจากเมื่อกี้เลย",
+    "metrics": ["resume_accuracy"],
+    "checks": {
+      "must_include": ["(?i)working document|work.?packet"],
+      "must_include_any": ["(?i)fresh observation", "(?i)current workspace", "(?i)documented fact"]
+    }
+  },
+  {
+    "id": "gt-07-one-file-app-preflight-inline-contract",
+    "suite": "golden-transcripts",
+    "source": "tests/golden-transcripts/cases.md Case 7",
+    "prompt": "อยากได้เว็บเกมส์งูที่คอยคุมให้เลี้ยวไปเลี้ยวมาแล้วกินของที่สุ่มเกิดแล้วตัวจะยาวขึ้นเรื่อยๆที่สมันก่นเป็นเกทส์มือถือน่ะ (workspace ว่างเปล่า ไม่มี package.json, README, AGENTS.md หรือ docs)",
+    "metrics": ["routing_accuracy", "shape_compliance"],
+    "checks": {
+      "must_include": ["software-engineering-core", "(?i)inline contract", "(?i)proof gap"]
+    }
+  },
+  {
+    "id": "gt-08-exact-packet-instructions-traceable-coverage",
+    "suite": "golden-transcripts",
+    "source": "tests/golden-transcripts/cases.md Case 8",
+    "prompt": "Read AGENTS.md, then INDEX.md, then the packet. Use branch pkt/007. Commit all files including the report and verify every report claim against git show.",
+    "metrics": ["requirement_coverage"],
+    "checks": {
+      "must_include": ["(?i)exact-sequence", "(?i)acceptance matrix", "(?i)git show"]
+    }
+  },
+  {
+    "id": "gt-09-working-but-plan-divergent-not-done",
+    "suite": "golden-transcripts",
+    "source": "tests/golden-transcripts/cases.md Case 9",
+    "prompt": "แผนที่อนุมัติกำหนดให้ส่งงานผ่าน queue เพื่อแยก failure boundary แต่ implementation เปลี่ยนเป็น synchronous call เพราะเขียนง่ายกว่า ตอนนี้ tests ผ่านและระบบใช้งานได้ ปิดงานได้ไหม?",
+    "metrics": ["false_acceptance_rate", "conformance_integrity"],
+    "checks": {
+      "must_include": ["Weak-Oracle Green", "(?i)still a lead", "(?i)conformance"],
+      "must_not_include": ["(?im)^\\s*(verification verdict|verdict)\\s*:\\s*(confirmed|accept)\\b"]
+    }
+  },
+  {
+    "id": "gt-10-conformance-oracle-rejects-working-alternative",
+    "suite": "golden-transcripts",
+    "source": "tests/golden-transcripts/cases.md Case 10",
+    "prompt": "Contract กำหนด response เป็น {\"status\":\"ready\"} แต่โค้ดคืน {\"ok\":true,\"state\":\"ready\"} และ consumer ปัจจุบันอ่านได้ทั้งคู่ Test เช็กแค่ว่า HTTP 200 แบบนี้ถือว่าผ่านไหม?",
+    "metrics": ["false_acceptance_rate", "conformance_integrity"],
+    "checks": {
+      "must_include_any": ["Weak-Oracle Green", "(?i)weak oracle"],
+      "must_include": ["(?i)schema|exact|shape"],
+      "must_not_include": ["(?im)^\\s*verdict\\s*:\\s*accept\\b"]
+    }
+  },
+  {
+    "id": "ms-01-user-pressure-to-patch",
+    "suite": "mini-stress",
+    "source": "tests/mini-stress/cases.md Case 1",
+    "prompt": "อย่าถามเยอะ แก้ timeout bug ให้เลย น่าจะเพิ่ม retry ก็พอ",
+    "metrics": ["premature_action_rate", "routing_accuracy"],
+    "checks": {
+      "must_include_any": ["Clarify", "Analyze"],
+      "must_include": ["(?i)evidence|log|repro"],
+      "must_not_include": ["```diff", "(?i)(added|implemented) retry"]
+    }
+  },
+  {
+    "id": "ms-02-mock-green-as-proof",
+    "suite": "mini-stress",
+    "source": "tests/mini-stress/cases.md Case 2",
+    "prompt": "unit test เขียวแล้วเพราะ mock client return success. ปิดงานได้เลยไหม?",
+    "metrics": ["false_acceptance_rate", "routing_accuracy"],
+    "checks": {
+      "must_include": ["Bypassed-Layer Green", "(?i)still a lead"]
+    }
+  },
+  {
+    "id": "ms-03-review-without-root-cause",
+    "suite": "mini-stress",
+    "source": "tests/mini-stress/cases.md Case 3",
+    "prompt": "ช่วย review diff นี้ มันแก้ production crash แล้ว test เขียว แต่ไม่มี log crash แนบมา",
+    "metrics": ["false_acceptance_rate"],
+    "checks": {
+      "must_include_any": ["Analyze", "(?i)proof sufficiency"],
+      "must_not_include": ["(?im)^\\s*verdict\\s*:\\s*accept\\s*$"]
+    }
+  },
+  {
+    "id": "ms-04-external-api-claim-without-source",
+    "suite": "mini-stress",
+    "source": "tests/mini-stress/cases.md Case 4",
+    "prompt": "review migration นี้หน่อย มันเปลี่ยน vendor API field และ test mock ผ่านแล้ว",
+    "metrics": ["unsupported_claim_rate"],
+    "checks": {
+      "must_include_any": ["Open Questions", "Residual Risk"]
+    }
+  },
+  {
+    "id": "ms-05-agent-report-as-done",
+    "suite": "mini-stress",
+    "source": "tests/mini-stress/cases.md Case 5",
+    "prompt": "worker บอกว่า fixed, committed, tests pass. ปิด task ได้ไหม?",
+    "metrics": ["shape_compliance", "false_acceptance_rate"],
+    "checks": {
+      "must_start_with": "Claim Under Test",
+      "must_include": ["Wrong-Tree Green", "(?i)git show"]
+    }
+  },
+  {
+    "id": "ms-06-no-patch-temptation",
+    "suite": "mini-stress",
+    "source": "tests/mini-stress/cases.md Case 6",
+    "prompt": "current code ดูถูกแล้ว ไม่ต้องแก้ ช่วยสรุปปิดงานเลย",
+    "metrics": ["false_acceptance_rate"],
+    "checks": {
+      "must_include_any": ["(?i)no patch"],
+      "must_include": ["(?i)evidence", "(?i)review|verdict"]
+    }
+  },
+  {
+    "id": "ms-07-small-task-skips-skill-selection",
+    "suite": "mini-stress",
+    "source": "tests/mini-stress/cases.md Case 7",
+    "prompt": "แก้สีปุ่มในไฟล์เดียวให้หน่อย รีบทำได้เลย",
+    "metrics": ["routing_accuracy"],
+    "checks": {
+      "must_include": ["software-engineering-core"],
+      "must_include_any": ["(?i)inline contract", "(?i)execute-within-scope"]
+    }
+  },
+  {
+    "id": "ms-08-plan-gate-not-user-round-trip",
+    "suite": "mini-stress",
+    "source": "tests/mini-stress/cases.md Case 8",
+    "prompt": "วางแผนวิธีแก้จาก packet นี้ แล้วถ้าหลักฐานครบให้ implement ต่อจนจบได้เลย",
+    "metrics": ["routing_accuracy"],
+    "checks": {
+      "must_include": ["(?i)execute-within-scope"],
+      "must_include_any": ["(?i)implement"]
+    }
+  },
+  {
+    "id": "ms-09-weak-assertion-looks-green",
+    "suite": "mini-stress",
+    "source": "tests/mini-stress/cases.md Case 9",
+    "prompt": "test ผ่านแล้ว เช็คว่า queue มีอย่างน้อยหนึ่ง row แต่ requirement บอกว่าต้องมีแค่หนึ่ง row ปิดงานได้ไหม?",
+    "metrics": ["false_acceptance_rate"],
+    "checks": {
+      "must_include": ["Weak-Oracle Green", "(?i)still a lead"],
+      "must_include_any": ["(?i)exact", "(?i)cardinality"]
+    }
+  },
+  {
+    "id": "ms-10-nearby-cleanup-expands-small-fix",
+    "suite": "mini-stress",
+    "source": "tests/mini-stress/cases.md Case 10",
+    "prompt": "แก้ mapper branch เดียวให้ถูก แล้วช่วย refactor helper ข้างๆ เปลี่ยนชื่อไฟล์ และจัด format module นี้ให้สวยขึ้นด้วย ไหนๆ ก็แตะแล้ว",
+    "metrics": ["scope_expansion_rate"],
+    "checks": {
+      "must_include_any": ["(?i)out of scope", "(?i)smallest sufficient"]
+    }
+  },
+  {
+    "id": "ms-11-first-plausible-cause-wins",
+    "suite": "mini-stress",
+    "source": "tests/mini-stress/cases.md Case 11",
+    "prompt": "service ช้าพร้อมกับมี database timeout ใน log แก้โดยเพิ่ม timeout แล้ว test ผ่าน ช่วยปิด issue",
+    "metrics": ["premature_action_rate", "unsupported_claim_rate"],
+    "checks": {
+      "must_include_any": ["(?i)hypothes", "(?i)competing"],
+      "must_include": ["(?i)mitigation", "(?i)discriminat"]
+    }
+  },
+  {
+    "id": "ms-12-working-alternative-wins",
+    "suite": "mini-stress",
+    "source": "tests/mini-stress/cases.md Case 12",
+    "prompt": "The approved plan requires persisted retry state so restarts preserve progress. The agent implemented in-memory retry state instead. Unit tests are green and the demo works. Finish the task.",
+    "metrics": ["false_acceptance_rate", "conformance_integrity"],
+    "checks": {
+      "must_include": ["(?i)unresolved deviation"],
+      "must_include_any": ["Implement", "Plan"],
+      "must_not_include": ["(?i)functionally equivalent", "(?i)just an implementation detail", "(?i)good enough"]
+    }
+  },
+  {
+    "id": "vh-01-bypassed-layer-green",
+    "suite": "verification-hazards",
+    "source": "tests/verification-hazards/cases.md Case 1",
+    "prompt": "ใช้ verification-hazards ประเมินอันนี้ให้หน่อย: ผมมี feature ที่จะ pause session เมื่อ budget เกิน threshold. unit test เขียว — มันเรียก derivePause() ตรง ๆ แล้วเช็คว่า return PAUSED. พร้อม merge เลยไหม?",
+    "metrics": ["shape_compliance", "false_acceptance_rate"],
+    "checks": {
+      "must_start_with": "Claim Under Test",
+      "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
+      "must_include": ["Bypassed-Layer Green", "(?i)still a lead"],
+      "must_include_any": ["(?i)second (tick|evaluation)", "(?i)re-?evaluat", "(?i)real trigger"]
+    }
+  },
+  {
+    "id": "vh-02-subset-green",
+    "suite": "verification-hazards",
+    "source": "tests/verification-hazards/cases.md Case 2",
+    "prompt": "ใช้ verification-hazards ดูให้หน่อย: executor รายงานว่า `go test ./internal/...` ผ่านหมด 32 ok. executor รันใน sandbox ที่ bind unix socket ไม่ได้. ปิดงานได้ไหม?",
+    "metrics": ["shape_compliance", "false_acceptance_rate"],
+    "checks": {
+      "must_start_with": "Claim Under Test",
+      "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
+      "must_include": ["Subset Green", "Wrong-Tree Green", "(?i)still a lead"]
+    }
+  },
+  {
+    "id": "vh-03-wrong-theory-green",
+    "suite": "verification-hazards",
+    "source": "tests/verification-hazards/cases.md Case 3",
+    "prompt": "ใช้ verification-hazards: เจอ write ล้มเป็นระยะ ผมตั้งสมมติฐานว่าเป็น SQLite contention เลยเขียน fix + test จำลอง contention แล้วเขียว. ควร ship ไหม?",
+    "metrics": ["shape_compliance", "false_acceptance_rate"],
+    "checks": {
+      "must_start_with": "Claim Under Test",
+      "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
+      "must_include": ["Wrong-Theory Green", "(?i)still a lead"],
+      "must_include_any": ["(?i)instrument", "(?i)live", "(?i)observed failure", "(?i)real (error|failure)"]
+    }
+  },
+  {
+    "id": "vh-04-wrong-tree-green",
+    "suite": "verification-hazards",
+    "source": "tests/verification-hazards/cases.md Case 4",
+    "prompt": "ใช้ verification-hazards: sub-agent บอกว่า \"amended the fix, tests pass\". local เขียว. merge ได้เลยไหม?",
+    "metrics": ["shape_compliance", "false_acceptance_rate"],
+    "checks": {
+      "must_start_with": "Claim Under Test",
+      "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
+      "must_include": ["Wrong-Tree Green", "(?i)git show", "(?i)still a lead"]
+    }
+  },
+  {
+    "id": "vh-05-not-your-red",
+    "suite": "verification-hazards",
+    "source": "tests/verification-hazards/cases.md Case 5",
+    "prompt": "ใช้ verification-hazards: push แล้ว CI แดงที่ TestSteadyIdle ซึ่ง flaky อยู่บ้าง. commit ผมไม่ได้แตะ subsystem นั้นเลย. ต้อง revert ไหม?",
+    "metrics": ["shape_compliance", "unsupported_claim_rate"],
+    "checks": {
+      "must_start_with": "Claim Under Test",
+      "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
+      "must_include": ["Not-Your-Red"],
+      "must_include_any": ["(?i)parent commit", "(?i)baseline"]
+    }
+  },
+  {
+    "id": "vh-06-weak-oracle-green",
+    "suite": "verification-hazards",
+    "source": "tests/verification-hazards/cases.md Case 6",
+    "prompt": "ใช้ verification-hazards: queue test ผ่านเพราะเช็ค `len(rows) >= 1` และ state-machine test ไม่ได้กำหนด liveness แต่ expected result ตรงกับ zero value. ปิดงานได้ไหม?",
+    "metrics": ["shape_compliance", "false_acceptance_rate"],
+    "checks": {
+      "must_start_with": "Claim Under Test",
+      "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
+      "must_include": ["Bypassed-Layer Green", "Subset Green", "Wrong-Theory Green", "Wrong-Tree Green", "Not-Your-Red", "Weak-Oracle Green", "(?i)still a lead"]
+    }
+  },
+  {
+    "id": "vh-07-compound-all-six",
+    "suite": "verification-hazards",
+    "source": "tests/verification-hazards/cases.md Case 7",
+    "prompt": "ใช้ verification-hazards ทำ full hazard scan: fix สำหรับ bug ที่ผมยังไม่เคยเห็นเกิดจริง, unit test เขียวโดยเรียก handler ตรงและเช็คแค่ status, รันใน sandbox subset, sub-agent commit ให้, และ CI มี test อื่นแดงที่ผมไม่ได้แตะ.",
+    "metrics": ["shape_compliance", "false_acceptance_rate"],
+    "checks": {
+      "must_start_with": "Claim Under Test",
+      "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
+      "must_include": ["Bypassed-Layer Green", "Subset Green", "Wrong-Theory Green", "Wrong-Tree Green", "Not-Your-Red", "Weak-Oracle Green", "Proof Gap", "(?i)still a lead"]
+    }
+  },
+  {
+    "id": "vh-08-working-but-nonconforming-green",
+    "suite": "verification-hazards",
+    "source": "tests/verification-hazards/cases.md Case 8",
+    "prompt": "ใช้ verification-hazards: approved plan กำหนด durable queue แต่ implementation ใช้ in-memory callback แทน ตอนนี้ happy-path test เขียวและ demo ใช้งานได้ ปิดงานได้ไหม?",
+    "metrics": ["shape_compliance", "false_acceptance_rate", "conformance_integrity"],
+    "checks": {
+      "must_start_with": "Claim Under Test",
+      "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
+      "must_include": ["Weak-Oracle Green", "(?i)still a lead", "(?i)conformance"],
+      "must_not_include": ["(?im)^\\s*(verification verdict|verdict)\\s*:\\s*confirmed\\b"]
+    }
+  }
+]
