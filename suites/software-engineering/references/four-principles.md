@@ -53,6 +53,17 @@ This hard gate is cross-cutting and does not replace the four gates above.
 
 Functional success does not close this gate. An agent cannot authorize its own material deviation or rewrite the plan retrospectively. When evidence invalidates the plan, return to planning, amend the working document prospectively, and obtain the authority the delta requires.
 
+## Mechanism-Before-Design Gate
+
+Use this conditional gate when a design decision depends on controlling behavior outside or not established by current local source.
+
+- `Trigger` — a proposed architecture, migration, configuration, or optimization depends on how a harness, framework, runtime, protocol, platform, vendor, model, tool, or infrastructure component behaves.
+- `Required Action` — separate objective from proposed explanation and solution; identify decision-changing mechanism claims; inspect implementing source, official contracts, or live behavior.
+- `Proceed Gate` — every mechanism claim that can change the architecture is established and the proof strategy measures the user objective rather than only structural conformance.
+- `Violation Signal` — editing because the user or agent supplied a plausible system model, or treating a green manifest/build/schema check as runtime proof.
+
+Do not apply this gate to pure preference or behavior fully controlled and directly inspectable in current local source.
+
 ## Evidence Gathering Rule
 
 Start locally when the answer belongs to the workspace or runtime. Search externally when local evidence is missing, contradictory, or depends on vendor, library, platform, policy, or ecosystem behavior. Surface conflicts and resolve them from the most authoritative applicable source.

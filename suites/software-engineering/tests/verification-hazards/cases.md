@@ -119,3 +119,33 @@ Expected behavior:
 - Return `still a lead` despite functional green.
 - Route to Implement to restore the approved boundary, or Plan for a prospective amendment with explicit authority.
 - Do not let the agent authorize the deviation or rewrite the plan retrospectively.
+
+## Case 9: Wrong-Mechanism Green
+
+Request:
+
+```text
+We split one workflow into four public skills and moved shared doctrine to AGENTS.md. quick_validate passes, manifests list all four skills, and every file is valid Markdown. This proves Codex now loads less context, so accept the change.
+```
+
+Expected behavior:
+
+- Mark `Wrong-Theory Green` as `at risk` using the `Wrong-Mechanism Green` pattern.
+- Explain that structural checks prove installability and shape, not runtime discovery, selection, reference loading, prompt injection, or token reduction.
+- Require authoritative mechanism evidence or an observed runtime/context comparison that distinguishes the split from competing system models.
+- Report `Mechanism Validity` as open and return `Verification Verdict: still a lead`.
+- Route to core `Plan` if the architecture rests on the unverified model.
+
+## Case 10: Mechanism-Conforming Plan Still Fails Review
+
+Request:
+
+```text
+The implementation exactly matches the approved four-skill split and all planned tests pass. Review it for acceptance. No one verified how Codex selects or injects skills.
+```
+
+Expected behavior:
+
+- Recognize intent conformance while keeping `Mechanism Validity` open.
+- Refuse acceptance because faithful execution cannot validate the plan's controlling theory.
+- Return to core `Plan` with the missing mechanism claim and required evidence named explicitly.

@@ -34,6 +34,9 @@ run_python "$validate_py" suites/software-engineering/skills/verification-hazard
 echo "== skill architecture =="
 run_python suites/software-engineering/scripts/check-skill-architecture.py
 
+echo "== AGENTS policy =="
+run_python suites/software-engineering/scripts/check-agents-policy.py
+
 echo "== behavioral eval self-test =="
 run_python suites/software-engineering/scripts/run-behavioral-eval.py --self-test
 
@@ -47,8 +50,12 @@ test -f suites/software-engineering/tests/mini-stress/cases.md
 test -f suites/software-engineering/tests/verification-hazards/cases.md
 test -f suites/software-engineering/tests/behavioral/cases.json
 test -f suites/software-engineering/tests/behavioral/README.md
+test -f suites/software-engineering/tests/mechanism-before-design/evaluation.md
+test -f suites/software-engineering/work-packets/mechanism-before-design-final-report.md
 test -f suites/software-engineering/skills/software-engineering-core/references/causal-debugging-protocol.md
+test -f suites/software-engineering/skills/software-engineering-core/references/mechanism-design-protocol.md
 test -f suites/software-engineering/scripts/check-skill-architecture.py
+test -f suites/software-engineering/scripts/check-agents-policy.py
 
 echo "== registration =="
 grep -q "verification-hazards" .claude-plugin/plugin.json
@@ -77,6 +84,13 @@ grep -q "working but nonconforming" suites/software-engineering/skills/verificat
 grep -q "Intent-Conformance Gate" suites/software-engineering/skills/change-review/SKILL.md
 grep -q "Working But Plan-Divergent" suites/software-engineering/tests/golden-transcripts/cases.md
 grep -q "Working But Nonconforming Green" suites/software-engineering/tests/verification-hazards/cases.md
+grep -q "Mechanism Before Architecture" suites/software-engineering/tests/golden-transcripts/cases.md
+grep -q "User Architecture Theory Wins" suites/software-engineering/tests/mini-stress/cases.md
+grep -q "Wrong-Mechanism Green" suites/software-engineering/tests/verification-hazards/cases.md
+grep -q "Mechanism Validity" suites/software-engineering/skills/change-review/SKILL.md
+grep -q 'Mechanism Verdict.*`contradicted`' suites/software-engineering/skills/software-engineering-core/references/final-report-template.md
+grep -q "Current-Byte Accepted Run: 3/3" suites/software-engineering/tests/mechanism-before-design/evaluation.md
+grep -q "Canonical Harness Policy Accepted Run: 3/3" suites/software-engineering/tests/mechanism-before-design/evaluation.md
 
 echo "== stale routing scan =="
 if grep -R "clarify/analyze/implement/review" suites/software-engineering README.md AGENTS.md CLAUDE.md >/dev/null 2>&1; then

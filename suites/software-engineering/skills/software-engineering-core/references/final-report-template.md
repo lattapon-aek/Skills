@@ -25,6 +25,13 @@ Use this before accepted completion for substantial software-engineering work.
 
 Use `conforms`, `authorized deviation`, or `unresolved deviation` and name the authority for every accepted delta.
 
+## Mechanism Validity
+
+- `Mechanism Claims Verified`
+- `Mechanism Evidence`
+- `Unverified Mechanisms`
+- `Mechanism Verdict` — `established`, `conditional`, `unproven`, or `contradicted`
+
 ## Acceptance Coverage
 
 | Commitment | Type | Source | Expected State | Observed State | Status | Evidence |

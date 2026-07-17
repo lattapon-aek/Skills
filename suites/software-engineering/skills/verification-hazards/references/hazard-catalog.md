@@ -56,11 +56,15 @@ The unifying failure: a result agreed with the setup that produced it instead of
 
 **What it is.** The fix rests on a root cause that was inferred but never observed failing. The offline test encodes the same assumption as the fix, so they confirm each other while both stay disconnected from the real failure.
 
+This includes `Wrong-Mechanism Green`: an architecture or optimization rests on an unverified model of a harness, framework, runtime, protocol, platform, vendor, model, or tool. Structural checks pass because they validate the proposed file shape, manifest, schema, documentation, or build rather than the controlling runtime behavior.
+
 **Concrete patterns seen.**
 
 - A root cause was diagnosed twice, wrong both times, from a rendered/summarized view of the failure — until a live probe disproved the theory outright. The real cause was a flag consumed too early, a cursor read from the wrong offset — visible only in the raw stream, not the rendered one.
 - A repro and a fix packet were built entirely on an unconfirmed theory (resource contention). Live instrumentation of the *actual* error showed a different cause (a request collision), and the theory-built fix failed live.
 - A pattern/fingerprint was matched against a rendered view while production classifies the raw stream; escape sequences split the phrase in the raw bytes, so the pattern that passed on rendered text scored zero on what actually ships. Verifying against the wrong representation cost the same mistake twice.
+- A skill split, adapter rewrite, configuration change, or migration is claimed to improve context, dispatch, lifecycle, compatibility, or performance without inspecting how the controlling system discovers, loads, routes, or executes it.
+- Quick validation, manifest parsing, documentation consistency, or compilation is used as proof of a runtime improvement that none of those checks can observe.
 
 **Why green lied.** The test and the fix share the wrong model. Two things that agree with each other can both disagree with reality.
 
@@ -69,8 +73,11 @@ The unifying failure: a result agreed with the setup that produced it instead of
 - Instrument or reproduce the live failure and read the real signal — log the failing value, `grep` the raw stream, `lsof` the live process, inspect the actual error string. Do not theorize from a rendered, summarized, or remembered view.
 - Prefer an observation the theory predicts *and a competing theory does not* — that is what discriminates cause from coincidence.
 - A prior fix for the same symptom that bounced is a strong signal the theory is wrong, not that the fix was almost right.
+- For architecture work, inspect implementing source or official contracts and run the cheapest live probe where competing system models predict different outcomes. Separate repository structure from runtime behavior and measure the user objective directly.
 
 **Cheapest proof.** One direct observation of the real failure consistent with the theory and inconsistent with its main rival.
+
+For `Wrong-Mechanism Green`, use one authoritative source or runtime observation that establishes the decision-changing mechanism, plus an outcome check that would fail if the system followed the competing model.
 
 ---
 

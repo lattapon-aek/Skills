@@ -7,7 +7,7 @@ description: Final acceptance gate for a concrete software change, diff, pull re
 
 ## Role
 
-Own acceptance, not primary clarification, diagnosis, planning, or implementation. Review a concrete artifact from evidence and decide whether it is ready, must return to an earlier owner, or remains blocked by proof.
+Own acceptance, not clarification, diagnosis, planning, or implementation. Review a concrete artifact and decide whether it is ready, must return to an earlier owner, or remains blocked by proof.
 
 Acceptable review targets are:
 
@@ -19,8 +19,8 @@ If the request is an approve, merge, ship, close, or production decision based m
 
 ## Must Obey
 
-- Inspect the actual target and surrounding behavior; do not review from summary alone.
-- Confirm objective, intended state, user contract, and plan commitments before judging the result.
+- Inspect the target and surrounding behavior; do not review from summary.
+- Confirm objective, intended state, contract, and plan commitments before judgment.
 - Separate observed evidence from inference and source external behavior in the current review.
 - Prioritize correctness, intent conformance, regressions, blast radius, and proof over taste or style.
 - Do not implement fixes in review mode; hand back to the exact owner and gate.
@@ -34,14 +34,16 @@ If the request is an approve, merge, ship, close, or production decision based m
 3. Inspect the actual diff and the surrounding code paths that determine behavior.
 4. Trace callers, contracts, data shapes, runtime paths, operational effects, and rollback implications.
 5. Check whether the implementation solves the proven objective or failure mechanism.
-6. Compare observed state with intended state and classify every material delta.
-7. Inspect tests, commands, logs, and hazard verdicts used as proof.
-8. Map each requirement and plan commitment to implementation and observed evidence.
-9. Report blocking findings before summaries and hand back when an earlier gate is open.
+6. For mechanism-dependent designs, check whether the plan rests on an observed or authoritative model of the controlling system.
+7. Compare observed state with intended state and classify every material delta.
+8. Inspect tests, commands, logs, and hazard verdicts used as proof.
+9. Map each requirement and plan commitment to implementation and observed evidence.
+10. Report blocking findings before summaries and hand back when an earlier gate is open.
 
 ## Review Rubric
 
 - `Functionality` — the result performs the required behavior and fixes the demonstrated failure when applicable.
+- `Mechanism Validity` — the design follows the actual controlling behavior rather than an unverified user or agent theory.
 - `Intent Conformance` — observed state matches the approved requirements, plan, architecture boundary, output contract, required sequence, and exclusions.
 - `Code Health` — the result is maintainable without unnecessary complexity.
 - `Smallest Sufficient Change` — every meaningful behavior and touched area has a requirement, fault, compatibility, or proof reason.
@@ -67,6 +69,8 @@ Use these dispositions:
 An `unresolved deviation` is blocking when it changes a user requirement, plan decision, architecture boundary, public or internal contract named by the plan, output shape, required sequence, compatibility constraint, or explicit exclusion.
 
 “It works”, “tests pass”, “the alternative is simpler”, “users are not affected”, and “functionally equivalent” do not authorize the deviation. If evidence shows the plan itself is wrong, route to core `Plan` for a prospective amendment; do not approve a retrospective rewrite.
+
+Intent conformance does not prove mechanism validity. A conforming result remains unacceptable when its plan depends on an unverified harness, framework, runtime, protocol, platform, or vendor model. Return it to core `Plan` rather than accepting faithful execution of a bad theory.
 
 ## Proof Review
 
@@ -100,6 +104,7 @@ Each finding should name the file and tight line range when applicable, impact, 
 - `Instruction Compliance`
 - `Acceptance Coverage`
 - `Intent Conformance`
+- `Mechanism Validity`
 - `Deviations`
 - `Open Questions`
 - `Ruled-out Concerns`
@@ -116,6 +121,7 @@ For `no patch`, state whether any justified change remains, which candidate fixe
 - Return to core `Clarify` when objective or intended state is unclear.
 - Return to core `Analyze` when the claimed failure mechanism is unproven.
 - Return to core `Plan` when implementation diverges materially or the approved approach needs amendment.
+- Return to core `Plan` when the artifact conforms to a plan whose controlling-mechanism claims remain unproven.
 - Return to core `Implement` when a concrete execution or oracle gap must be corrected.
 - Return to `verification-hazards` when acceptance depends on an unchallenged green/red result or report.
 

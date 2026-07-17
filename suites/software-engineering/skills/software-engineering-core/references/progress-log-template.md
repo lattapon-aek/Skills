@@ -11,6 +11,10 @@ Use this when work spans multiple steps, changes direction, uncovers new evidenc
 
 ## Decisions Made
 
+## Mechanism Evidence
+
+- Update when the system model changes, a primary source conflicts with the plan, or a runtime probe changes the architecture decision
+
 ## Changes Made
 
 ## Verification Runs

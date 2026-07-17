@@ -47,6 +47,6 @@ Use the suite README for:
 - skill catalog
 - shared doctrine
 - routing guidance
-- `AGENTS.md` policy snippets that make agents select the skills consistently
+- the canonical [`AGENTS.md` enforcement policy](suites/software-engineering/references/agents-enforcement-policy.md) that makes agents select the skills and honor mechanism precedence consistently
 - stress-test layout
 - validation commands

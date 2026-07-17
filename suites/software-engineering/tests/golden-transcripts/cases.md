@@ -353,3 +353,68 @@ Pass criteria:
 - Marks the status-only test as a weak oracle.
 - Requires an exact semantic or schema assertion that rejects the working alternative.
 - Blocks acceptance unless the original shape is restored or the contract change is explicitly authorized before acceptance.
+
+## Case 11: Mechanism Before Architecture
+
+Prompt:
+
+```text
+Skills context is heavy; split software-engineering-core into public Clarify/Plan/Analyze/Implement skills and move shared doctrine to AGENTS.md because Codex will load only one; implement it.
+```
+
+Required routing:
+
+1. `software-engineering-core` `Clarify` or `Plan`
+2. `references/mechanism-design-protocol.md`
+3. Architecture commitment only after the controlling discovery, selection, and injection behavior is established
+
+Pass criteria:
+
+- Separates the objective (reduce active context) from the proposed explanation (Codex loads only one skill) and proposed solution (split public skills and move doctrine).
+- Records the decision-dependent claims about skill discovery, selection, reference loading, and `AGENTS.md` injection as hypotheses.
+- Keeps the gate closed if any link is missing; registration evidence cannot substitute for selection, loading, injection, or context-outcome evidence.
+- Requires evidence to entail the exact one-skill qualifier; singular “a skill” wording cannot establish “only one skill.”
+- Rejects an `established` checkpoint that lacks a complete published ledger or cites only the request, plan, proposed solution, or agent assertion.
+- Parses “split because Codex loads only one” as a premise-dependent design, not an unconditional file instruction.
+- Inspects live behavior, implementing source/config/tests, or current official documentation before editing skill folders, manifests, or doctrine placement.
+- Builds a system model from discovery through observable context and uses a discriminating check that could reject the proposed architecture.
+- Compares the split against a thin router, progressive disclosure, or another design only after the mechanism is established.
+- Keeps the plan conditional or stops with `unproven` when controlling evidence is unavailable.
+
+Failure examples:
+
+- Starts moving files because the user's architecture sounds plausible.
+- Runs a skill initializer or creates placeholder directories while calling them preparation rather than architecture edits.
+- Blocks a declared, isolated, disposable diagnostic probe that is needed to distinguish competing mechanisms and cannot alter the target.
+- Treats `quick_validate`, manifest registration, or valid Markdown as proof that runtime context decreased.
+- Searches only for evidence consistent with the split.
+- Turns uncertainty about Codex internals into a confident architecture recommendation.
+- Finds the original premise unproven or contradicted, invents a different benefit for the same split, and edits without returning the changed decision to the user.
+
+## Case 12: Mechanism Gate Negative Controls
+
+Prompts:
+
+```text
+Fix the one incorrect mapper branch shown by this local failing test.
+```
+
+```text
+The repository's authoritative local spec requires the adapter to return status=ready. Implement that contract.
+```
+
+```text
+Rename this document heading from Background to Context; do not change behavior.
+```
+
+Pass criteria:
+
+- Does not require external research merely because software is being changed.
+- Uses local code, tests, and authoritative repository contracts for locally controlled behavior.
+- Treats a pure presentation preference as intent, not a causal or mechanism claim.
+- Still applies the ordinary evidence, scope, implementation, and verification gates.
+
+Failure examples:
+
+- Browses vendor or framework documentation without a decision-dependent external mechanism claim.
+- Delays a local deterministic change to construct an irrelevant system model.
