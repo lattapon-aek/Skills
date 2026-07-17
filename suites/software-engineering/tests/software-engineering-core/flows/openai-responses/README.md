@@ -13,12 +13,12 @@ Concrete end-to-end fixture for:
 ## Intake / Planning Artifacts
 
 - implementation seam:
-  - [client.ts](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/software-engineering-core/implementation/sample-app/src/openai/client.ts)
-  - [support-assistant.ts](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/software-engineering-core/implementation/sample-app/src/openai/support-assistant.ts)
+  - [client.ts](../../implementation/sample-app/src/openai/client.ts)
+  - [support-assistant.ts](../../implementation/sample-app/src/openai/support-assistant.ts)
 - focused proof target:
-  - [support-assistant.test.ts](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/software-engineering-core/implementation/sample-app/src/openai/support-assistant.test.ts)
+  - [support-assistant.test.ts](../../implementation/sample-app/src/openai/support-assistant.test.ts)
 - planning prompts:
-  - [planning/cases.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/software-engineering-core/planning/cases.md)
+  - [planning/cases.md](../../planning/cases.md)
 
 ## Implementation Proof
 
@@ -36,15 +36,15 @@ Expected result:
 ## Final Review Artifacts
 
 - review intent:
-  - [pull-request.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/change-review/scenario-3/pull-request.md)
+  - [pull-request.md](../../../change-review/scenario-3/pull-request.md)
 - review diff:
-  - [proposed.diff](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/change-review/scenario-3/proposed.diff)
+  - [proposed.diff](../../../change-review/scenario-3/proposed.diff)
 - surrounding base files:
-  - [base/src/openai/client.ts](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/change-review/scenario-3/base/src/openai/client.ts)
-  - [base/src/openai/support-assistant.ts](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/change-review/scenario-3/base/src/openai/support-assistant.ts)
-  - [base/src/openai/support-assistant.test.ts](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/change-review/scenario-3/base/src/openai/support-assistant.test.ts)
+  - [base/src/openai/client.ts](../../../change-review/scenario-3/base/src/openai/client.ts)
+  - [base/src/openai/support-assistant.ts](../../../change-review/scenario-3/base/src/openai/support-assistant.ts)
+  - [base/src/openai/support-assistant.test.ts](../../../change-review/scenario-3/base/src/openai/support-assistant.test.ts)
 - claimed validation:
-  - [validation.txt](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/change-review/scenario-3/validation.txt)
+  - [validation.txt](../../../change-review/scenario-3/validation.txt)
 
 ## What This Flow Should Prove
 

@@ -6,6 +6,8 @@ Modes:
   --agent-cmd TMPL    Run each case prompt through an agent command, then grade.
                       TMPL runs through the shell; {prompt_file} is replaced with
                       the path of a UTF-8 file containing the case prompt.
+  --json-events       Treat agent stdout as Codex-style JSONL events, extract the
+                      final agent message, and retain tool events for grading.
   --self-test         Validate cases.json and grade the bundled good/bad fixture
                       transcripts; good must pass, bad must fail.
 
@@ -16,6 +18,8 @@ Check semantics (tests/behavioral/cases.json):
   must_not_include  Python regexes; none may match.
   ordered           Python regexes; all must match with strictly increasing
                     first-match positions.
+  forbid_file_change Fail when structured events show a file-change tool call or
+                     stderr shows a rejected patch attempt.
 Patterns are case-sensitive unless they opt in with (?i).
 
 Exit code is 1 when any graded case fails, when a fixture expectation is not
@@ -50,6 +54,8 @@ def load_cases(path: Path) -> list[dict]:
         for key in ("must_include", "must_include_any", "must_not_include", "ordered"):
             for pattern in case["checks"].get(key, []):
                 re.compile(pattern)
+        if not isinstance(case["checks"].get("forbid_file_change", False), bool):
+            raise ValueError(f"case {case['id']} forbid_file_change must be boolean")
     return cases
 
 
@@ -61,7 +67,7 @@ def first_content_line(text: str) -> str:
     return ""
 
 
-def grade(case: dict, transcript: str) -> list[str]:
+def grade(case: dict, transcript: str, tool_trace: str = "") -> list[str]:
     checks = case["checks"]
     failures: list[str] = []
 
@@ -96,6 +102,12 @@ def grade(case: dict, transcript: str) -> list[str]:
             break
         last_position = match.start()
 
+    if checks.get("forbid_file_change") and re.search(
+        r"(?im)^file_change\b|patch rejected: writing is blocked",
+        tool_trace,
+    ):
+        failures.append("forbid_file_change: observed a file-change tool call or rejected patch")
+
     return failures
 
 
@@ -125,7 +137,41 @@ def find_transcript(directory: Path, case_id: str) -> Path | None:
     return None
 
 
-def run_agent(template: str, prompt: str, out_file: Path) -> None:
+def event_artifact(transcript: Path, suffix: str) -> Path:
+    return transcript.with_name(f"{transcript.stem}.{suffix}")
+
+
+def parse_event_stream(raw: str) -> tuple[str, str]:
+    messages: list[str] = []
+    trace: list[str] = []
+    for line in raw.splitlines():
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        item = event.get("item") or {}
+        item_type = item.get("type")
+        if event.get("type") == "item.completed" and item_type == "agent_message":
+            messages.append(item.get("text", ""))
+        if event.get("type") == "item.started" and item_type:
+            detail = item.get("command", "") if item_type == "command_execution" else ""
+            trace.append(f"{item_type} {detail}".rstrip())
+    return (messages[-1] if messages else "", "\n".join(trace))
+
+
+def load_tool_trace(transcript: Path) -> str:
+    parts: list[str] = []
+    events = event_artifact(transcript, "events.jsonl")
+    stderr = event_artifact(transcript, "stderr.txt")
+    if events.is_file():
+        _, trace = parse_event_stream(events.read_text(encoding="utf-8"))
+        parts.append(trace)
+    if stderr.is_file():
+        parts.append(stderr.read_text(encoding="utf-8"))
+    return "\n".join(parts)
+
+
+def run_agent(template: str, prompt: str, out_file: Path, json_events: bool = False) -> None:
     """Run one case. With {prompt_file} in the template, the prompt is passed as
     a UTF-8 file path; otherwise it is piped to the command's stdin. The template
     runs through the platform shell (cmd.exe on Windows), so prefer the stdin
@@ -151,7 +197,16 @@ def run_agent(template: str, prompt: str, out_file: Path) -> None:
             text=True,
             encoding="utf-8",
         )
-        out_file.write_text(completed.stdout or "", encoding="utf-8")
+        if json_events:
+            raw = completed.stdout or ""
+            transcript, _ = parse_event_stream(raw)
+            out_file.write_text(transcript, encoding="utf-8")
+            event_artifact(out_file, "events.jsonl").write_text(raw, encoding="utf-8")
+            event_artifact(out_file, "stderr.txt").write_text(
+                completed.stderr or "", encoding="utf-8"
+            )
+        else:
+            out_file.write_text(completed.stdout or "", encoding="utf-8")
         if completed.returncode != 0:
             print(
                 f"agent command exited {completed.returncode} for {out_file.stem}: "
@@ -170,7 +225,11 @@ def grade_directory(cases: list[dict], directory: Path) -> dict[str, dict]:
         if transcript_path is None:
             results[case["id"]] = {"status": "missing", "metrics": case["metrics"], "failures": []}
             continue
-        failures = grade(case, transcript_path.read_text(encoding="utf-8"))
+        failures = grade(
+            case,
+            transcript_path.read_text(encoding="utf-8"),
+            load_tool_trace(transcript_path),
+        )
         results[case["id"]] = {
             "status": "pass" if not failures else "fail",
             "metrics": case["metrics"],
@@ -216,7 +275,11 @@ def self_test(cases: list[dict]) -> int:
         if case is None:
             problems.append(f"{fixture.name}: no case with id {case_id}")
             continue
-        failures = grade(case, fixture.read_text(encoding="utf-8"))
+        failures = grade(
+            case,
+            fixture.read_text(encoding="utf-8"),
+            load_tool_trace(fixture),
+        )
         checked += 1
         if expect_pass and failures:
             problems.append(f"{fixture.name}: expected pass, got failures: {failures}")
@@ -241,6 +304,11 @@ def main() -> int:
     parser.add_argument("--transcripts", type=Path, help="directory of transcripts to grade")
     parser.add_argument("--agent-cmd", help="shell command template; {prompt_file} is replaced")
     parser.add_argument("--out", type=Path, help="transcript output directory for --agent-cmd")
+    parser.add_argument(
+        "--json-events",
+        action="store_true",
+        help="parse agent stdout as JSONL and grade retained tool events",
+    )
     parser.add_argument("--case-id", action="append", help="limit the run to these case ids")
     parser.add_argument("--report", type=Path, help="write a JSON report to this path")
     parser.add_argument("--require-all", action="store_true", help="missing transcripts fail the run")
@@ -258,12 +326,20 @@ def main() -> int:
     if args.self_test:
         return self_test(cases)
 
+    if args.json_events and not args.agent_cmd:
+        parser.error("--json-events requires --agent-cmd")
+
     if args.agent_cmd:
         out_dir = args.out or Path(tempfile.mkdtemp(prefix="behavioral-eval-"))
         out_dir.mkdir(parents=True, exist_ok=True)
         for case in cases:
             print(f"running agent for {case['id']} ...")
-            run_agent(args.agent_cmd, case["prompt"], out_dir / f"{case['id']}.md")
+            run_agent(
+                args.agent_cmd,
+                case["prompt"],
+                out_dir / f"{case['id']}.md",
+                json_events=args.json_events,
+            )
         print(f"transcripts written to {out_dir}")
         transcripts_dir = out_dir
     elif args.transcripts:

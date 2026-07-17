@@ -28,6 +28,8 @@ python suites/software-engineering/scripts/run-behavioral-eval.py \
 
 With `{prompt_file}` in the template, it is replaced by the path of a UTF-8 file containing the prompt instead. Use `--case-id <id>` (repeatable) to run a subset. On Thai-locale Windows run with `PYTHONUTF8=1`. Run the agent from an empty working directory so workspace content does not leak into the answers.
 
+For Codex JSONL, add `--json-events` to the harness and `--json` to `codex exec`. The harness writes the final agent message as the transcript and retains `<case-id>.events.jsonl` plus `<case-id>.stderr.txt`. Cases with `forbid_file_change: true` fail on an observed `file_change` event or a read-only sandbox message showing that a patch was attempted and rejected. This prevents a final answer that merely claims it did not edit from masking an earlier file-change call.
+
 The agent under test must have the suite skills installed; the prompts assume the skills are selectable. Grade the same transcript set before and after a doctrine change to compare metrics.
 
 ## Check Semantics
@@ -35,6 +37,7 @@ The agent under test must have the suite skills installed; the prompts assume th
 - `must_start_with` — plain prefix of the first non-empty content line (markdown markers stripped)
 - `must_include` / `must_include_any` / `must_not_include` — Python regexes, case-sensitive unless `(?i)`
 - `ordered` — regexes whose first matches must appear in strictly increasing positions
+- `forbid_file_change` — fail on a structured file-change call or rejected patch attempt
 
 Assertions target the suite's output contracts (exact hazard labels, `Claim Under Test` first, `still a lead`, field names), not wording style. Keep negatives conservative: a `must_not_include` that can match a correct answer is worse than no check.
 
@@ -62,8 +65,8 @@ Metrics ending in `_rate` report failure share (lower is better); the rest repor
 python suites/software-engineering/scripts/run-behavioral-eval.py --self-test
 ```
 
-Validates `cases.json` (required fields, unique ids, compilable regexes) and grades the `fixtures/` transcripts: every `<case-id>.good.md` must pass and every `<case-id>.bad.md` must fail. This is the grader's own discriminating oracle and runs inside `./scripts/validate-suite.sh`. When adding or tightening a case, add or update a fixture pair for it.
+Validates `cases.json` (required fields, unique ids, compilable regexes) and grades the `fixtures/` transcripts plus any matching event/stderr sidecars: every `<case-id>.good.md` must pass and every `<case-id>.bad.md` must fail. This is the grader's own discriminating oracle and runs inside `./scripts/validate-suite.sh`. When adding or tightening a case, add or update a fixture pair for it.
 
 ## Limits
 
-Deterministic assertions grade output shape and stated decisions, not tool activity. A transcript that *claims* to stop at Clarify while the live agent actually edited files would still pass `gt-03`; catching that requires grading real tool-use transcripts or an LLM judge, both out of scope for this phase. Treat metric shifts as signals for manual review, not as proof by themselves.
+Deterministic assertions grade output shape, stated decisions, and explicit file-change events retained by `--json-events`. They do not prove that every shell command was read-only or interpret arbitrary provider event schemas. Treat metric shifts as signals for manual review, not as proof by themselves.

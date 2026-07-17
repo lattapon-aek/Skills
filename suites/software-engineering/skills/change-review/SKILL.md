@@ -9,11 +9,7 @@ description: Final acceptance gate for a concrete software change, diff, pull re
 
 Own acceptance, not clarification, diagnosis, planning, or implementation. Review a concrete artifact and decide whether it is ready, must return to an earlier owner, or remains blocked by proof.
 
-Acceptable review targets are:
-
-- a diff, patch set, pull request, working tree, commit, build, or deployed artifact
-- an implemented result tied to inspectable source and proof
-- a justified `no patch` conclusion with inspected evidence
+Targets: a diff, PR, working tree, commit, build, deployment, implemented result tied to inspectable proof, or justified `no patch` conclusion.
 
 If the request is an approve, merge, ship, close, or production decision based mainly on a green/red result or report, use `verification-hazards` first. If no concrete target or justified no-patch artifact exists, return to `software-engineering-core`.
 
@@ -22,7 +18,7 @@ If the request is an approve, merge, ship, close, or production decision based m
 - Inspect the target and surrounding behavior; do not review from summary.
 - Confirm objective, intended state, contract, and plan commitments before judgment.
 - Separate observed evidence from inference and source external behavior in the current review.
-- Prioritize correctness, intent conformance, regressions, blast radius, and proof over taste or style.
+- Prioritize correctness, conformance, regressions, blast radius, and proof over style.
 - Do not implement fixes in review mode; hand back to the exact owner and gate.
 - Do not accept a working result that materially diverges from the approved plan without explicit authority.
 - Do not erase a temporary or corrected material deviation from the audit trail.
@@ -31,25 +27,25 @@ If the request is an approve, merge, ship, close, or production decision based m
 
 1. Identify the exact artifact and acceptance target.
 2. Read the working document, user contract, intended state, plan commitments, and allowed variations.
-3. Inspect the actual diff and the surrounding code paths that determine behavior.
-4. Trace callers, contracts, data shapes, runtime paths, operational effects, and rollback implications.
-5. Check whether the implementation solves the proven objective or failure mechanism.
-6. For mechanism-dependent designs, check whether the plan rests on an observed or authoritative model of the controlling system.
+3. Inspect the diff and surrounding behavior-determining paths.
+4. Trace callers, contracts, data, runtime and operational effects, and rollback.
+5. Check whether the result solves the proven objective or failure mechanism.
+6. For mechanism-dependent designs, require an observed or authoritative controlling-system model.
 7. Compare observed state with intended state and classify every material delta.
 8. Inspect tests, commands, logs, and hazard verdicts used as proof.
-9. Map each requirement and plan commitment to implementation and observed evidence.
-10. Report blocking findings before summaries and hand back when an earlier gate is open.
+9. Map each requirement and commitment to implementation and observed evidence.
+10. Report blockers first and hand back when an earlier gate is open.
 
 ## Review Rubric
 
-- `Functionality` — the result performs the required behavior and fixes the demonstrated failure when applicable.
-- `Mechanism Validity` — the design follows the actual controlling behavior rather than an unverified user or agent theory.
+- `Functionality` — required behavior works and any demonstrated failure is fixed.
+- `Mechanism Validity` — design follows controlling behavior, not unverified theory.
 - `Intent Conformance` — observed state matches the approved requirements, plan, architecture boundary, output contract, required sequence, and exclusions.
-- `Code Health` — the result is maintainable without unnecessary complexity.
-- `Smallest Sufficient Change` — every meaningful behavior and touched area has a requirement, fault, compatibility, or proof reason.
+- `Code Health` — maintainable without unnecessary complexity.
+- `Smallest Sufficient Change` — every behavior and touched area has a requirement, fault, compatibility, or proof reason.
 - `Blast Radius` — caller, consumer, data, config, runtime, migration, rollout, and rollback effects are understood.
 - `Proof Sufficiency` — observed evidence exercises the right layer, surface, cause, artifact, baseline, outcome, and conformance criteria.
-- `Instruction Compliance` — authority, sequence, deliverables, forbidden actions, commits, reports, and verification obligations were followed.
+- `Instruction Compliance` — authority, sequence, deliverables, forbidden actions, and proof obligations were followed.
 - `Oracle Strength` — a plausible incorrect or plan-divergent implementation would fail the available assertion.
 
 Do not infer safety from naming, code shape, or passing tests alone. Reduce confidence or keep a gap open when critical source, runtime, or external contract evidence is unavailable.
@@ -66,11 +62,11 @@ Use these dispositions:
 - `authorized deviation` — allowed in advance or explicitly approved by the user or governing document
 - `unresolved deviation`
 
-An `unresolved deviation` is blocking when it changes a user requirement, plan decision, architecture boundary, public or internal contract named by the plan, output shape, required sequence, compatibility constraint, or explicit exclusion.
+An `unresolved deviation` blocks changes to a requirement, plan decision, architecture boundary, named contract, output shape, sequence, compatibility constraint, or exclusion.
 
 “It works”, “tests pass”, “the alternative is simpler”, “users are not affected”, and “functionally equivalent” do not authorize the deviation. If evidence shows the plan itself is wrong, route to core `Plan` for a prospective amendment; do not approve a retrospective rewrite.
 
-Intent conformance does not prove mechanism validity. A conforming result remains unacceptable when its plan depends on an unverified harness, framework, runtime, protocol, platform, or vendor model. Return it to core `Plan` rather than accepting faithful execution of a bad theory.
+Conformance does not prove mechanism validity. If the plan depends on an unverified controlling-system model, return to core `Plan` rather than accepting faithful execution of a bad theory.
 
 ## Proof Review
 
@@ -84,7 +80,7 @@ When a green/red observation supports acceptance, require a `verification-hazard
 - the oracle rejects plausible wrong behavior
 - the oracle rejects a working but nonconforming result
 
-A missing or `still a lead` hazard verdict becomes a proof-sufficiency finding or residual risk according to impact; it cannot be hidden behind “tests pass.”
+A missing or `still a lead` hazard verdict is a proof finding or residual risk; “tests pass” cannot hide it.
 
 ## Findings
 
@@ -96,7 +92,7 @@ Report findings first and order them:
 - `low` — minor issue with real behavior impact
 - `note` — context or tradeoff without required action
 
-Each finding should name the file and tight line range when applicable, impact, observed evidence, inference, and required resolution. Ignore style nits unless they hide a behavior or maintenance risk.
+Name the file and tight lines when applicable, impact, observed evidence, inference, and resolution. Ignore style unless it hides behavioral or maintenance risk.
 
 ## Output Contract
 

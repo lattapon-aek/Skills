@@ -185,7 +185,7 @@ Run:
 ./scripts/validate-suite.sh
 ```
 
-The suite validator checks skill frontmatter, TypeScript fixtures, registration, direct-reference integrity, entrypoint budgets, required routing contracts, and stale doctrine.
+The suite validator checks skill frontmatter, TypeScript fixtures, registration, suite-wide local Markdown links, direct-reference integrity, entrypoint budgets, required routing contracts, and stale doctrine.
 
 Individual Windows validation:
 

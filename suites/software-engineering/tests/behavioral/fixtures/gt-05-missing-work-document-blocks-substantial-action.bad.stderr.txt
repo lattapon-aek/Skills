@@ -1,0 +1,1 @@
+ERROR patch rejected: writing is blocked by read-only sandbox

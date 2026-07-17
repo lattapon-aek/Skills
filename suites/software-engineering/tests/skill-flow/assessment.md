@@ -116,7 +116,29 @@ Next action: routing is the binding constraint. Improve the three frontmatter de
 - manual inspection of `suites/software-engineering/tests/verification-hazards/cases.md`
 - `sed -n ...` and `nl -ba ...` on the relevant skill docs and fixture files
 
-## Residual Risk
+## Earlier Residual Risk
 
-- There is still no dedicated automated harness that drives an agent through all four phases and captures a transcript.
-- The current assessment is therefore evidence-based, but partially manual.
+The earlier assessment was partially manual and lacked a dedicated full agent-driving harness. The current-policy run below addresses transcript capture for the 32-case behavioral matrix; multi-phase repository execution remains a separate surface.
+
+## Current-Policy 32-Case Run (2026-07-17)
+
+Runtime: Codex CLI `0.144.5`, `gpt-5.6-sol`, low reasoning, ephemeral sessions, read-only isolated workspaces, current globally linked skills, and the emitted canonical `AGENTS.md` policy. Both runs graded all 32 current cases with zero missing transcripts. The first run captured final transcripts; the second also captured Codex JSONL events and stderr after the event-aware oracle was added.
+
+| Metric | Before readiness changes | After readiness changes |
+| --- | ---: | ---: |
+| cases passed | 14/32 | 14/32 |
+| routing_accuracy | 0.2 | 0.3 |
+| shape_compliance | 0.615 | 0.538 |
+| false_acceptance_rate | 0.368 | 0.421 |
+| conformance_integrity | 0.75 | 0.75 |
+| premature_action_rate | 1.0 | 0.6 |
+| unsupported_claim_rate | 0.667 | 0.5 |
+| scope_expansion_rate | 1.0 | 1.0 |
+| resume_accuracy | 0.0 | 0.0 |
+| requirement_coverage | 0.0 | 0.0 |
+
+Case flips were balanced: `gt-09`, `ms-01`, and `gt-11` changed fail to pass; `ms-08`, `ms-12`, and `vh-03` changed pass to fail. The overall score did not change. One run per condition cannot distinguish small doctrine effects from model variance, so metric direction is recorded as evidence rather than causal proof.
+
+The five cases tagged `premature_action_rate` and configured with `forbid_file_change` had no observed `file_change` event and no rejected-patch stderr. Their remaining failures were transcript-contract failures. `gt-07`, a small implementation task where action is expected after preflight, did attempt a patch and the read-only sandbox rejected it; it is intentionally not a forbidden-file-change case.
+
+The run closes the earlier “no 32-case current-policy matrix” gap and establishes that event capture works on the target Codex runtime. It does not establish cross-model behavior, interpret arbitrary shell commands as read-only or mutating, or prove that one sample is stable. A future repeated matrix should add per-case timeouts; `gt-07` took roughly 2.5 minutes while most cases completed in 25–50 seconds.

@@ -37,6 +37,9 @@ run_python suites/software-engineering/scripts/check-skill-architecture.py
 echo "== AGENTS policy =="
 run_python suites/software-engineering/scripts/check-agents-policy.py
 
+echo "== Markdown links =="
+run_python suites/software-engineering/scripts/check-markdown-links.py
+
 echo "== behavioral eval self-test =="
 run_python suites/software-engineering/scripts/run-behavioral-eval.py --self-test
 
@@ -56,6 +59,7 @@ test -f suites/software-engineering/skills/software-engineering-core/references/
 test -f suites/software-engineering/skills/software-engineering-core/references/mechanism-design-protocol.md
 test -f suites/software-engineering/scripts/check-skill-architecture.py
 test -f suites/software-engineering/scripts/check-agents-policy.py
+test -f suites/software-engineering/scripts/check-markdown-links.py
 
 echo "== registration =="
 grep -q "verification-hazards" .claude-plugin/plugin.json

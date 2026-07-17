@@ -45,7 +45,7 @@ This suite is meant to test not only each phase in isolation, but also the hando
 
 ## Full 5-Phase OpenAI Flow
 
-See [openai-responses/README.md](C:/Users/lattapon.kea/Desktop/Agents%20Skills/suites/software-engineering/tests/software-engineering-core/flows/openai-responses/README.md) for a concrete end-to-end fixture that ties together:
+See [openai-responses/README.md](openai-responses/README.md) for a concrete end-to-end fixture that ties together:
 
 - intake and planning inputs
 - implementation seam and focused proof

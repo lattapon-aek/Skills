@@ -16,6 +16,8 @@ LIMITS = {
     "verification-hazards": {"lines": 150, "words": 1100},
     "change-review": {"lines": 160, "words": 1120},
 }
+MIN_ENTRYPOINT_HEADROOM = 50
+MIN_SUITE_HEADROOM = 150
 
 REQUIRED_TEXT = {
     "software-engineering-core": [
@@ -92,6 +94,12 @@ def main() -> None:
             fail(f"{entry.relative_to(REPO)} has {line_count} lines; limit is {limits['lines']}")
         if word_count > limits["words"]:
             fail(f"{entry.relative_to(REPO)} has {word_count} words; limit is {limits['words']}")
+        headroom = limits["words"] - word_count
+        if headroom < MIN_ENTRYPOINT_HEADROOM:
+            fail(
+                f"{entry.relative_to(REPO)} has {headroom} words of headroom; "
+                f"minimum is {MIN_ENTRYPOINT_HEADROOM}"
+            )
 
         for required in REQUIRED_TEXT[skill]:
             if required not in text:
@@ -110,6 +118,12 @@ def main() -> None:
 
     if total_words > 3750:
         fail(f"activated entrypoint budget is {total_words} words; suite limit is 3750")
+    suite_headroom = 3750 - total_words
+    if suite_headroom < MIN_SUITE_HEADROOM:
+        fail(
+            f"activated entrypoint budget has {suite_headroom} words of headroom; "
+            f"minimum is {MIN_SUITE_HEADROOM}"
+        )
 
     for reference in direct_references:
         nested = local_links(reference, reference.read_text(encoding="utf-8"))
