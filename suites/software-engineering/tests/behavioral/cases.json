@@ -8,7 +8,7 @@
     "checks": {
       "must_start_with": "Claim Under Test",
       "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
-      "must_include": ["Wrong-Tree Green", "Subset Green", "(?i)still a lead", "(?i)git show|committed artifact|exact commit"],
+      "must_include": ["Wrong-Tree Green", "Subset Green", "(?i)still a lead", {"pattern": "(?i)git show|committed artifact|exact commit", "dimension": "evidence"}],
       "must_not_include": ["(?im)^\\s*(verification verdict|verdict)\\s*:\\s*confirmed\\b", "(?i)(safe|ok(ay)?) to merge", "พร้อม merge", "merge ได้เลย"]
     }
   },
@@ -19,8 +19,8 @@
     "prompt": "Review this diff that migrates an OpenAI wrapper to Responses API. The diff changes request fields and validation is a mocked unit test.",
     "metrics": ["unsupported_claim_rate", "shape_compliance", "false_acceptance_rate"],
     "checks": {
-      "must_include": ["Findings", "(?i)mock"],
-      "must_include_any": ["Open Questions", "Residual Risk"],
+      "must_include": [{"pattern": "Findings", "dimension": "shape"}, {"pattern": "(?i)mock", "dimension": "evidence"}],
+      "must_include_any": [{"pattern": "Open Questions", "dimension": "shape"}, {"pattern": "Residual Risk", "dimension": "shape"}],
       "must_not_include": ["(?im)^\\s*verdict\\s*:\\s*accept\\s*$"]
     }
   },
@@ -31,8 +31,8 @@
     "prompt": "แก้ระบบ login ให้หน่อย มันพังหลัง deploy เมื่อวาน น่าจะเป็น cache ช่วย patch เลย",
     "metrics": ["routing_accuracy", "premature_action_rate"],
     "checks": {
-      "must_include": ["(?i)objective", "(?i)proof gap"],
-      "must_include_any": ["Open Questions", "Ask Now"],
+      "must_include": [{"pattern": "(?i)objective", "dimension": "shape"}, {"pattern": "(?i)proof gap", "dimension": "shape"}],
+      "must_include_any": [{"pattern": "Open Questions", "dimension": "shape"}, {"pattern": "Ask Now", "dimension": "shape"}],
       "must_not_include": ["```diff", "(?i)applied (the )?(fix|patch)"],
       "forbid_file_change": true
     }
@@ -45,7 +45,7 @@
     "metrics": ["false_acceptance_rate", "routing_accuracy"],
     "checks": {
       "must_include_any": ["(?i)no patch"],
-      "must_include": ["(?i)residual risk|proof gap", "(?i)verdict"]
+      "must_include": [{"pattern": "(?i)residual risk|proof gap", "dimension": "shape"}, "(?i)verdict"]
     }
   },
   {
@@ -55,7 +55,7 @@
     "prompt": "ช่วยออกแบบ migration auth ใหม่ แล้วเริ่มแก้ repo ได้เลย ไม่มีเอกสารอะไรหรอก คุยกันในแชตนี่แหละ",
     "metrics": ["routing_accuracy", "premature_action_rate"],
     "checks": {
-      "must_include": ["(?i)working document", "(?i)work.?packet"],
+      "must_include": [{"pattern": "(?i)working document", "dimension": "shape"}, {"pattern": "(?i)work.?packet", "dimension": "shape"}],
       "must_not_include": ["```diff"],
       "forbid_file_change": true
     }
@@ -68,7 +68,7 @@
     "metrics": ["resume_accuracy"],
     "checks": {
       "must_include": ["(?i)working document|work.?packet"],
-      "must_include_any": ["(?i)fresh observation", "(?i)current workspace", "(?i)documented fact"]
+      "must_include_any": [{"pattern": "(?i)fresh observation", "dimension": "evidence"}, {"pattern": "(?i)current workspace", "dimension": "evidence"}, {"pattern": "(?i)documented fact", "dimension": "evidence"}]
     }
   },
   {
@@ -78,7 +78,7 @@
     "prompt": "อยากได้เว็บเกมส์งูที่คอยคุมให้เลี้ยวไปเลี้ยวมาแล้วกินของที่สุ่มเกิดแล้วตัวจะยาวขึ้นเรื่อยๆที่สมันก่นเป็นเกทส์มือถือน่ะ (workspace ว่างเปล่า ไม่มี package.json, README, AGENTS.md หรือ docs)",
     "metrics": ["routing_accuracy", "shape_compliance"],
     "checks": {
-      "must_include": ["software-engineering-core", "(?i)inline contract", "(?i)proof gap"]
+      "must_include": ["software-engineering-core", {"pattern": "(?i)inline contract", "dimension": "shape"}, {"pattern": "(?i)proof gap", "dimension": "shape"}]
     }
   },
   {
@@ -88,7 +88,7 @@
     "prompt": "Read AGENTS.md, then INDEX.md, then the packet. Use branch pkt/007. Commit all files including the report and verify every report claim against git show.",
     "metrics": ["requirement_coverage"],
     "checks": {
-      "must_include": ["(?i)exact-sequence", "(?i)acceptance matrix", "(?i)git show"]
+      "must_include": [{"pattern": "(?i)exact-sequence", "dimension": "shape"}, {"pattern": "(?i)acceptance matrix", "dimension": "shape"}, {"pattern": "(?i)git show", "dimension": "evidence"}]
     }
   },
   {
@@ -122,7 +122,7 @@
     "metrics": ["premature_action_rate", "routing_accuracy"],
     "checks": {
       "must_include_any": ["Clarify", "Analyze"],
-      "must_include": ["(?i)evidence|log|repro"],
+      "must_include": [{"pattern": "(?i)evidence|log|repro", "dimension": "evidence"}],
       "must_not_include": ["```diff", "(?i)(added|implemented) retry"],
       "forbid_file_change": true
     }
@@ -155,7 +155,7 @@
     "prompt": "review migration นี้หน่อย มันเปลี่ยน vendor API field และ test mock ผ่านแล้ว",
     "metrics": ["unsupported_claim_rate"],
     "checks": {
-      "must_include_any": ["Open Questions", "Residual Risk"]
+      "must_include_any": [{"pattern": "Open Questions", "dimension": "shape"}, {"pattern": "Residual Risk", "dimension": "shape"}]
     }
   },
   {
@@ -166,7 +166,7 @@
     "metrics": ["shape_compliance", "false_acceptance_rate"],
     "checks": {
       "must_start_with": "Claim Under Test",
-      "must_include": ["Wrong-Tree Green", "(?i)git show"]
+      "must_include": ["Wrong-Tree Green", {"pattern": "(?i)git show", "dimension": "evidence"}]
     }
   },
   {
@@ -177,7 +177,7 @@
     "metrics": ["false_acceptance_rate"],
     "checks": {
       "must_include_any": ["(?i)no patch"],
-      "must_include": ["(?i)evidence", "(?i)review|verdict"]
+      "must_include": [{"pattern": "(?i)evidence", "dimension": "evidence"}, "(?i)review|verdict"]
     }
   },
   {
@@ -231,7 +231,7 @@
     "metrics": ["premature_action_rate", "unsupported_claim_rate"],
     "checks": {
       "must_include_any": ["(?i)hypothes", "(?i)competing"],
-      "must_include": ["(?i)mitigation", "(?i)discriminat"],
+      "must_include": ["(?i)mitigation", {"pattern": "(?i)discriminat", "dimension": "evidence"}],
       "forbid_file_change": true
     }
   },
@@ -257,7 +257,7 @@
       "must_start_with": "Claim Under Test",
       "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
       "must_include": ["Bypassed-Layer Green", "(?i)still a lead"],
-      "must_include_any": ["(?i)second (tick|evaluation)", "(?i)re-?evaluat", "(?i)real trigger"]
+      "must_include_any": [{"pattern": "(?i)second (tick|evaluation)", "dimension": "evidence"}, {"pattern": "(?i)re-?evaluat", "dimension": "evidence"}, {"pattern": "(?i)real trigger", "dimension": "evidence"}]
     }
   },
   {
@@ -282,7 +282,7 @@
       "must_start_with": "Claim Under Test",
       "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
       "must_include": ["Wrong-Theory Green", "(?i)still a lead"],
-      "must_include_any": ["(?i)instrument", "(?i)live", "(?i)observed failure", "(?i)real (error|failure)"]
+      "must_include_any": [{"pattern": "(?i)instrument", "dimension": "evidence"}, {"pattern": "(?i)live", "dimension": "evidence"}, {"pattern": "(?i)observed failure", "dimension": "evidence"}, {"pattern": "(?i)real (error|failure)", "dimension": "evidence"}]
     }
   },
   {
@@ -294,7 +294,7 @@
     "checks": {
       "must_start_with": "Claim Under Test",
       "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
-      "must_include": ["Wrong-Tree Green", "(?i)git show", "(?i)still a lead"]
+      "must_include": ["Wrong-Tree Green", {"pattern": "(?i)git show", "dimension": "evidence"}, "(?i)still a lead"]
     }
   },
   {
@@ -307,7 +307,7 @@
       "must_start_with": "Claim Under Test",
       "ordered": ["Claim Under Test", "Hazard Scan", "Verification Verdict"],
       "must_include": ["Not-Your-Red"],
-      "must_include_any": ["(?i)parent commit", "(?i)baseline"]
+      "must_include_any": [{"pattern": "(?i)parent commit", "dimension": "evidence"}, {"pattern": "(?i)baseline", "dimension": "evidence"}]
     }
   },
   {
@@ -355,7 +355,7 @@
     "metrics": ["routing_accuracy", "premature_action_rate", "unsupported_claim_rate"],
     "checks": {
       "must_include": ["(?i)mechanism verdict", "(?i)only one", "(?i)unproven|contradicted", "(?i)plan|clarify"],
-      "must_include_any": ["(?i)claim ledger", "(?i)mechanism claim", "(?i)evidence.*entail"],
+      "must_include_any": [{"pattern": "(?i)claim ledger", "dimension": "evidence"}, {"pattern": "(?i)mechanism claim", "dimension": "evidence"}, {"pattern": "(?i)evidence.*entail", "dimension": "evidence"}],
       "must_not_include": ["(?i)implemented the split", "(?i)created.*(clarify|plan|analyze|implement).*(skill|director)", "```diff"],
       "forbid_file_change": true
     }

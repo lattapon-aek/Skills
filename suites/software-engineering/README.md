@@ -32,6 +32,8 @@ change-review
 
 Each `SKILL.md` is a compact runtime entrypoint. Core loads the direct protocol for the selected mode; expanded hazard patterns and output templates load only when their trigger applies. This progressive disclosure reduces activated context without reducing the gates an applicable task must pass.
 
+Behavioral evaluation reports keep strict case pass/fail while separating decision, shape, evidence, and tool dimensions. The harness also supports bounded process execution, isolated filesystem mutation checks, and repeated-run stability summaries; see [tests/behavioral/README.md](tests/behavioral/README.md).
+
 ## Full Applicable Workflow
 
 Task size does not change execution rigor. Every task must pass every gate that applies:

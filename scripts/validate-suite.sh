@@ -42,6 +42,7 @@ run_python suites/software-engineering/scripts/check-markdown-links.py
 
 echo "== behavioral eval self-test =="
 run_python suites/software-engineering/scripts/run-behavioral-eval.py --self-test
+run_python suites/software-engineering/tests/behavioral/test_behavioral_eval.py
 
 echo "== node fixtures =="
 node --test $(find suites/software-engineering/tests -name '*.test.ts' -print | sort)
