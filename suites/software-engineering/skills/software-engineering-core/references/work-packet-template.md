@@ -39,6 +39,13 @@ Default: `none`.
 
 ## Plan Amendment Authority
 
+## Mechanism Evidence
+
+Include only when a decision depends on controlling behavior not established by current local source.
+
+| Claim | Decision Dependency | Source | Observed or Inferred | Falsifying Check | Status |
+| --- | --- | --- | --- | --- | --- |
+
 ## Plan
 
 ## Proof Strategy

@@ -1,4 +1,4 @@
 interface:
   display_name: "Software Engineering Core"
-  short_description: "Own evidence-first engineering work from objective through a conforming result"
-  default_prompt: "Use $software-engineering-core to establish the contract and intended state, choose the evidence-justified mode, diagnose or implement within the proven boundary, block unapproved plan drift, and hand proof to the later gates."
+  short_description: "Gate software and skill-architecture work on evidence before implementation"
+  default_prompt: "Use $software-engineering-core to separate objective, explanation, and solution; scan do-X-because-Y mechanism claims before choosing a mode; establish the contract and intended state; diagnose or implement only within a proven boundary; block plan drift; and hand proof to the later gates."

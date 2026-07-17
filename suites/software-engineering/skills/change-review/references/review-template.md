@@ -25,6 +25,13 @@ Use this template for final review after a patch and after a justified `no patch
 - `Conformance Verdict` — `conforms`, `authorized deviation`, or `unresolved deviation`
 - `Authority Source` for every authorized deviation
 
+## Mechanism Validity
+
+- Controlling-mechanism claims the plan depends on
+- Implementing source, official contract, or live observation inspected
+- Local structural evidence separated from runtime behavior
+- Verdict: `established`, `conditional`, or `unproven`
+
 ## Deviations
 
 - Record expected state, observed state, affected commitment, authority, and required resolution for every material departure, including corrected departures

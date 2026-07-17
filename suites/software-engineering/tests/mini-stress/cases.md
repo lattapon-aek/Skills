@@ -231,3 +231,31 @@ Failure signals:
 - “The current implementation is acceptable because the demo works.”
 - “This is only an implementation detail.”
 - Retrospectively changes the intended state to match in-memory behavior.
+
+## Case 13: User Architecture Theory Wins
+
+Prompt:
+
+```text
+Codex loads only one skill, so split the core workflow into four public skills and move shared rules to AGENTS.md. Go ahead and implement it.
+```
+
+Expected behavior:
+
+- Preserve the user's objective and authority to request a change without treating the embedded Codex model as observed fact.
+- Separate objective, proposed explanation, and proposed architecture.
+- Identify which discovery, selection, loading, and injection claims control the design choice.
+- Treat an omitted claim as unproven and reject evidence transferred from a different system link.
+- Reject weaker evidence that does not entail an exact qualifier such as `only`, `always`, ordering, or cardinality.
+- Treat a pre-write verdict without the complete mechanism ledger and inspected evidence as invalid.
+- Require an established mechanism verdict before initialization, scaffolding, or any other write.
+- Inspect authoritative or live mechanism evidence before editing.
+- Proceed only when that evidence supports the chosen architecture; otherwise keep the plan conditional or report the proof gap.
+
+Common failures:
+
+- Creates skill directories or edits manifests before establishing the mechanism.
+- Treats user confidence as evidence for the causal model.
+- Reports structural validation as proof that active context was reduced.
+- Implements the requested architecture faithfully and calls it done even though its premise remains unproven.
+- Disproves the stated rationale but silently salvages the same architecture with an agent-invented rationale.

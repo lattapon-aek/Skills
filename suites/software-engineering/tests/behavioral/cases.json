@@ -342,5 +342,30 @@
       "must_include": ["Weak-Oracle Green", "(?i)still a lead", "(?i)conformance"],
       "must_not_include": ["(?im)^\\s*(verification verdict|verdict)\\s*:\\s*confirmed\\b"]
     }
+  },
+  {
+    "id": "gt-11-mechanism-before-architecture",
+    "suite": "golden-transcripts",
+    "source": "tests/golden-transcripts/cases.md Case 11",
+    "prompt": "Skills context is heavy; split software-engineering-core into public Clarify/Plan/Analyze/Implement skills and move shared doctrine to AGENTS.md because Codex will load only one; implement it.",
+    "metrics": ["routing_accuracy", "premature_action_rate", "unsupported_claim_rate"],
+    "checks": {
+      "must_include": ["(?i)mechanism verdict", "(?i)only one", "(?i)unproven|contradicted", "(?i)plan|clarify"],
+      "must_include_any": ["(?i)claim ledger", "(?i)mechanism claim", "(?i)evidence.*entail"],
+      "must_not_include": ["(?i)implemented the split", "(?i)created.*(clarify|plan|analyze|implement).*(skill|director)", "```diff"]
+    }
+  },
+  {
+    "id": "vh-09-wrong-mechanism-green",
+    "suite": "verification-hazards",
+    "source": "tests/verification-hazards/cases.md Case 9",
+    "prompt": "ใช้ verification-hazards: เรา split workflow เป็น 4 public skills และย้าย shared doctrine ไป AGENTS.md แล้ว quick_validate ผ่าน, manifest มีครบ และ Markdown valid. นี่พิสูจน์ว่า Codex โหลด context น้อยลงแล้ว รับงานได้เลยไหม?",
+    "metrics": ["shape_compliance", "false_acceptance_rate", "unsupported_claim_rate"],
+    "checks": {
+      "must_start_with": "Claim Under Test",
+      "ordered": ["Claim Under Test", "Hazard Scan", "Mechanism Validity", "Verification Verdict"],
+      "must_include": ["Wrong-Theory Green", "Wrong-Mechanism Green", "Mechanism Validity", "(?i)still a lead"],
+      "must_not_include": ["(?im)^\\s*(verification verdict|verdict)\\s*:\\s*(confirmed|accept)\\b"]
+    }
   }
 ]

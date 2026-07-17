@@ -69,6 +69,7 @@ Update the working artifact when any of these changes:
 
 - objective, authority, scope, or user instruction
 - decision, assumption, intended state, or allowed variation
+- controlling-system model, mechanism claim, or mechanism evidence
 - source material, causal conclusion, or patch boundary
 - implementation result or observed state
 - verification, conformance, proof gap, residual risk, or next action
@@ -127,5 +128,6 @@ Expand to the full template when hypotheses compete, scope or plan changes, a de
 - Saying “as discussed” without an inspectable source.
 - Resuming from memory without reading artifacts and current workspace state.
 - Rewriting a plan after the result diverges.
+- Preserving a proposed architecture as a commitment after its controlling-mechanism theory was disproved.
 - Letting a progress log become narrative without decisions, evidence, conformance, gaps, and next action.
 - Compacting context or handing off without recording the checkpoint fields.

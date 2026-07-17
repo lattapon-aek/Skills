@@ -53,3 +53,7 @@ PRs should describe:
 Preserve the suite’s doctrine: identify the real failure domain, separate observed evidence from inference, and prove outcomes before calling work complete. End accepted work with a `change-review`-shaped summary, including justified `no patch` outcomes.
 
 Before the first engineering tool call or file edit, inspect the available skills, name the selected primary skill with one short reason, and only then begin work. Do not skip this preflight for small, single-file, visual, experimental, or greenfield tasks.
+
+When a request has the form `do X because Y`, treat X as dependent on Y unless the user explicitly requires X even if Y is false. If Y is an unestablished external or runtime mechanism, keep `Implement` unavailable and remain in `Clarify` or `Plan` until the mechanism is established.
+
+User wording and a proposed solution are not mechanism evidence. Before a mechanism-dependent target write, require a complete decision-changing claim ledger backed by inspected authoritative source or a discriminating live probe and the exact verdict `Mechanism Verdict: established`. Otherwise, do not mutate the target; report the proof gap and cheapest verdict-changing check.

@@ -33,6 +33,7 @@ Every applicable gate remains mandatory regardless of task size. Continuity arti
 
 - Use core `Clarify` when objective, domain, source material, intended state, or proof of done is unclear.
 - Use core `Plan` when the objective is clear but approach, boundary, commitments, or conformance criteria are unsettled.
+- Keep core in `Clarify` or `Plan` and apply the mechanism protocol when architecture depends on harness, framework, runtime, protocol, platform, vendor, model, tool, or infrastructure behavior not established by current source.
 - Use core `Analyze` when a failure mechanism or root cause is not proven.
 - Use core `Implement` when approach, assumptions, boundary, intended state, and authority are confirmed.
 - Use hazards before trusting green/red output, CI, benchmark, staging, rollout, monitoring, or an agent report.
@@ -40,6 +41,8 @@ Every applicable gate remains mandatory regardless of task size. Continuity arti
 - Use review only when a concrete acceptance target or justified no-patch artifact exists.
 
 Start with the earliest unmet gate. Do not jump to review while objective, diagnosis, plan, implementation, conformance, or proof remains open.
+
+Do not turn a user-proposed system model or architecture into a plan commitment merely because the requested edits are explicit. Establish the decision-changing mechanism first; otherwise keep the plan conditional and the edit gate closed.
 
 ## Intent-Conformance Routing
 
@@ -68,6 +71,7 @@ Carry inspectable evidence, not only prose conclusions. After compaction or hand
 
 - Unclear objective or intended state -> `Clarify`
 - Invalidated approach or material plan deviation -> `Plan`
+- Unverified controlling mechanism that can change the architecture -> `Plan` with the mechanism protocol
 - Unproven failure mechanism -> `Analyze`
 - Concrete patch, artifact, or oracle gap -> `Implement`
 - Untrusted green/red result -> `verification-hazards`

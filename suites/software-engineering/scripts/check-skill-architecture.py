@@ -12,9 +12,9 @@ REPO = Path(__file__).resolve().parents[3]
 SUITE = REPO / "suites" / "software-engineering"
 
 LIMITS = {
-    "software-engineering-core": {"lines": 240, "words": 1800},
-    "verification-hazards": {"lines": 150, "words": 1200},
-    "change-review": {"lines": 160, "words": 1200},
+    "software-engineering-core": {"lines": 240, "words": 1550},
+    "verification-hazards": {"lines": 150, "words": 1100},
+    "change-review": {"lines": 160, "words": 1120},
 }
 
 REQUIRED_TEXT = {
@@ -27,6 +27,7 @@ REQUIRED_TEXT = {
         "change-review",
         "references/intake-template.md",
         "references/planning-template.md",
+        "references/mechanism-design-protocol.md",
         "references/causal-debugging-protocol.md",
         "references/implementation-checklist.md",
         "earliest unmet gate",
@@ -45,12 +46,15 @@ REQUIRED_TEXT = {
         "still a lead",
         "## Required Input",
         "without new evidence",
+        "Wrong-Mechanism Green",
+        "Mechanism Validity",
     ],
     "change-review": [
         "Intent Conformance",
         "unresolved deviation",
         "Acceptance Coverage",
         "Proof Sufficiency",
+        "Mechanism Validity",
         "return to <owner/mode>",
     ],
 }
@@ -104,8 +108,8 @@ def main() -> None:
                 )
             direct_references.add(link)
 
-    if total_words > 4200:
-        fail(f"activated entrypoint budget is {total_words} words; suite limit is 4200")
+    if total_words > 3750:
+        fail(f"activated entrypoint budget is {total_words} words; suite limit is 3750")
 
     for reference in direct_references:
         nested = local_links(reference, reference.read_text(encoding="utf-8"))
@@ -119,6 +123,8 @@ def main() -> None:
             for stale in DELETED_RUNTIME_REFERENCES:
                 if stale in text:
                     fail(f"stale runtime reference {stale} in {path.relative_to(REPO)}")
+            if re.search(r"\b(always|must) browse (the internet )?(for|before) (every|all)\b", text, re.IGNORECASE):
+                fail(f"universal browsing rule found in {path.relative_to(REPO)}")
 
     continuity = (
         SUITE

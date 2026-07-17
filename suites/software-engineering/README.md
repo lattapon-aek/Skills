@@ -39,12 +39,13 @@ Task size does not change execution rigor. Every task must pass every gate that 
 1. Record user contract and authority.
 2. Establish objective, intended state, source material, and proof of done.
 3. Select the evidence-justified core mode.
-4. Read that mode's direct reference.
-5. Diagnose or implement within a proven boundary.
-6. Observe functional behavior.
-7. Compare observed state with intended state.
-8. Challenge proof through `verification-hazards` when a result or report is being trusted.
-9. Use `change-review` before accepting a concrete patch, result, or no-patch conclusion.
+4. Establish any controlling mechanism the architecture decision depends on.
+5. Read the applicable direct reference.
+6. Diagnose or implement within a proven boundary.
+7. Observe functional and mechanism behavior.
+8. Compare observed state with intended state.
+9. Challenge proof through `verification-hazards` when a result or report is being trusted.
+10. Use `change-review` before accepting a concrete patch, result, or no-patch conclusion.
 
 Continuity artifact choice affects only audit and resume durability. An inline contract never authorizes weaker analysis, verification, conformance, or review.
 
@@ -69,6 +70,12 @@ After implementation, compare intended and observed state. Use:
 
 An unresolved material deviation blocks completion even when tests pass and the system remains usable. The agent may restore the approved state within scope, or return to Plan and amend the working document prospectively. It may not authorize its own material deviation or rewrite the plan after the fact.
 
+## Mechanism Before Design
+
+A clear user-proposed architecture is not automatically a proven plan. When a recommendation depends on harness, framework, runtime, protocol, platform, vendor, model, tool, or infrastructure behavior not established by local source, separate the objective from the proposed explanation and solution. Inspect implementing source, official contracts, or live behavior before committing the architecture.
+
+Structural validation proves structure. It does not by itself prove context usage, dispatch, lifecycle, compatibility, performance, or another runtime outcome. Mechanism-dependent work uses the direct `mechanism-design-protocol.md` reference and keeps the edit gate closed while a decision-changing claim remains conditional or unproven.
+
 ## Skills
 
 ### `software-engineering-core`
@@ -77,6 +84,7 @@ Use for most engineering work:
 
 - `Clarify` — objective, contract, domain, intended state, and proof of done
 - `Plan` — options, boundary, commitments, allowed variations, and proof strategy
+- `Mechanism Before Design` — conditional system-model evidence before architecture commitment
 - `Analyze` — incident evidence, causal chain, competing hypotheses, discriminating checks, and root-cause gate
 - `Implement` — assumption revalidation, narrow patch, original-reproduction replay, conformance check, and proof
 
@@ -105,6 +113,7 @@ Use for a concrete diff, PR, working tree, commit, implemented result, or justif
 
 - functionality and root-cause closure
 - intent conformance and plan fidelity
+- mechanism validity and whether the plan follows the actual controlling system
 - code health and smallest sufficient change
 - blast radius and rollback
 - proof sufficiency and oracle strength
@@ -118,21 +127,16 @@ Return `accept`, `accept with authorized deviation`, or the exact owner and mode
 - [references/four-principles.md](references/four-principles.md) — evidence, scope, proof, and intent-conformance gates
 - [skills/software-engineering-core/references/context-continuity.md](skills/software-engineering-core/references/context-continuity.md) — working documents, resume safety, and prospective plan amendments (ships inside the core skill so installed copies stay self-contained)
 - [references/orchestration-policy.md](references/orchestration-policy.md) — ownership, routing, and handoff packets
+- [references/agents-enforcement-policy.md](references/agents-enforcement-policy.md) — canonical copy-paste repo policy that activates selection and mechanism precedence before skill loading
 
 ## Enforce Selection With `AGENTS.md`
 
-Installing skills makes them available but does not guarantee implicit selection. Projects that require this suite should include a compact policy like:
+Installing skills makes them available but does not guarantee implicit selection or mode precedence. Copy the canonical block from [references/agents-enforcement-policy.md](references/agents-enforcement-policy.md) into the target repository's root `AGENTS.md`. It covers preflight selection, premise-dependent authority, the fail-closed mechanism checkpoint, intent conformance, proof challenge, and final review without duplicating the full skill bodies.
 
-```md
-## Required Software-Engineering Workflow
+Emit only the copy block for automation or a temporary evaluation workspace:
 
-For software-engineering work, use `agents-skills:software-engineering-core` before planning, debugging, editing, or verification. Name the selected skill and reason before the first engineering tool call.
-
-Record the user contract, intended state, plan commitments, allowed variations, and proof obligations in a user-supplied document, repo-local work packet, or compact inline contract appropriate only to continuity risk. Task size does not reduce execution rigor.
-
-Do not accept a result merely because it works. Compare observed state with intended state; an unapproved material deviation blocks completion and must be corrected or returned to Plan for prospective amendment.
-
-Use `agents-skills:verification-hazards` before trusting green/red output or an agent report, and `agents-skills:change-review` before accepting every concrete patch or justified no-patch conclusion.
+```bash
+python suites/software-engineering/scripts/check-agents-policy.py --emit
 ```
 
 ## Reporting Conventions
@@ -142,6 +146,7 @@ Use `agents-skills:verification-hazards` before trusting green/red output or an 
 - Map each user requirement and plan commitment to expected state, observed state, status, and evidence.
 - Record material deviations when they occur, including corrected deviations.
 - Treat missing proof and unresolved conformance as blockers, not omitted rows.
+- Keep user-proposed explanations and solutions as hypotheses until decision-changing mechanisms are established.
 - Preserve ruled-out interpretations, options, hypotheses, approaches, and concerns in their owning mode.
 
 ## Tests

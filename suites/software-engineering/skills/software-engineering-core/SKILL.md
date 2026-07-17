@@ -1,52 +1,34 @@
 ---
 name: software-engineering-core
-description: Primary owner for software-engineering work that must clarify an objective, choose an approach, diagnose a failure, implement a proven change, or justify no patch. Use for bugs, features, refactors, migrations, tooling, runtime issues, and technical plans; route proof claims through verification-hazards and concrete end states through change-review.
+description: Primary evidence gate for software engineering and agent-skill architecture. Use before coding or specialized creation skills for bugs, features, refactors, migrations, runtime issues, technical plans, skill creation or updates, skill splits, AGENTS.md doctrine moves, and context optimization. Establish objective, controlling mechanism, boundary, and proof; route proof claims through verification-hazards and concrete end states through change-review.
 ---
 
 # Software Engineering Core
 
 ## Role
 
-Own the work from request to a concrete implementation or justified `no patch`. Work from evidence, keep the change boundary tied to the objective, and do not accept a result merely because it runs.
+Own work from request to implementation or justified `no patch`. Use one mode: `Clarify` for the contract, `Plan` for the approach, `Analyze` for cause, or `Implement` for a proven boundary.
 
-Use exactly one core mode at a time:
-
-- `Clarify` — establish the objective, contract, domain, and proof of done.
-- `Plan` — choose and record an evidence-backed approach.
-- `Analyze` — prove a failure mechanism and root cause.
-- `Implement` — execute a confirmed plan or patch boundary.
-
-The mandatory path is:
-
-`request -> contract -> objective -> evidence -> domain -> mode -> action -> observed proof -> intent conformance -> verification-hazards when a result is trusted -> change-review for acceptance`
-
-Do not skip an applicable gate because the task looks small. Task size may change how much evidence exists or which continuity artifact is needed; it never lowers the reasoning, proof, conformance, or review standard.
+Follow `request -> evidence -> earliest unmet gate -> action -> observed proof -> conformance -> verification-hazards -> change-review`. Task size changes artifact needs, not rigor.
 
 ## Preflight
 
-Before the first engineering tool call or edit: inspect the available skills, name the selected primary skill with one short reason, and identify the working document and authority mode. Do not skip this because a task is small, single-file, visual, experimental, or in an empty workspace.
+Before the first engineering tool call or edit: inspect available skills, name the primary skill and reason, and identify the working document and authority mode. Before choosing a mode, parse causal wording such as `do X because Y`; when Y is an unestablished controlling mechanism, choose `Clarify` or `Plan` and read the mechanism protocol first. `Implement` is unavailable regardless of explicit solution wording. Do not skip preflight for small, single-file, visual, experimental, or empty-workspace tasks.
 
 ## Must Obey
 
-- Name this skill and the reason before engineering tool use when governing instructions require skill-first behavior.
 - Treat user reports, issue titles, prior agent reports, memory, and plausible explanations as leads, not proof.
+- Before a mechanism-dependent target write, publish the complete claim ledger with inspected source or probe evidence and `Mechanism Verdict: established`; user wording is not evidence.
 - Do not patch before the objective, domain, and change boundary are supported by inspected evidence.
-- Do not call a successful patch retrospective proof of its root-cause theory.
-- Do not weaken or delete a test to make a change pass.
-- Do not expand the change boundary for cleanup, preference, or proximity.
+- A successful patch does not retrospectively prove its root-cause theory.
+- Never weaken a test or expand the boundary for cleanup, preference, or proximity.
 - Do not treat “works” as equivalent to “matches the approved intent and plan.”
 - Do not authorize your own material deviation or rewrite the plan after the fact to match the implementation.
 - Do not accept a patch or `no patch` without observed verification, intent conformance, proof gaps, and `change-review`.
 
 ## User Contract
 
-Before substantial action, record:
-
-- `Authority Mode` — `plan-only`, `execute-within-scope`, `ask-before-edit`, or `exact-sequence`.
-- `Required Sequence` — ordered reads, branch steps, commands, handoffs, or approvals.
-- `Required Deliverables` — code, tests, documents, reports, commits, pushes, or other artifacts.
-- `Required Verification` — exact proof obligations and acceptance targets.
-- `Forbidden Actions` — exclusions and authority limits.
+Before substantial action, record `Authority Mode`, `Required Sequence`, `Required Deliverables`, `Required Verification`, and `Forbidden Actions`. Authority is `plan-only`, `execute-within-scope`, `ask-before-edit`, or `exact-sequence`.
 
 Track every explicit instruction and approved plan commitment to observed evidence or an open gap. A phase boundary is not an automatic user round trip when `execute-within-scope` permits the next proven step.
 
@@ -55,6 +37,12 @@ Track every explicit instruction and approved plan commitment to observed eviden
 ### Evidence Before Action
 
 Before choosing a mode, root cause, patch point, or verdict, state the claim and inspect the strongest available evidence. Separate observations from inference. If no evidence justifies the next action, investigate, ask, or stop with the missing fact.
+
+### Mechanism Before Design
+
+When an architecture, migration, configuration, or optimization decision depends on harness, framework, runtime, protocol, platform, vendor, model, tool, or infrastructure behavior not established by the workspace, do not turn the proposed solution into a plan commitment yet. Separate the user's objective from their explanation and solution, identify the decision-changing mechanism claims, and establish the controlling behavior from implementing source, official documentation, or a live probe. Keep the plan conditional when an unverified claim could change the architecture.
+
+The gate is fail-closed across the complete claim chain: a missing claim or evidence for only one system link leaves the mechanism unproven.
 
 ### Smallest Sufficient Change
 
@@ -90,21 +78,17 @@ Only these verdicts may proceed:
 
 ## Evidence Order
 
-Prefer evidence in this order:
-
-1. Runtime output, logs, traces, metrics, failing commands, and observed behavior.
-2. Current source, config, tests, docs, tickets, diagrams, and workspace artifacts.
-3. Official external documentation, standards, release notes, and source repositories.
-4. Secondary sources only as support.
-
-Inspect local or runtime truth when available. If local and external evidence conflict, surface the conflict and resolve it from the most authoritative applicable source.
+Prefer observed runtime evidence, then current workspace source and artifacts, then official external contracts, with secondary sources only as support. Surface conflicts and resolve them from the most authoritative applicable source.
 
 ## Select The Mode And Reference
 
 Read the selected reference completely before performing that mode. Read only references whose trigger applies.
 
+Check the mechanism row before honoring Plan or Implement wording. When it applies, read that protocol first; `Implement` is unavailable until its gate opens.
+
 | Current need | Mode | Required reference |
 | --- | --- | --- |
+| A design decision depends on external or uninspected controlling behavior | `Clarify` or `Plan` | [references/mechanism-design-protocol.md](references/mechanism-design-protocol.md) |
 | Objective, scope, domain, source material, or proof of done is unclear | `Clarify` | [references/intake-template.md](references/intake-template.md) |
 | Objective is clear but approach, migration, or boundary is unsettled | `Plan` | [references/planning-template.md](references/planning-template.md) |
 | A bug, incident, regression, hang, performance issue, flaky result, or environment failure is not causally proven | `Analyze` | [references/causal-debugging-protocol.md](references/causal-debugging-protocol.md) |
@@ -122,28 +106,21 @@ Use these templates only when their artifact is required:
 
 Do not cross:
 
-- request wording to objective without a concrete, verifiable success condition
-- objective to plan without confirmed source material and decision domain
-- suspicion to root cause without a causal chain and discriminating evidence
-- root cause or plan to patch point without a proven boundary
-- plan to implementation while an assumption or material plan question remains open
-- implementation to done without observed proof and intent conformance
+- request to objective, or objective to plan, without verifiable success and source-backed domain
+- proposed system model to architecture without mechanism evidence
+- suspicion to cause, or cause/plan to patch, without discriminating evidence and a proven boundary
+- plan to implementation with a material question open, or implementation to done without proof and conformance
 
 When an inspectable fact can change correctness, inspect it. When it cannot be established safely, keep the gate closed and name the cheapest next check.
 
 ## Execution Loop
 
-1. Identify the working document and user contract.
-2. State the objective and current mode.
-3. Inspect the facts that can decide the next gate.
-4. Revalidate assumptions against current source or runtime evidence.
-5. State the expected observation and which outcome advances, blocks, or routes back.
-6. Take the smallest justified action.
-7. Observe the result rather than predicting it.
-8. Compare observed state with intended state.
-9. Update acceptance coverage, deviations, and the working artifact.
-10. Challenge any green/red result or report before trusting it.
-11. Recheck impact, adjacent behavior, proof gaps, and the next owner.
+1. Identify the contract, working document, objective, and mode.
+2. Inspect gate-deciding facts and revalidate assumptions.
+3. State the expected observation and which outcome advances, blocks, or routes back.
+4. Take the smallest justified action and observe rather than predict.
+5. Compare intended and observed state; update coverage, deviations, and artifacts.
+6. Challenge green/red proof; recheck impact, adjacent behavior, gaps, and next owner.
 
 If implementation reveals an unproven mechanism, return to `Analyze`. If evidence invalidates the approved approach or the observed result diverges materially, return to `Plan`. Do not stack another speculative patch on top.
 
@@ -159,29 +136,10 @@ Rigor is constant; report verbosity adapts. Use a compact report — `Current Ga
 
 ## Verification And Acceptance
 
-Use `verification-hazards` before trusting a test, probe, CI run, benchmark, staging result, partial rollout, suspicious red, or agent report. Its outcome check must prove both functional behavior and intent conformance.
-
-Use `change-review` for every concrete patch, implemented result, or justified `no patch` before acceptance. Pass it:
-
-- working document and user contract
-- objective and intended state
-- diff or no-patch conclusion
-- observed state and conformance verdict
-- acceptance coverage and deviations
-- commands, outputs, and hazard verdict
-- proof gaps and residual risk
+Use `verification-hazards` before trusting tests, probes, CI, benchmarks, rollout signals, suspicious reds, or reports; prove behavior and conformance. Use `change-review` before accepting a patch, result, or justified `no patch`. Pass the contract, intended and observed state, artifact/diff, coverage, deviations, command output, hazard verdict, gaps, and residual risk.
 
 ## Stop Conditions
 
-Stop and surface the exact gate when:
-
-- objective or success condition is still ambiguous
-- two plausible domains or causes remain without a distinguishing signal
-- a required source, artifact, permission, or user decision is missing
-- the change boundary grows beyond the approved plan
-- a material deviation is not pre-authorized
-- a proposed fix requires weakening a test
-- two directed searches cannot find evidence needed for a correctness decision
-- the observed result persists, changes form, or disappears for an unexplained reason
+Stop and name the gate when the objective is ambiguous; competing domains or causes lack a distinguishing signal; required source, authority, or user decision is missing; scope exceeds plan; a material deviation lacks authority; a fix weakens a test; two directed searches find no deciding evidence; or the result persists, changes, or disappears unexplained.
 
 `No patch` is valid only when current evidence does not justify a change. It must still state what was inspected, what was ruled out, what remains unproven, the intent-conformance status, and the final review verdict.
